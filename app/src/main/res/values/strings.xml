@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PlantsProject</string>
+    <string name="action_settings">Настройки</string>
+    <string name="my_plants">Мои растения</string>
+</resources>
