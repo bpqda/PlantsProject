@@ -1,7 +1,10 @@
 package com.example.plantsproject;
 
-public class Plant {
-    String name = "Мое растение";
+
+import java.io.Serializable;
+
+public class Plant implements Serializable {
+    String name;
     int watering;
     int feeding;
     int spraying;
@@ -43,5 +46,15 @@ public class Plant {
 
     public void setSpraying(int spraying) {
         this.spraying = spraying;
+    }
+
+    @Override
+    public String toString() {
+        return "Plant{" +
+                "name='" + name + '\'' +
+                ", watering=" + watering +
+                ", feeding=" + feeding +
+                ", spraying=" + spraying +
+                '}';
     }
 }

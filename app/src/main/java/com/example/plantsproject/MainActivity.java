@@ -1,5 +1,7 @@
 package com.example.plantsproject;
 
+
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -7,28 +9,43 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    ListView list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //NotificationCompat.Builder = new NotificationCompat.Builder(MainActivity.this, "Notification").setSmallIcon()
 
+        //массив растений
+        ArrayList<Plant> plants = new ArrayList<>();
+        //Intent i = getIntent();
+        //plants.add(new Plant(i.getStringExtra("plantName"), 3, 3, 3));
+        list = findViewById(R.id.list);
+
+        // адаптер plants
+        ArrayAdapter<Plant> adapter = new ArrayAdapter<>(this, R.layout.plant_list, plants);
+        // привязка массива к адаптеру
+        list.setAdapter(adapter);
+
+
+        //создание растений
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "ksdjbf", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(MainActivity.this, PlantCreation.class);
+                startActivity(i);
             }
         });
     }
@@ -54,4 +71,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
