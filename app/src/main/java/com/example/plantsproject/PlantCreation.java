@@ -2,28 +2,29 @@ package com.example.plantsproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 public class PlantCreation extends AppCompatActivity {
-    Button backBtn, createBtn, dialogBtn;
+    Button dialogBtn;
     TextView plantName;
-
+    ImageButton back, create;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_creation);
+        setTheme(R.style.AppTheme);
 
-        backBtn = findViewById(R.id.backBtn);
-        createBtn = findViewById(R.id.createBtn);
+        back = findViewById(R.id.back);
+        create = findViewById(R.id.create);
         plantName = findViewById(R.id.plantName);
         dialogBtn = findViewById(R.id.dialogBtn);
 
@@ -49,7 +50,7 @@ public class PlantCreation extends AppCompatActivity {
       });
 
       //кнопка отмены
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PlantCreation.this, MainActivity.class);
@@ -57,12 +58,12 @@ public class PlantCreation extends AppCompatActivity {
             }
         });
         //кнопка создания растения
-        createBtn.setOnClickListener(new View.OnClickListener() {
+        create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Plant plant = new Plant(plantName.getText().toString(), 3, 3, 3);
-                Intent i = new Intent("plant", plant);
-                i.putExtra("plantName", plantName.getText().toString());
+                Plant plant = new Plant(0, plantName.getText().toString(), 3, 3, 3);
+                Intent i = new Intent(PlantCreation.this, MainActivity.class);
+                i.putExtra("plant", plant);
                 //TODO: сделать watering, feeding и тд, создать растение
                 startActivity(i);
             }

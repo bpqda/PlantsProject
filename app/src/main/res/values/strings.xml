@@ -2,4 +2,6 @@
     <string name="app_name">PlantsProject</string>
     <string name="action_settings">Настройки</string>
     <string name="my_plants">Мои растения</string>
+    <string name="name">Название</string>
+    <string name="plant_creation_bar">Создать растение</string>
 </resources>

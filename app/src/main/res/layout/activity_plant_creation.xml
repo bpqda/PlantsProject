@@ -7,14 +7,65 @@
     android:orientation="vertical"
     tools:context=".PlantCreation">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorMain"
+                app:srcCompat="@drawable/arrow" />
+
+            <TextView
+                android:id="@+id/appBarTV"
+                style="@android:style/Widget.TextView.PopupMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:gravity="center_horizontal|left|center_vertical"
+                android:text="@string/plant_creation_bar"
+                android:textColor="@color/white" />
+
+            <ImageButton
+                android:id="@+id/create"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@color/colorMain"
+                app:srcCompat="@drawable/plus_circle" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/name" />
+
     <EditText
         android:id="@+id/plantName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:inputType="textPersonName" />
 
+
+    <SeekBar
+        android:id="@+id/wateringSB"
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/dialogBtn"
@@ -22,15 +73,5 @@
         android:layout_height="wrap_content"
         android:text="Выбрать переодичность" />
 
-    <Button
-        android:id="@+id/backBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Отменить" />
 
-    <Button
-        android:id="@+id/createBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Создать растение" />
 </LinearLayout>

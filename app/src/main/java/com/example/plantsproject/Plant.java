@@ -8,8 +8,10 @@ public class Plant implements Serializable {
     int watering;
     int feeding;
     int spraying;
+    long id;
 
-    public Plant(String name, int watering, int feeding, int spraying) {
+    public Plant(long id, String name, int watering, int feeding, int spraying) {
+        this.id = id;
         this.name = name;
         this.watering = watering;
         this.feeding = feeding;
@@ -56,5 +58,13 @@ public class Plant implements Serializable {
                 ", feeding=" + feeding +
                 ", spraying=" + spraying +
                 '}';
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
