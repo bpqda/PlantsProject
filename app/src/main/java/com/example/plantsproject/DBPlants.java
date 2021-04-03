@@ -32,7 +32,7 @@ public class DBPlants {
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    public long insert(String name,String watering,int feeding,int spraying) {
+    public long insert(String name, int watering, int feeding, int spraying) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, name);
         cv.put(COLUMN_WATERING, watering);

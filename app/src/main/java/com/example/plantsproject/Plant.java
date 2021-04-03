@@ -18,6 +18,13 @@ public class Plant implements Serializable {
         this.spraying = spraying;
     }
 
+    public Plant(String name, int watering, int feeding, int spraying) {
+        this.name = name;
+        this.watering = watering;
+        this.feeding = feeding;
+        this.spraying = spraying;
+    }
+
     public String getName() {
         return name;
     }
