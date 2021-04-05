@@ -6,9 +6,9 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:layout_width="75dp"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/plant" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:id="@+id/nameTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="Название"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -29,24 +29,30 @@
 
             <TextView
                 android:id="@+id/plantWatering"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:gravity="center_horizontal"
+                android:text="Полив"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/plantFeeding"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:gravity="center_horizontal"
+                android:text="Удобрение"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/plantSpraying"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:gravity="center_horizontal"
+                android:text="Опрыскивание"
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>

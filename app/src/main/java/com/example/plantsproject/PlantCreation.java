@@ -6,28 +6,24 @@ import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class PlantCreation extends AppCompatActivity {
-    EditText plantName;
+    TextView plantName;
     ImageButton back, create;
-
     CheckBox wCB;
     SeekBar wSB;
     TextView wInf;
-
     CheckBox fCB;
     SeekBar fSB;
     TextView fInf;
     CheckBox sCB;
     SeekBar sSB;
     TextView sInf;
+    long plantID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,98 +34,86 @@ public class PlantCreation extends AppCompatActivity {
         back = findViewById(R.id.back);
         create = findViewById(R.id.create);
         plantName = findViewById(R.id.nameTxt);
-
-        wCB = findViewById(R.id.wCB);
-        wSB = findViewById(R.id.wSB);
-        wInf = findViewById(R.id.wInf);
+        wCB = findViewById(R.id.wateringCB);
+        wSB = findViewById(R.id.wateringSB);
+        wInf = findViewById(R.id.wateringInf);
         setAllListeners(wCB, wSB, wInf, ContextCompat.getColor(PlantCreation.this, R.color.blue));
         fCB = findViewById(R.id.feedingCB);
         fSB = findViewById(R.id.feedingSB);
         fInf = findViewById(R.id.feedingInf);
-        setAllListeners(fCB, fSB, fInf, ContextCompat.getColor(PlantCreation.this, R.color.blue));
+        setAllListeners(fCB, fSB, fInf, ContextCompat.getColor(PlantCreation.this, R.color.yellow));
         sCB = findViewById(R.id.sprayingCB);
         sSB = findViewById(R.id.sprayingSB);
         sInf = findViewById(R.id.sprayingInf);
-        setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(PlantCreation.this, R.color.blue));
+        setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(PlantCreation.this, R.color.colorMain));
 
+//Если MainActivity передала в intent растение для редактирования, то поля заполняются значениями
+        if(getIntent().hasExtra("plant")) {
+            Plant plant = (Plant) getIntent().getSerializableExtra("plant");
+            plantName.setText(plant.getName());
+            setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
+            setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
+            setPlantParameters(plant.getSpraying(), sCB, sInf, sSB);
+            plantID = plant.getId();
+        } else {
+            plantID = -1;
+        }
 
-        //wSB.getProgressDrawable().setColorFilter(ContextCompat.getColor(PlantCreation.this, R.color.gray), PorterDuff.Mode.MULTIPLY);
-        //wInf.setText("---");
+//кнопка создания растения
+        create.setOnClickListener(v -> {
+            Plant plant =new Plant(plantID,
+                    plantName.getText().toString(),
+                    wSB.getProgress(),
+                    fSB.getProgress(),
+                    sSB.getProgress());
 
-
-
-
-        setAllListeners(wCB, wSB, wInf, ContextCompat.getColor(PlantCreation.this, R.color.blue));
-
-     wSB.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                wInf.setText(String.valueOf(seekBar.getProgress()));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            Intent intent=getIntent();
+            intent.putExtra("plant", plant);
+            setResult(RESULT_OK, intent);
+            finish();
         });
 
-      //кнопка отмены
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(PlantCreation.this, MainActivity.class);
-                startActivity(i);
-            }
-        });
-        //кнопка создания растения
-        create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Plant plant = new Plant(plantName.getText().toString(), wSB.getProgress(), fSB.getProgress(), sSB.getProgress());
-                Intent i = new Intent(PlantCreation.this, MainActivity.class);
-                //i.putExtra("plant", plant);
-                //i.putExtra("name", plantName.getText().toString());
-                //i.putExtra("watering", wSB.getProgress());
-                //i.putExtra("feeding", fSB.getProgress());
-                //i.putExtra("spraying", sSB.getProgress());
-                startActivity(i);
-            }
-        });
 
+        //кнопка отмены
+        back.setOnClickListener(v -> {
+            finish();
+        });
     }
-    public void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
+
+    //Установка листенеров и цветов на SeekBar, TextView, CheckBox.
+    private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
 
        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txt.setText(String.valueOf(seekBar.getProgress()));
+                    txt.setText(String.valueOf(seekBar.getProgress()));
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar){}
             @Override
             public void onStopTrackingTouch(SeekBar seekBar){}
         });
-
-        cb.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    txt.setText(String.valueOf(sb.getProgress()));
-
-                    sb.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
-                } else {
-                    sb.getProgressDrawable().setColorFilter(ContextCompat.getColor(PlantCreation.this, R.color.gray), PorterDuff.Mode.MULTIPLY);
-                    txt.setText("---");
-                }
+        cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                sb.setEnabled(true);
+                txt.setText(String.valueOf(sb.getProgress()));
+                sb.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            } else {
+                sb.getProgressDrawable().setColorFilter(ContextCompat.getColor(PlantCreation.this, R.color.gray), PorterDuff.Mode.MULTIPLY);
+                txt.setText("---");
+                sb.setEnabled(false);
             }
         });
     }
 
-
-
+    private void setPlantParameters(int parameter, CheckBox cb, TextView tv, SeekBar sb) {
+        if(parameter!=0){
+            cb.setChecked(true);
+            tv.setText(parameter+"");
+            sb.setProgress(parameter);
+        } else {
+            cb.setChecked(false);
+            tv.setText("---");
+        }
+    }
 }

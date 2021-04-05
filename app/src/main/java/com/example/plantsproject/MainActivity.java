@@ -1,16 +1,17 @@
 package com.example.plantsproject;
 
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -22,14 +23,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
-
 public class MainActivity extends AppCompatActivity {
     ListView list;
     Toolbar toolbar;
     PlantAdapter adapter;
-    DBPlants dbConnector;
-    public DBPlants plants;
+    DBPlants plants;
+    final int ADD_ACTIVITY = 0;
+    final int UPDATE_ACTIVITY = 1;
+    final int DELETE_ACTIVITY = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,31 +40,24 @@ public class MainActivity extends AppCompatActivity {
         list = findViewById(R.id.list);
         setSupportActionBar(toolbar);
 
-        plants = new DBPlants(MainActivity.this);
-        dbConnector = new DBPlants(this);
-        adapter = new PlantAdapter(this, dbConnector.selectAll());
+        plants = new DBPlants(this);
+
+        adapter = new PlantAdapter(this, plants.selectAll());
         list.setAdapter(adapter);
 
-        //Не знаю зачем это нужно
-        //registerForContextMenu(list);
-
-        Intent i = new Intent();
-        Plant plant = i.getParcelableExtra("plant");
-
-
-        plants.insert(plant.getName(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
-        //plants.insert(i.getStringExtra("name"), i.getIntExtra("watering", 0), 3, 4);
-
+        list.setOnItemClickListener((parent, view, position, id) -> {
+            Plant selectedPlant = (Plant) adapter.getItem(position);
+            PlantDialog dialog = new PlantDialog(selectedPlant);
+            FragmentManager manager = getSupportFragmentManager();
+            dialog.show(manager, "dialog");
+        });
 
         //кнопка для создания растений
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, PlantCreation.class);
-                //startActivityForResult(i, 1);
-                startActivity(i);
-            }
+        fab.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, PlantCreation.class);
+            startActivityForResult(i, ADD_ACTIVITY);
+            updateList();
         });
     }
 
@@ -87,14 +81,32 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_delete:
                 plants.deleteAll();
-                //list.invalidateViews();
-                //adapter.notifyDataSetChanged();
+                updateList();
                 return true;
         }
             return super.onOptionsItemSelected(item);
         }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Plant plant = (Plant) data.getSerializableExtra("plant");
+
+            if (requestCode == UPDATE_ACTIVITY) {
+                plants.update(plant);
+            } else if (requestCode==ADD_ACTIVITY){
+                plants.insert(plant.getName(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
+            }
+            updateList();
+        }
     }
+
+    private void updateList () {
+        adapter.setArrayMyData(plants.selectAll());
+        adapter.notifyDataSetChanged();
+    }
+}
 
 
     class PlantAdapter extends BaseAdapter {
@@ -146,9 +158,9 @@ public class MainActivity extends AppCompatActivity {
 
             Plant plant = plants.get(i);
             name.setText(plant.getName());
-            watering.setText("Полив:" + plant.getWatering() + "");
-            feeding.setText("Удобрение" + plant.getFeeding() + "");
-            spraying.setText("Опрыскивание:" + plant.getSpraying() + "");
+            watering.setText("Полив\n" + plant.getWatering());
+            feeding.setText("Удобрение\n" + plant.getFeeding());
+            spraying.setText("Опрыскивание\n" + plant.getSpraying());
 
             return view;
 

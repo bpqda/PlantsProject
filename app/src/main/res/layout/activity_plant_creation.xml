@@ -23,7 +23,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/colorMain"
-                app:srcCompat="@drawable/arrow" />
+                android:rotation="270"
+                app:srcCompat="@drawable/ic_group_expand_15" />
 
             <TextView
                 android:id="@+id/appBarTV"
@@ -39,9 +40,9 @@
                 android:id="@+id/create"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:background="@color/colorMain"
-                app:srcCompat="@drawable/plus_circle" />
+                app:srcCompat="@android:drawable/ic_menu_add" />
 
         </LinearLayout>
 
@@ -63,7 +64,7 @@
 
 
     <CheckBox
-        android:id="@+id/wCB"
+        android:id="@+id/wateringCB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:buttonTint="@color/blue"
@@ -79,7 +80,7 @@
         android:orientation="horizontal">
 
         <SeekBar
-            android:id="@+id/wSB"
+            android:id="@+id/wateringSB"
             style="@android:style/Widget.DeviceDefault.Light.SeekBar"
             android:layout_width="387dp"
             android:layout_height="match_parent"
@@ -92,7 +93,7 @@
 
 
         <TextView
-            android:id="@+id/wInf"
+            android:id="@+id/wateringInf"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0"
