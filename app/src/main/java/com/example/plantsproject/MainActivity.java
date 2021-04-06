@@ -1,22 +1,22 @@
 package com.example.plantsproject;
 
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
     ListView list;
     Toolbar toolbar;
     PlantAdapter adapter;
+    DBPlants plants;
+    final int ADD_ACTIVITY = 0;
+    final int UPDATE_ACTIVITY = 1;
+    final int DELETE_ACTIVITY = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,30 +40,27 @@ public class MainActivity extends AppCompatActivity {
         list = findViewById(R.id.list);
         setSupportActionBar(toolbar);
 
-        //массив растений
-        ArrayList<Plant> plants = new ArrayList<>();
-        adapter = new PlantAdapter(this, plants);
+        plants = new DBPlants(this);
 
-        //Intent i = getIntent();
-        //plants.add(new Plant(i.getStringExtra("plantName"), 3, 3, 3));
+        adapter = new PlantAdapter(this, plants.selectAll());
+        list.setAdapter(adapter);
 
-
-        // адаптер plants
-        //ArrayAdapter<Plant> adapter = new ArrayAdapter<>(this, R.layout.plant_list, plants);
-        // привязка массива к адаптеру
-        //list.setAdapter(adapter);
-
+        list.setOnItemClickListener((parent, view, position, id) -> {
+            Plant selectedPlant = (Plant) adapter.getItem(position);
+            PlantDialog dialog = new PlantDialog(selectedPlant);
+            FragmentManager manager = getSupportFragmentManager();
+            dialog.show(manager, "dialog");
+        });
 
         //кнопка для создания растений
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, PlantCreation.class);
-                startActivity(i);
-            }
+        fab.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, PlantCreation.class);
+            startActivityForResult(i, ADD_ACTIVITY);
+            updateList();
         });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,68 +76,93 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_delete:
+                plants.deleteAll();
+                updateList();
+                return true;
+        }
+            return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Plant plant = (Plant) data.getSerializableExtra("plant");
+
+            if (requestCode == UPDATE_ACTIVITY) {
+                plants.update(plant);
+            } else if (requestCode==ADD_ACTIVITY){
+                plants.insert(plant.getName(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
+            }
+            updateList();
+        }
     }
 
+    private void updateList () {
+        adapter.setArrayMyData(plants.selectAll());
+        adapter.notifyDataSetChanged();
+    }
 }
 
 
-class PlantAdapter extends BaseAdapter {
-    private LayoutInflater inflater;
-    private ArrayList<Plant> plants;
+    class PlantAdapter extends BaseAdapter {
+        private LayoutInflater inflater;
+        private ArrayList<Plant> plants;
 
-    public PlantAdapter (Context ctx, ArrayList<Plant> array) {
-        inflater = LayoutInflater.from(ctx);
-        setArrayMyData(array);
-    }
-
-    public ArrayList<Plant> getArrayMyData() {
-        return plants;
-    }
-
-    public void setArrayMyData(ArrayList<Plant> arrayMyData) {
-        this.plants = arrayMyData;
-    }
-
-    @Override
-    public int getCount() {
-        return plants.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return plants.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        //TODO
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-
-        if (view == null) {
-            view = inflater.inflate(R.layout.plant_list, null);
+        public PlantAdapter(Context ctx, ArrayList<Plant> array) {
+            inflater = LayoutInflater.from(ctx);
+            setArrayMyData(array);
         }
-        TextView name = view.findViewById(R.id.plantName);
-        TextView watering = view.findViewById(R.id.plantWatering);
-        TextView feeding = view.findViewById(R.id.plantFeeding);
-        TextView spraying = view.findViewById(R.id.plantSpraying);
 
-        Plant plant = plants.get(i);
-        name.setText(plant.getName());
-        watering.setText(plant.getWatering());
-        feeding.setText(plant.getFeeding());
-        spraying.setText(plant.getSpraying());
+        public ArrayList<Plant> getArrayMyData() {
+            return plants;
+        }
 
-        return view;
+        public void setArrayMyData(ArrayList<Plant> arrayMyData) {
+            this.plants = arrayMyData;
+        }
 
+        @Override
+        public int getCount() {
+            return plants.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return plants.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            Plant plant = plants.get(i);
+            if (plant != null) {
+                return plant.getId();
+            }
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+
+            if (view == null) {
+                view = inflater.inflate(R.layout.plant_list, null);
+            }
+            TextView name = view.findViewById(R.id.nameTxt);
+            TextView watering = view.findViewById(R.id.plantWatering);
+            TextView feeding = view.findViewById(R.id.plantFeeding);
+            TextView spraying = view.findViewById(R.id.plantSpraying);
+
+            Plant plant = plants.get(i);
+            name.setText(plant.getName());
+            watering.setText("Полив\n" + plant.getWatering());
+            feeding.setText("Удобрение\n" + plant.getFeeding());
+            spraying.setText("Опрыскивание\n" + plant.getSpraying());
+
+            return view;
+
+        }
     }
-}

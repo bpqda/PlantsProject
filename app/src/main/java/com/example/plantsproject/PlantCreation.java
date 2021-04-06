@@ -1,21 +1,29 @@
 package com.example.plantsproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 public class PlantCreation extends AppCompatActivity {
-    Button dialogBtn;
     TextView plantName;
     ImageButton back, create;
-
+    CheckBox wCB;
+    SeekBar wSB;
+    TextView wInf;
+    CheckBox fCB;
+    SeekBar fSB;
+    TextView fInf;
+    CheckBox sCB;
+    SeekBar sSB;
+    TextView sInf;
+    long plantID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,49 +33,87 @@ public class PlantCreation extends AppCompatActivity {
 
         back = findViewById(R.id.back);
         create = findViewById(R.id.create);
-        plantName = findViewById(R.id.plantName);
-        dialogBtn = findViewById(R.id.dialogBtn);
+        plantName = findViewById(R.id.nameTxt);
+        wCB = findViewById(R.id.wateringCB);
+        wSB = findViewById(R.id.wateringSB);
+        wInf = findViewById(R.id.wateringInf);
+        setAllListeners(wCB, wSB, wInf, ContextCompat.getColor(PlantCreation.this, R.color.blue));
+        fCB = findViewById(R.id.feedingCB);
+        fSB = findViewById(R.id.feedingSB);
+        fInf = findViewById(R.id.feedingInf);
+        setAllListeners(fCB, fSB, fInf, ContextCompat.getColor(PlantCreation.this, R.color.yellow));
+        sCB = findViewById(R.id.sprayingCB);
+        sSB = findViewById(R.id.sprayingSB);
+        sInf = findViewById(R.id.sprayingInf);
+        setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(PlantCreation.this, R.color.colorMain));
 
-// Выбор периодичности полива
-      dialogBtn.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-// Listener для TimePicker
-              TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+//Если MainActivity передала в intent растение для редактирования, то поля заполняются значениями
+        if(getIntent().hasExtra("plant")) {
+            Plant plant = (Plant) getIntent().getSerializableExtra("plant");
+            plantName.setText(plant.getName());
+            setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
+            setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
+            setPlantParameters(plant.getSpraying(), sCB, sInf, sSB);
+            plantID = plant.getId();
+        } else {
+            plantID = -1;
+        }
 
-                  @Override
-                  public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        //TODO: сохранить выбранное время
-                  }
-              };
-// Создание диалогового окна
-              TimePickerDialog timePickerDialog = new TimePickerDialog(PlantCreation.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                      timeSetListener, 0, 0, true);
+//кнопка создания растения
+        create.setOnClickListener(v -> {
+            Plant plant =new Plant(plantID,
+                    plantName.getText().toString(),
+                    wSB.getProgress(),
+                    fSB.getProgress(),
+                    sSB.getProgress());
 
-// Показ окна
-              timePickerDialog.show();
-          }
-      });
-
-      //кнопка отмены
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(PlantCreation.this, MainActivity.class);
-                startActivity(i);
-            }
-        });
-        //кнопка создания растения
-        create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Plant plant = new Plant(0, plantName.getText().toString(), 3, 3, 3);
-                Intent i = new Intent(PlantCreation.this, MainActivity.class);
-                i.putExtra("plant", plant);
-                //TODO: сделать watering, feeding и тд, создать растение
-                startActivity(i);
-            }
+            Intent intent=getIntent();
+            intent.putExtra("plant", plant);
+            setResult(RESULT_OK, intent);
+            finish();
         });
 
+
+        //кнопка отмены
+        back.setOnClickListener(v -> {
+            finish();
+        });
+    }
+
+    //Установка листенеров и цветов на SeekBar, TextView, CheckBox.
+    private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
+
+       sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    txt.setText(String.valueOf(seekBar.getProgress()));
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar){}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar){}
+        });
+        cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                sb.setEnabled(true);
+                txt.setText(String.valueOf(sb.getProgress()));
+                sb.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            } else {
+                sb.getProgressDrawable().setColorFilter(ContextCompat.getColor(PlantCreation.this, R.color.gray), PorterDuff.Mode.MULTIPLY);
+                txt.setText("---");
+                sb.setEnabled(false);
+            }
+        });
+    }
+
+    private void setPlantParameters(int parameter, CheckBox cb, TextView tv, SeekBar sb) {
+        if(parameter!=0){
+            cb.setChecked(true);
+            tv.setText(parameter+"");
+            sb.setProgress(parameter);
+        } else {
+            cb.setChecked(false);
+            tv.setText("---");
+        }
     }
 }
