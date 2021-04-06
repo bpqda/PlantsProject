@@ -70,7 +70,7 @@ public class DBPlants {
     }
 
     public ArrayList<Plant> selectAll() {
-        Cursor mCursor = mDataBase.query(TABLE_NAME, null, null, null, null, null, null);
+        Cursor mCursor = mDataBase.query(TABLE_NAME, null, null, null, null, null, "id desc");
 
         ArrayList<Plant> arr = new ArrayList<>();
         mCursor.moveToFirst();

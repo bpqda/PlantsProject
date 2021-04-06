@@ -47,6 +47,8 @@ public class PlantCreation extends AppCompatActivity {
         sInf = findViewById(R.id.sprayingInf);
         setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(PlantCreation.this, R.color.colorMain));
 
+        DBPlants plants = new DBPlants(this);
+
 //Если MainActivity передала в intent растение для редактирования, то поля заполняются значениями
         if(getIntent().hasExtra("plant")) {
             Plant plant = (Plant) getIntent().getSerializableExtra("plant");
@@ -67,12 +69,13 @@ public class PlantCreation extends AppCompatActivity {
                     fSB.getProgress(),
                     sSB.getProgress());
 
-            Intent intent=getIntent();
-            intent.putExtra("plant", plant);
-            setResult(RESULT_OK, intent);
+            plants.insert(plant.getName(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
+            plants.update(plant);
+           // Intent intent=getIntent();
+           // intent.putExtra("plant", plant);
+           // setResult(RESULT_OK, intent);
             finish();
         });
-
 
         //кнопка отмены
         back.setOnClickListener(v -> {

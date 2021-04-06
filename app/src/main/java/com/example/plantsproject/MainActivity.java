@@ -22,15 +22,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
     ListView list;
     Toolbar toolbar;
     PlantAdapter adapter;
     DBPlants plants;
-    final int ADD_ACTIVITY = 0;
-    final int UPDATE_ACTIVITY = 1;
-    final int DELETE_ACTIVITY = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +46,17 @@ public class MainActivity extends AppCompatActivity {
 
         list.setOnItemClickListener((parent, view, position, id) -> {
             Plant selectedPlant = (Plant) adapter.getItem(position);
-            PlantDialog dialog = new PlantDialog(selectedPlant);
+            PlantDialog dialog = new PlantDialog(selectedPlant, this);
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");
         });
+        updateList();
 
         //кнопка для создания растений
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent i = new Intent(MainActivity.this, PlantCreation.class);
-            startActivityForResult(i, ADD_ACTIVITY);
-            updateList();
+            startActivityForResult(i, RESULT_OK);
         });
     }
 
@@ -91,13 +90,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            Plant plant = (Plant) data.getSerializableExtra("plant");
-
-            if (requestCode == UPDATE_ACTIVITY) {
-                plants.update(plant);
-            } else if (requestCode==ADD_ACTIVITY){
-                plants.insert(plant.getName(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
-            }
             updateList();
         }
     }
@@ -106,9 +98,15 @@ public class MainActivity extends AppCompatActivity {
         adapter.setArrayMyData(plants.selectAll());
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateList();
+    }
 }
 
-
+//адаптер
     class PlantAdapter extends BaseAdapter {
         private LayoutInflater inflater;
         private ArrayList<Plant> plants;

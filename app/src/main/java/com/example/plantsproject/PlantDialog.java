@@ -2,6 +2,7 @@ package com.example.plantsproject;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,9 +15,14 @@ import androidx.fragment.app.DialogFragment;
 
 public class PlantDialog extends DialogFragment {
     Plant plant;
+    Context context;
 
     public PlantDialog(Plant plant) {
         this.plant = plant;
+    }
+    public PlantDialog(Plant plant, Context context) {
+        this(plant);
+        this.context = context;
     }
 
     @NonNull
@@ -48,7 +54,8 @@ public class PlantDialog extends DialogFragment {
             return;
         });
         builder.setNegativeButton("Удалить растение", (dialog, which) -> {
-
+            DBPlants db = new DBPlants(context);
+            db.delete(plant.getId());
         });
 
         builder.setCancelable(true);
