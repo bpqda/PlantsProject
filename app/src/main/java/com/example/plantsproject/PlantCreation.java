@@ -3,14 +3,12 @@ package com.example.plantsproject;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PlantCreation extends AppCompatActivity {
     TextView plantName;
@@ -26,6 +24,7 @@ public class PlantCreation extends AppCompatActivity {
     SeekBar sSB;
     TextView sInf;
     long plantID;
+    private boolean add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,7 @@ public class PlantCreation extends AppCompatActivity {
         back = findViewById(R.id.back);
         create = findViewById(R.id.create);
         plantName = findViewById(R.id.nameTxt);
-        sort = findViewById(R.id.sort);
+        sort = findViewById(R.id.notes);
         wCB = findViewById(R.id.wateringCB);
         wSB = findViewById(R.id.wateringSB);
         wInf = findViewById(R.id.wateringInf);
@@ -51,16 +50,19 @@ public class PlantCreation extends AppCompatActivity {
         setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(PlantCreation.this, R.color.colorMain));
 
         DBPlants plants = new DBPlants(this);
+        add = false;
 
 //Если MainActivity передала в intent растение для редактирования, то поля заполняются значениями
         if(getIntent().hasExtra("plant")) {
             Plant plant = (Plant) getIntent().getSerializableExtra("plant");
             plantName.setText(plant.getName());
-            sort.setText(plant.getSort());
+            sort.setText(plant.getNotes());
             setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
             setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
             setPlantParameters(plant.getSpraying(), sCB, sInf, sSB);
             plantID = plant.getId();
+            add = true;
+
         } else {
             plantID = -1;
         }
@@ -72,10 +74,12 @@ public class PlantCreation extends AppCompatActivity {
                     wSB.getProgress(),
                     fSB.getProgress(),
                     sSB.getProgress());
-
-            plants.insert(plant.getName(), plant.getSort(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
-            plants.update(plant);
-            NotificationScheduler.setReminder(PlantCreation.this, AlarmReceiver.class, plant);
+            if(add==true) {
+                plants.update(plant);
+            } else {
+                plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
+            }
+            NotificationScheduler.setReminder(this, MainActivity.class, plant);
             finish();
         });
 

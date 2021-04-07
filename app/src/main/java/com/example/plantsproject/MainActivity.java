@@ -153,14 +153,12 @@ public class MainActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.plant_list, null);
             }
             TextView name = view.findViewById(R.id.nameTxt);
-            TextView sort = view.findViewById(R.id.sort);
             TextView watering = view.findViewById(R.id.plantWatering);
             TextView feeding = view.findViewById(R.id.plantFeeding);
             TextView spraying = view.findViewById(R.id.plantSpraying);
 
             Plant plant = plants.get(i);
             name.setText(plant.getName());
-            sort.setText(plant.getSort());
             watering.setText("Полив\n" + plant.getWatering());
             feeding.setText("Удобрение\n" + plant.getFeeding());
             spraying.setText("Опрыскивание\n" + plant.getSpraying());

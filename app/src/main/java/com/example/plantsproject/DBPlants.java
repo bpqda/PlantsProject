@@ -12,17 +12,22 @@ public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_NAME = "tablePlants";
+    private static final String TABLE_NAME_TIPS = "tablePlants";
 
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "Name";
-    private static final String COLUMN_SORT = "Sort";
+    private static final String COLUMN_NOTES = "Notes";
     private static final String COLUMN_WATERING = "Watering";
     private static final String COLUMN_FEEDING = "Feeding";
     private static final String COLUMN_SPRAYING = "Spraying";
 
+    private static final String COLUMN_ID_TIPS = "id";
+    private static final String COLUMN_NAME_TIPS = "Name";
+    private static final String COLUMN_TIPS = "Tips";
+
     private static final int NUM_COLUMN_ID = 0;
     private static final int NUM_COLUMN_NAME= 1;
-    private static final int NUM_COLUMN_SORT= 2;
+    private static final int NUM_COLUMN_NOTES= 2;
     private static final int NUM_COLUMN_WATERING = 3;
     private static final int NUM_COLUMN_FEEDING = 4;
     private static final int NUM_COLUMN_SPRAYING = 5;
@@ -34,10 +39,10 @@ public class DBPlants {
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    public long insert(String name, String sort, int watering, int feeding, int spraying) {
+    public long insert(String name, String notes, int watering, int feeding, int spraying) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, name);
-        cv.put(COLUMN_SORT, sort);
+        cv.put(COLUMN_NOTES, notes);
         cv.put(COLUMN_WATERING, watering);
         cv.put(COLUMN_FEEDING, feeding);
         cv.put(COLUMN_SPRAYING,spraying);
@@ -47,7 +52,7 @@ public class DBPlants {
     public int update(Plant plant) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, plant.getName());
-        cv.put(COLUMN_SORT, plant.getSort());
+        cv.put(COLUMN_NOTES, plant.getNotes());
         cv.put(COLUMN_WATERING, plant.getWatering());
         cv.put(COLUMN_FEEDING, plant.getFeeding());
         cv.put(COLUMN_SPRAYING,plant.getSpraying());
@@ -67,11 +72,11 @@ public class DBPlants {
 
         mCursor.moveToFirst();
         String plantName = mCursor.getString(NUM_COLUMN_NAME);
-        String plantSort = mCursor.getString(NUM_COLUMN_SORT);
+        String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
         int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
         int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
         int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-        return new Plant(id, plantName, plantSort, plantWatering, plantFeeding,plantSpraying);
+        return new Plant(id, plantName, plantNotes, plantWatering, plantFeeding,plantSpraying);
     }
 
     public ArrayList<Plant> selectAll() {
@@ -83,15 +88,17 @@ public class DBPlants {
             do {
                 long id = mCursor.getLong(NUM_COLUMN_ID);
                 String plantName = mCursor.getString(NUM_COLUMN_NAME);
-                String plantSort = mCursor.getString(NUM_COLUMN_SORT);
+                String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
                 int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
                 int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
                 int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-                arr.add(new Plant(id, plantName, plantSort, plantWatering, plantFeeding,plantSpraying));
+                arr.add(new Plant(id, plantName, plantNotes, plantWatering, plantFeeding,plantSpraying));
             } while (mCursor.moveToNext());
         }
         return arr;
     }
+
+
 
 
 
@@ -102,14 +109,22 @@ public class DBPlants {
         }
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String query = "CREATE TABLE " + TABLE_NAME + " (" +
+            //many
+            String queryPlantsDB = "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_NAME+ " TEXT, " +
-                    COLUMN_SORT+" TEXT, "+
+                    COLUMN_NOTES+" TEXT, "+
                     COLUMN_WATERING + " INT," +
                     COLUMN_FEEDING + " INT,"+
                     COLUMN_SPRAYING+" INT);";
-            db.execSQL(query);
+            db.execSQL(queryPlantsDB);
+            //one
+          //  String queryTipsDB = "CREATE TABLE " + TABLE_NAME_TIPS + " ("+
+          //          COLUMN_ID_TIPS + "INTEGER PRIMARY KEY AUTOINCREMENT, " +
+          //          COLUMN_NAME_TIPS + "TEXT, " +
+          //          COLUMN_TIPS + " TEXT);";
+          //  db.execSQL(queryTipsDB);
+
         }
 
         @Override

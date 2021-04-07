@@ -36,11 +36,13 @@ public class PlantDialog extends DialogFragment {
         TextView watering = view.findViewById(R.id.watering);
         TextView feeding = view.findViewById(R.id.feeding);
         TextView spraying = view.findViewById(R.id.spraying);
+        TextView notes = view.findViewById(R.id.notes);
 
         name.setText(plant.getName());
-        watering.setText(plant.getWatering() + "");
-        feeding.setText(plant.getFeeding() + "");
-        spraying.setText(plant.getSpraying() + "");
+        watering.setText("Переодичность полива:   "+plant.getWatering());
+        feeding.setText("Переодичность удобрения   "+plant.getFeeding());
+        spraying.setText("Переодичность опрыскивания  "+plant.getSpraying());
+        notes.setText(plant.getNotes());
 
 
         builder.setView(view);

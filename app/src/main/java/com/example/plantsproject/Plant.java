@@ -5,16 +5,16 @@ import java.io.Serializable;
 
 public class Plant implements Serializable {
     String name;
-    String sort;
+    String notes;
     int watering;
     int feeding;
     int spraying;
     long id;
 
-    public Plant(long id, String name, String sort, int watering, int feeding, int spraying) {
+    public Plant(long id, String name, String notes, int watering, int feeding, int spraying) {
         this.id = id;
         this.name = name;
-        this.sort = sort;
+        this.notes = notes;
         this.watering = watering;
         this.feeding = feeding;
         this.spraying = spraying;
@@ -77,11 +77,11 @@ public class Plant implements Serializable {
         this.id = id;
     }
 
-    public String getSort() {
-        return sort;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

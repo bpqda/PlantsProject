@@ -7,5 +7,6 @@
     <string name="water">Периодичность полива</string>
     <string name="feed">Периодичность удобрения</string>
     <string name="spray">Периодичность опрыскивания</string>
+    <string name="notes">Заметки:</string>
 
 </resources>
