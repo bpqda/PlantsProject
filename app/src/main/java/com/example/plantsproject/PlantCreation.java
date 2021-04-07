@@ -10,9 +10,11 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PlantCreation extends AppCompatActivity {
     TextView plantName;
+    TextView sort;
     ImageButton back, create;
     CheckBox wCB;
     SeekBar wSB;
@@ -34,6 +36,7 @@ public class PlantCreation extends AppCompatActivity {
         back = findViewById(R.id.back);
         create = findViewById(R.id.create);
         plantName = findViewById(R.id.nameTxt);
+        sort = findViewById(R.id.sort);
         wCB = findViewById(R.id.wateringCB);
         wSB = findViewById(R.id.wateringSB);
         wInf = findViewById(R.id.wateringInf);
@@ -53,6 +56,7 @@ public class PlantCreation extends AppCompatActivity {
         if(getIntent().hasExtra("plant")) {
             Plant plant = (Plant) getIntent().getSerializableExtra("plant");
             plantName.setText(plant.getName());
+            sort.setText(plant.getSort());
             setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
             setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
             setPlantParameters(plant.getSpraying(), sCB, sInf, sSB);
@@ -64,16 +68,14 @@ public class PlantCreation extends AppCompatActivity {
 //кнопка создания растения
         create.setOnClickListener(v -> {
             Plant plant =new Plant(plantID,
-                    plantName.getText().toString(),
+                    plantName.getText().toString(), sort.getText().toString(),
                     wSB.getProgress(),
                     fSB.getProgress(),
                     sSB.getProgress());
 
-            plants.insert(plant.getName(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
+            plants.insert(plant.getName(), plant.getSort(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
             plants.update(plant);
-           // Intent intent=getIntent();
-           // intent.putExtra("plant", plant);
-           // setResult(RESULT_OK, intent);
+            NotificationScheduler.setReminder(PlantCreation.this, AlarmReceiver.class, plant);
             finish();
         });
 

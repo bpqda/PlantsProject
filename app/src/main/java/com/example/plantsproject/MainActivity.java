@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -90,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            //Plant plant = (Plant) data.getSerializableExtra("plant");
+
             updateList();
         }
     }
@@ -150,12 +153,14 @@ public class MainActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.plant_list, null);
             }
             TextView name = view.findViewById(R.id.nameTxt);
+            TextView sort = view.findViewById(R.id.sort);
             TextView watering = view.findViewById(R.id.plantWatering);
             TextView feeding = view.findViewById(R.id.plantFeeding);
             TextView spraying = view.findViewById(R.id.plantSpraying);
 
             Plant plant = plants.get(i);
             name.setText(plant.getName());
+            sort.setText(plant.getSort());
             watering.setText("Полив\n" + plant.getWatering());
             feeding.setText("Удобрение\n" + plant.getFeeding());
             spraying.setText("Опрыскивание\n" + plant.getSpraying());

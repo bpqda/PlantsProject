@@ -2,12 +2,12 @@ package com.example.plantsproject;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -25,7 +25,7 @@ import static android.content.Context.ALARM_SERVICE;
 
 public class NotificationScheduler {
 
-    public static final int DAILY_REMINDER_REQUEST_CODE=100;
+    public static final int REMINDER_REQUEST_CODE=100;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public static void showNotification(Context context, Class<?> cls, String title, String content) {
@@ -33,9 +33,9 @@ public class NotificationScheduler {
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 //при нажатии на уведомление откроет MainActivity
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(cls);
-        stackBuilder.addNextIntent(notificationIntent);
+//       TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+//       stackBuilder.addParentStack(cls);
+//       stackBuilder.addNextIntent(notificationIntent);
 //создание уведомления
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "CHANNEL_ID")
@@ -46,7 +46,7 @@ public class NotificationScheduler {
 
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(context);
-        notificationManager.notify(DAILY_REMINDER_REQUEST_CODE, builder.build());
+        notificationManager.notify(REMINDER_REQUEST_CODE, builder.build());
     }
 
     public static void cancelReminder(Context context,Class<?> cls) {
@@ -60,26 +60,26 @@ public class NotificationScheduler {
                 PackageManager.DONT_KILL_APP);
 
         Intent intent1 = new Intent(context, cls);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.cancel(pendingIntent);
         pendingIntent.cancel();
     }
 
-    public static void setReminder(Context context,Class<?> cls,int hour, int min)
+    public static void setReminder(Context context,Class<?> cls, Plant plant)
     {
         Calendar calendar = Calendar.getInstance();
 
-        Calendar setcalendar = Calendar.getInstance();
-        setcalendar.set(Calendar.HOUR_OF_DAY, hour);
-        setcalendar.set(Calendar.MINUTE, min);
-        setcalendar.set(Calendar.SECOND, 0);
+        //Calendar setCalendar = Calendar.getInstance();
+        //setCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        //setCalendar.set(Calendar.MINUTE, 0);
+        //setCalendar.set(Calendar.SECOND, 1);
 
         // cancel already scheduled reminders
-        cancelReminder(context,cls);
+        //cancelReminder(context,cls);
 
-        if(setcalendar.before(calendar))
-            setcalendar.add(Calendar.DATE,1);
+        //if(setCalendar.before(calendar))
+        //    setCalendar.add(Calendar.DATE,1);
 
         // Enable a receiver
 
@@ -90,11 +90,18 @@ public class NotificationScheduler {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
 
-
         Intent intent1 = new Intent(context, cls);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, setcalendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), plant.getWatering()*1000, pendingIntent);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), plant.getFeeding()*1000, pendingIntent);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), plant.getSpraying()*1000, pendingIntent);
+
+        Toast.makeText(context, "Уведомления установлены", Toast.LENGTH_SHORT).show();
+
 
     }
+
 }
+

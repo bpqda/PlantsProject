@@ -63,6 +63,20 @@
         android:text="Мое растение" />
 
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Сорт растения" />
+
+    <EditText
+        android:id="@+id/sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Растение" />
+
     <CheckBox
         android:id="@+id/wateringCB"
         android:layout_width="match_parent"

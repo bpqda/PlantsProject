@@ -5,25 +5,27 @@ import java.io.Serializable;
 
 public class Plant implements Serializable {
     String name;
+    String sort;
     int watering;
     int feeding;
     int spraying;
     long id;
 
-    public Plant(long id, String name, int watering, int feeding, int spraying) {
+    public Plant(long id, String name, String sort, int watering, int feeding, int spraying) {
         this.id = id;
         this.name = name;
+        this.sort = sort;
         this.watering = watering;
         this.feeding = feeding;
         this.spraying = spraying;
     }
 
-    public Plant(String name, int watering, int feeding, int spraying) {
-        this.name = name;
-        this.watering = watering;
-        this.feeding = feeding;
-        this.spraying = spraying;
-    }
+   // public Plant(String name, int watering, int feeding, int spraying) {
+   //     this.name = name;
+   //     this.watering = watering;
+   //     this.feeding = feeding;
+   //     this.spraying = spraying;
+   // }
 
     public String getName() {
         return name;
@@ -73,5 +75,13 @@ public class Plant implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }
