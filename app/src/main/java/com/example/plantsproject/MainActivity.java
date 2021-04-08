@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");
         });
-        updateList();
 
         //кнопка для создания растений
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -91,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            //Plant plant = (Plant) data.getSerializableExtra("plant");
-
             updateList();
         }
     }
@@ -159,10 +156,21 @@ public class MainActivity extends AppCompatActivity {
 
             Plant plant = plants.get(i);
             name.setText(plant.getName());
-            watering.setText("Полив\n" + plant.getWatering());
-            feeding.setText("Удобрение\n" + plant.getFeeding());
-            spraying.setText("Опрыскивание\n" + plant.getSpraying());
-
+            if(plant.getWatering()!=0) {
+                watering.setText("Полив\n" + plant.getWatering());
+            } else {
+                watering.setText("Полив\n-");
+            }
+            if(plant.getFeeding()!=0) {
+                feeding.setText("Удобрение\n" + plant.getFeeding());
+            } else {
+                feeding.setText("Удобрение\n-");
+            }
+            if(plant.getSpraying()!=0) {
+                spraying.setText("Опрыскивание\n" + plant.getSpraying());
+            } else {
+                spraying.setText("Опрыскивание\n-");
+            }
             return view;
 
         }

@@ -10,9 +10,8 @@ import java.util.ArrayList;
 
 public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 8;
     private static final String TABLE_NAME = "tablePlants";
-    private static final String TABLE_NAME_TIPS = "tablePlants";
 
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "Name";
@@ -20,10 +19,6 @@ public class DBPlants {
     private static final String COLUMN_WATERING = "Watering";
     private static final String COLUMN_FEEDING = "Feeding";
     private static final String COLUMN_SPRAYING = "Spraying";
-
-    private static final String COLUMN_ID_TIPS = "id";
-    private static final String COLUMN_NAME_TIPS = "Name";
-    private static final String COLUMN_TIPS = "Tips";
 
     private static final int NUM_COLUMN_ID = 0;
     private static final int NUM_COLUMN_NAME= 1;
@@ -98,10 +93,6 @@ public class DBPlants {
         return arr;
     }
 
-
-
-
-
     private class OpenHelper extends SQLiteOpenHelper {
 
         OpenHelper(Context context) {
@@ -118,13 +109,6 @@ public class DBPlants {
                     COLUMN_FEEDING + " INT,"+
                     COLUMN_SPRAYING+" INT);";
             db.execSQL(queryPlantsDB);
-            //one
-          //  String queryTipsDB = "CREATE TABLE " + TABLE_NAME_TIPS + " ("+
-          //          COLUMN_ID_TIPS + "INTEGER PRIMARY KEY AUTOINCREMENT, " +
-          //          COLUMN_NAME_TIPS + "TEXT, " +
-          //          COLUMN_TIPS + " TEXT);";
-          //  db.execSQL(queryTipsDB);
-
         }
 
         @Override

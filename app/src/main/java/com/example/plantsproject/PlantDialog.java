@@ -39,9 +39,21 @@ public class PlantDialog extends DialogFragment {
         TextView notes = view.findViewById(R.id.notes);
 
         name.setText(plant.getName());
-        watering.setText("Переодичность полива:   "+plant.getWatering());
-        feeding.setText("Переодичность удобрения   "+plant.getFeeding());
-        spraying.setText("Переодичность опрыскивания  "+plant.getSpraying());
+        if(plant.getWatering()!=0) {
+            watering.setText("Периодичность полива:   " + plant.getWatering());
+        } else {
+            watering.setText("Периодичность полива:   -");
+        }
+        if(plant.getFeeding()!=0) {
+            feeding.setText("Периодичность удобрения:   " + plant.getFeeding());
+        } else {
+            feeding.setText("Периодичность удобрения:   -");
+        }
+        if(plant.getSpraying()!=0) {
+            spraying.setText("Периодичность опрыскивания:   " + plant.getSpraying());
+        } else {
+            spraying.setText("Периодичность опрыскивания:   -");
+        }
         notes.setText(plant.getNotes());
 
 
@@ -62,6 +74,5 @@ public class PlantDialog extends DialogFragment {
 
         builder.setCancelable(true);
         return builder.create();
-        //return super.onCreateDialog(savedInstanceState);
     }
 }

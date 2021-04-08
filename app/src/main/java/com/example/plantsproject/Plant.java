@@ -20,13 +20,6 @@ public class Plant implements Serializable {
         this.spraying = spraying;
     }
 
-   // public Plant(String name, int watering, int feeding, int spraying) {
-   //     this.name = name;
-   //     this.watering = watering;
-   //     this.feeding = feeding;
-   //     this.spraying = spraying;
-   // }
-
     public String getName() {
         return name;
     }
@@ -59,16 +52,6 @@ public class Plant implements Serializable {
         this.spraying = spraying;
     }
 
-    @Override
-    public String toString() {
-        return "Plant{" +
-                "name='" + name + '\'' +
-                ", watering=" + watering +
-                ", feeding=" + feeding +
-                ", spraying=" + spraying +
-                '}';
-    }
-
     public long getId() {
         return id;
     }
@@ -83,5 +66,17 @@ public class Plant implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    @Override
+    public String toString() {
+        return "Plant{" +
+                "name='" + name + '\'' +
+                ", notes='" + notes + '\'' +
+                ", watering=" + watering +
+                ", feeding=" + feeding +
+                ", spraying=" + spraying +
+                ", id=" + id +
+                '}';
     }
 }
