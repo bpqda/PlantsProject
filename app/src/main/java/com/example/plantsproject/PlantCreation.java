@@ -99,7 +99,7 @@ public class PlantCreation extends AppCompatActivity {
             } else {
                 plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
             }
-            NotificationScheduler.setReminder(this, MainActivity.class, plant.getWatering());
+            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering());
             finish();
         });
 
