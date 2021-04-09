@@ -3,10 +3,10 @@
     <string name="action_settings">Настройки</string>
     <string name="my_plants">Мои растения</string>
     <string name="name">Название</string>
-    <string name="plant_creation_bar">Создать растение</string>
+    <string name="plant_creation_bar">Новое растение</string>
     <string name="water">Периодичность полива</string>
     <string name="feed">Периодичность удобрения</string>
     <string name="spray">Периодичность опрыскивания</string>
-    <string name="notes">Заметки:</string>
+    <string name="notes">Заметки</string>
 
 </resources>

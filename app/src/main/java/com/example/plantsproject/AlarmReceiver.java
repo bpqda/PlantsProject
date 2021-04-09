@@ -17,7 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-            NotificationScheduler.showNotification(context, MainActivity.class, "Требуется уход за растением", "");
+            NotificationScheduler.showNotification(context, MainActivity.class, "Требуется уход за растением", "Зайти в приложение");
     }
 
 }

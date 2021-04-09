@@ -85,15 +85,39 @@ public class DBTips {
             cv.put(TIPS_COLUMN_WATERING, 5);
             cv.put(TIPS_COLUMN_FEEDING, 30);
             cv.put(TIPS_COLUMN_SPRAYING, 0);
+            db.insert(TABLE_NAME_TIPS, null, cv);
 
-            db.insert(TABLE_NAME_TIPS, null, cv);  ContentValues cv2=new ContentValues();
+            ContentValues cv2=new ContentValues();
             cv2.put(TIPS_COLUMN_NAME, "Орхидея");
             cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни.\nПересаживать раз в 2-3 года.");
             cv2.put(TIPS_COLUMN_WATERING, 5);
             cv2.put(TIPS_COLUMN_FEEDING, 30);
             cv2.put(TIPS_COLUMN_SPRAYING, 1);
-
             db.insert(TABLE_NAME_TIPS, null, cv2);
+
+            ContentValues cv3=new ContentValues();
+            cv2.put(TIPS_COLUMN_NAME, "Лук репчатый");
+            cv2.put(TIPS_COLUMN_NOTES, "Нельзя обрезать перо лука");
+            cv2.put(TIPS_COLUMN_WATERING, 4);
+            cv2.put(TIPS_COLUMN_FEEDING, 30);
+            cv2.put(TIPS_COLUMN_SPRAYING, 0);
+            db.insert(TABLE_NAME_TIPS, null, cv3);
+
+            ContentValues cv4=new ContentValues();
+            cv2.put(TIPS_COLUMN_NAME, "Фиалка");
+            cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни.\nПересаживать раз в 2-3 года.");
+            cv2.put(TIPS_COLUMN_WATERING, 5);
+            cv2.put(TIPS_COLUMN_FEEDING, 30);
+            cv2.put(TIPS_COLUMN_SPRAYING, 1);
+            db.insert(TABLE_NAME_TIPS, null, cv4);
+
+            ContentValues cv5=new ContentValues();
+            cv2.put(TIPS_COLUMN_NAME, "Фикус");
+            cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни.\nПересаживать раз в 2-3 года.");
+            cv2.put(TIPS_COLUMN_WATERING, 5);
+            cv2.put(TIPS_COLUMN_FEEDING, 30);
+            cv2.put(TIPS_COLUMN_SPRAYING, 1);
+            db.insert(TABLE_NAME_TIPS, null, cv5);
 
         }
 
