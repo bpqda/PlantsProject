@@ -63,16 +63,16 @@ public class PlantCreation extends AppCompatActivity {
         checkName.setOnClickListener(view -> {
            Plant plant = tips.findString(plantName.getText().toString());
            if(plant!=null) {
-               tipsTxt.setText(plant.toString());
+               tipsTxt.setText("Рекомендуемый уход установлен");
                setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
                setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
                setPlantParameters(plant.getWatering(), sCB, sInf, sSB);
+               notes.setText(plant.getNotes());
            } else {
                tipsTxt.setText("Растение не найдено");
            }
         });
 
-//Если MainActivity передала в intent растение для редактирования, то поля заполняются значениями
         if(getIntent().hasExtra("plant")) {
             Plant plant = (Plant) getIntent().getSerializableExtra("plant");
             plantName.setText(plant.getName());
@@ -87,19 +87,26 @@ public class PlantCreation extends AppCompatActivity {
             plantID = -1;
         }
 
-//кнопка создания растения
         create.setOnClickListener(v -> {
             Plant plant =new Plant(plantID,
                     plantName.getText().toString(), notes.getText().toString(),
                     wSB.getProgress(),
                     fSB.getProgress(),
                     sSB.getProgress());
-            if(add==true) {
+            if(add==true)
                 plants.update(plant);
-            } else {
+             else
                 plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
-            }
-            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering());
+            if(plant.getWatering()!=0)
+            {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering());}
+            else {}
+            if(plant.getSpraying()!=0)
+            {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding());}
+            else {}
+            if(plant.getSpraying()!=0)
+            {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying());}
+            else {}
+
             finish();
         });
 

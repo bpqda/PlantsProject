@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_delete:
                 plants.deleteAll();
+                NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
                 updateList();
                 return true;
         }

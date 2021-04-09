@@ -73,23 +73,24 @@
                     android:id="@+id/nameTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="20"
                     android:ems="10"
                     android:inputType="textPersonName"
                     android:text="Мое растение" />
 
                 <ImageButton
                     android:id="@+id/checkName"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@android:drawable/ic_menu_add" />
+                    android:background="#00FFFFFF"
+                    app:srcCompat="@android:drawable/ic_menu_search" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tips"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tips" />
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,8 +99,9 @@
 
                 <CheckBox
                     android:id="@+id/wateringCB"
-                    android:layout_width="355dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="20"
                     android:buttonTint="@color/blue"
                     android:checked="true"
                     android:text="@string/water"
@@ -111,7 +113,7 @@
                     android:id="@+id/wateringInf"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0"
+                    android:layout_weight="1"
                     android:text="---"
                     android:textColor="@color/blue"
                     android:textSize="24sp" />
@@ -137,8 +139,9 @@
 
                 <CheckBox
                     android:id="@+id/feedingCB"
-                    android:layout_width="355dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="20"
                     android:buttonTint="@color/yellow"
                     android:checked="true"
                     android:text="@string/feed"
@@ -149,7 +152,7 @@
                     android:id="@+id/feedingInf"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0"
+                    android:layout_weight="1"
                     android:text="---"
                     android:textColor="@color/yellow"
                     android:textSize="24sp" />
@@ -176,8 +179,9 @@
 
                 <CheckBox
                     android:id="@+id/sprayingCB"
-                    android:layout_width="355dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="20"
                     android:buttonTint="@color/colorMain"
                     android:checked="true"
                     android:text="@string/spray"
@@ -189,7 +193,7 @@
                     android:id="@+id/sprayingInf"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="0"
+                    android:layout_weight="1"
                     android:text="---"
                     android:textColor="@color/colorMain"
                     android:textSize="24sp" />

@@ -17,9 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "jkhdskjcghjkf", Toast.LENGTH_SHORT).show();
-
-            NotificationScheduler.showNotification(context, MainActivity.class, "Требуется уход за растением", "Content");
+            NotificationScheduler.showNotification(context, MainActivity.class, "Требуется уход за растением", "");
     }
 
 }

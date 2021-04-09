@@ -14,12 +14,6 @@ import androidx.core.app.TaskStackBuilder;
 
 import static android.content.Context.ALARM_SERVICE;
 
-
-
-//https://droidmentor.com/schedule-notifications-using-alarmmanager/
-
-
-
 public class NotificationScheduler {
 
     public static final int REMINDER_REQUEST_CODE=100;
@@ -35,11 +29,6 @@ public class NotificationScheduler {
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(
                 REMINDER_REQUEST_CODE,PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //PendingIntent pendingIntent = PendingIntent.getActivity(context,
-        //        0, notificationIntent,
-        //        PendingIntent.FLAG_CANCEL_CURRENT);
-
-//создание уведомления
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "CHANNEL_ID")
                         .setSmallIcon(R.drawable.plantpicture)
@@ -55,7 +44,6 @@ public class NotificationScheduler {
     }
 
     public static void cancelReminder(Context context,Class<?> cls) {
-        // Выключение ресивера
 
         ComponentName receiver = new ComponentName(context, cls);
         PackageManager pm = context.getPackageManager();
@@ -85,7 +73,7 @@ public class NotificationScheduler {
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + period*1000, period*1000, pendingIntent);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + period*1000*60*60*24, period*1000*60*60*24, pendingIntent);
 
         Toast.makeText(context, "Уведомления установлены", Toast.LENGTH_SHORT).show();
 

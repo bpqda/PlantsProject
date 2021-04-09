@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBTips {
     Context ctx;
     private static final String DATABASE_NAME = "tips.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     private static final String TABLE_NAME_TIPS = "tableTips";
 
     private static final String TIPS_COLUMN_ID = "id";
@@ -80,13 +80,20 @@ public class DBTips {
             db.execSQL(queryTipsDB);
 
             ContentValues cv=new ContentValues();
-            cv.put(TIPS_COLUMN_NAME, "Огурец");
-            cv.put(TIPS_COLUMN_NOTES, "Заметки");
-            cv.put(TIPS_COLUMN_WATERING, 3);
-            cv.put(TIPS_COLUMN_FEEDING, 3);
-            cv.put(TIPS_COLUMN_SPRAYING,3);
+            cv.put(TIPS_COLUMN_NAME, "Огурцы");
+            cv.put(TIPS_COLUMN_NOTES, "Рекомендуемое удобрение - перегной.");
+            cv.put(TIPS_COLUMN_WATERING, 5);
+            cv.put(TIPS_COLUMN_FEEDING, 30);
+            cv.put(TIPS_COLUMN_SPRAYING, 0);
 
-            db.insert(TABLE_NAME_TIPS, null, cv);
+            db.insert(TABLE_NAME_TIPS, null, cv);  ContentValues cv2=new ContentValues();
+            cv2.put(TIPS_COLUMN_NAME, "Орхидея");
+            cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни.\nПересаживать раз в 2-3 года.");
+            cv2.put(TIPS_COLUMN_WATERING, 5);
+            cv2.put(TIPS_COLUMN_FEEDING, 30);
+            cv2.put(TIPS_COLUMN_SPRAYING, 1);
+
+            db.insert(TABLE_NAME_TIPS, null, cv2);
 
         }
 
