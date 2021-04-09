@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,13 +17,15 @@ import androidx.fragment.app.DialogFragment;
 public class PlantDialog extends DialogFragment {
     Plant plant;
     Context context;
+   PlantAdapter adapter;
 
     public PlantDialog(Plant plant) {
         this.plant = plant;
     }
-    public PlantDialog(Plant plant, Context context) {
+    public PlantDialog(Plant plant, Context context, PlantAdapter adapter) {
         this(plant);
         this.context = context;
+        this.adapter = adapter;
     }
 
     @NonNull
@@ -40,22 +43,21 @@ public class PlantDialog extends DialogFragment {
 
         name.setText(plant.getName());
         if(plant.getWatering()!=0) {
-            watering.setText("Периодичность полива:   " + plant.getWatering());
+            watering.setText("Периодичность полива:   " + plant.getWatering()+ " дней");
         } else {
             watering.setText("Периодичность полива:   -");
         }
         if(plant.getFeeding()!=0) {
-            feeding.setText("Периодичность удобрения:   " + plant.getFeeding());
+            feeding.setText("Периодичность удобрения:   " + plant.getFeeding()+ " дней");
         } else {
             feeding.setText("Периодичность удобрения:   -");
         }
         if(plant.getSpraying()!=0) {
-            spraying.setText("Периодичность опрыскивания:   " + plant.getSpraying());
+            spraying.setText("Периодичность опрыскивания:   " + plant.getSpraying()+ " дней");
         } else {
             spraying.setText("Периодичность опрыскивания:   -");
         }
         notes.setText(plant.getNotes());
-
 
         builder.setView(view);
 
@@ -70,6 +72,9 @@ public class PlantDialog extends DialogFragment {
         builder.setNegativeButton("Удалить растение", (dialog, which) -> {
             DBPlants db = new DBPlants(context);
             db.delete(plant.getId());
+            DBPlants plants= new DBPlants(context);
+            adapter.setArrayMyData(plants.selectAll());
+            adapter.notifyDataSetChanged();
         });
 
         builder.setCancelable(true);

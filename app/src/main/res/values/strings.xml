@@ -1,12 +1,14 @@
 <resources>
-    <string name="app_name">PlantsProject</string>
+    <string name="app_name">Менеджер растений</string>
     <string name="action_settings">Настройки</string>
     <string name="my_plants">Мои растения</string>
     <string name="name">Название</string>
     <string name="plant_creation_bar">Новое растение</string>
-    <string name="water">Периодичность полива</string>
-    <string name="feed">Периодичность удобрения</string>
-    <string name="spray">Периодичность опрыскивания</string>
+    <string name="water">Периодичность полива (сутки)</string>
+    <string name="feed">Периодичность удобрения (сутки)</string>
+    <string name="spray">Периодичность опрыскивания (сутки)</string>
     <string name="notes">Заметки</string>
+    <string name="deleteall">Удалить все растения</string>
+    <string name="refresh">Обновить</string>
 
 </resources>

@@ -3,31 +3,20 @@ package com.example.plantsproject;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class PlantCreation extends AppCompatActivity {
-    TextView plantName;
-    TextView notes;
+    TextView plantName, notes, wInf, fInf, sInf, tipsTxt;
     ImageButton back, create, checkName;
-    CheckBox wCB;
-    SeekBar wSB;
-    TextView wInf;
-    CheckBox fCB;
-    SeekBar fSB;
-    TextView fInf;
-    CheckBox sCB;
-    SeekBar sSB;
-    TextView sInf;
+    CheckBox wCB, fCB, sCB;
+    SeekBar wSB, fSB, sSB;
     long plantID;
     private boolean add;
-    TextView tipsTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +52,7 @@ public class PlantCreation extends AppCompatActivity {
         checkName.setOnClickListener(view -> {
            Plant plant = tips.findString(plantName.getText().toString());
            if(plant!=null) {
-               tipsTxt.setText("Рекомендуемый уход установлен");
+               tipsTxt.setText("Рекомендуемый уход установлен.\nВы можете его отредактировать");
                setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
                setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
                setPlantParameters(plant.getWatering(), sCB, sInf, sSB);
@@ -93,10 +82,11 @@ public class PlantCreation extends AppCompatActivity {
                     wSB.getProgress(),
                     fSB.getProgress(),
                     sSB.getProgress());
-            if(add==true)
+            if(add)
                 plants.update(plant);
              else
                 plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
+
             if(plant.getWatering()!=0)
             {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering());}
             else {}
@@ -110,13 +100,11 @@ public class PlantCreation extends AppCompatActivity {
             finish();
         });
 
-        //кнопка отмены
         back.setOnClickListener(v -> {
             finish();
         });
     }
 
-    //Установка листенеров и цветов на SeekBar, TextView, CheckBox.
     private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
 
        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

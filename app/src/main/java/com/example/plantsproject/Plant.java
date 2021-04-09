@@ -1,6 +1,5 @@
 package com.example.plantsproject;
 
-
 import java.io.Serializable;
 
 public class Plant implements Serializable {
@@ -32,24 +31,12 @@ public class Plant implements Serializable {
         return watering;
     }
 
-    public void setWatering(int watering) {
-        this.watering = watering;
-    }
-
     public int getFeeding() {
         return feeding;
     }
 
-    public void setFeeding(int feeding) {
-        this.feeding = feeding;
-    }
-
     public int getSpraying() {
         return spraying;
-    }
-
-    public void setSpraying(int spraying) {
-        this.spraying = spraying;
     }
 
     public long getId() {
@@ -64,19 +51,4 @@ public class Plant implements Serializable {
         return notes;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    @Override
-    public String toString() {
-        return "Plant{" +
-                "name='" + name + '\'' +
-                ", notes='" + notes + '\'' +
-                ", watering=" + watering +
-                ", feeding=" + feeding +
-                ", spraying=" + spraying +
-                ", id=" + id +
-                '}';
-    }
 }

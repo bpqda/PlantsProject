@@ -7,9 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBTips {
-    Context ctx;
     private static final String DATABASE_NAME = "tips.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String TABLE_NAME_TIPS = "tableTips";
 
     private static final String TIPS_COLUMN_ID = "id";
@@ -52,16 +51,6 @@ public class DBTips {
         return null;
     }
 
-    public long insert(String name, String notes, int watering, int feeding, int spraying) {
-        ContentValues cv=new ContentValues();
-        cv.put(TIPS_COLUMN_NAME, name);
-        cv.put(TIPS_COLUMN_NOTES, notes);
-        cv.put(TIPS_COLUMN_WATERING, watering);
-        cv.put(TIPS_COLUMN_FEEDING, feeding);
-        cv.put(TIPS_COLUMN_SPRAYING,spraying);
-        return mDataBase.insert(TABLE_NAME_TIPS, null, cv);
-    }
-
     private class TipsOpenHelper extends SQLiteOpenHelper {
 
         TipsOpenHelper(Context context) {
@@ -89,34 +78,38 @@ public class DBTips {
 
             ContentValues cv2=new ContentValues();
             cv2.put(TIPS_COLUMN_NAME, "Орхидея");
-            cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни.\nПересаживать раз в 2-3 года.");
+            cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни;\nПересаживать раз в 2-3 года.");
             cv2.put(TIPS_COLUMN_WATERING, 5);
             cv2.put(TIPS_COLUMN_FEEDING, 30);
             cv2.put(TIPS_COLUMN_SPRAYING, 1);
             db.insert(TABLE_NAME_TIPS, null, cv2);
 
             ContentValues cv3=new ContentValues();
-            cv2.put(TIPS_COLUMN_NAME, "Лук репчатый");
-            cv2.put(TIPS_COLUMN_NOTES, "Нельзя обрезать перо лука");
-            cv2.put(TIPS_COLUMN_WATERING, 4);
-            cv2.put(TIPS_COLUMN_FEEDING, 30);
-            cv2.put(TIPS_COLUMN_SPRAYING, 0);
+            cv3.put(TIPS_COLUMN_NAME, "Лук репчатый");
+            cv3.put(TIPS_COLUMN_NOTES, "Нельзя обрезать перо лука.");
+            cv3.put(TIPS_COLUMN_WATERING, 4);
+            cv3.put(TIPS_COLUMN_FEEDING, 30);
+            cv3.put(TIPS_COLUMN_SPRAYING, 0);
             db.insert(TABLE_NAME_TIPS, null, cv3);
 
             ContentValues cv4=new ContentValues();
-            cv2.put(TIPS_COLUMN_NAME, "Фиалка");
-            cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни.\nПересаживать раз в 2-3 года.");
-            cv2.put(TIPS_COLUMN_WATERING, 5);
-            cv2.put(TIPS_COLUMN_FEEDING, 30);
-            cv2.put(TIPS_COLUMN_SPRAYING, 1);
+            cv4.put(TIPS_COLUMN_NAME, "Фиалка");
+            cv4.put(TIPS_COLUMN_NOTES, "Нельзя опрыскивать;\n" +
+                    "Ставить в места с рассеяным солнечным светом;\n" +
+                    "Фиалки не любят резкие перепады температур.");
+            cv4.put(TIPS_COLUMN_WATERING, 5);
+            cv4.put(TIPS_COLUMN_FEEDING, 15);
+            cv4.put(TIPS_COLUMN_SPRAYING, 0);
             db.insert(TABLE_NAME_TIPS, null, cv4);
 
             ContentValues cv5=new ContentValues();
-            cv2.put(TIPS_COLUMN_NAME, "Фикус");
-            cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни.\nПересаживать раз в 2-3 года.");
-            cv2.put(TIPS_COLUMN_WATERING, 5);
-            cv2.put(TIPS_COLUMN_FEEDING, 30);
-            cv2.put(TIPS_COLUMN_SPRAYING, 1);
+            cv5.put(TIPS_COLUMN_NAME, "Фикус");
+            cv5.put(TIPS_COLUMN_NOTES, "Чем выше уровень влажности, тем лучше;\n" +
+                    "Не ставить под прямые солнечные лучи;\n" +
+                    "Пересаживать раз в 2-3 года.");
+            cv5.put(TIPS_COLUMN_WATERING, 7);
+            cv5.put(TIPS_COLUMN_FEEDING, 15);
+            cv5.put(TIPS_COLUMN_SPRAYING, 1);
             db.insert(TABLE_NAME_TIPS, null, cv5);
 
         }

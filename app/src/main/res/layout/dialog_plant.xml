@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Название"
-        android:textColor="@color/darkBrown"
+        android:textColor="@color/darkGreen"
         android:textSize="30sp" />
 
     <TextView

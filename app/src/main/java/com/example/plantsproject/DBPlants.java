@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String TABLE_NAME = "tablePlants";
 
     private static final String COLUMN_ID = "id";
@@ -60,18 +60,6 @@ public class DBPlants {
 
     public void delete(long id) {
         mDataBase.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
-    }
-
-    public Plant select(long id) {
-        Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
-
-        mCursor.moveToFirst();
-        String plantName = mCursor.getString(NUM_COLUMN_NAME);
-        String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
-        int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
-        int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
-        int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-        return new Plant(id, plantName, plantNotes, plantWatering, plantFeeding,plantSpraying);
     }
 
     public ArrayList<Plant> selectAll() {

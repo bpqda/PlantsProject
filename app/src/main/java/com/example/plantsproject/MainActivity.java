@@ -47,12 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
         list.setOnItemClickListener((parent, view, position, id) -> {
             Plant selectedPlant = (Plant) adapter.getItem(position);
-            PlantDialog dialog = new PlantDialog(selectedPlant, this);
+            PlantDialog dialog = new PlantDialog(selectedPlant, this, adapter);
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");
         });
 
-        //кнопка для создания растений
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent i = new Intent(MainActivity.this, PlantCreation.class);
@@ -77,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_settings:
+                updateList();
                 return true;
             case R.id.action_delete:
                 plants.deleteAll();
@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-//адаптер
     class PlantAdapter extends BaseAdapter {
         private LayoutInflater inflater;
         private ArrayList<Plant> plants;
@@ -115,10 +114,6 @@ public class MainActivity extends AppCompatActivity {
         public PlantAdapter(Context ctx, ArrayList<Plant> array) {
             inflater = LayoutInflater.from(ctx);
             setArrayMyData(array);
-        }
-
-        public ArrayList<Plant> getArrayMyData() {
-            return plants;
         }
 
         public void setArrayMyData(ArrayList<Plant> arrayMyData) {

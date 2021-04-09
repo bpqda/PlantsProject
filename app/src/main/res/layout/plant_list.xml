@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Название"
-            android:textColor="#0A4B04"
+            android:textColor="@color/darkGreen"
             android:textSize="20sp" />
 
         <LinearLayout
