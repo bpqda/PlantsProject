@@ -76,12 +76,13 @@
                     android:layout_weight="20"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="Мое растение" />
+                    android:text="Мое растение"
+                    android:textColor="@color/darkGreen" />
 
                 <ImageButton
                     android:id="@+id/checkName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="#00FFFFFF"
                     app:srcCompat="@android:drawable/ic_menu_search" />
@@ -124,13 +125,13 @@
                 android:id="@+id/wateringSB"
                 style="@android:style/Widget.DeviceDefault.Light.SeekBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="42dp"
                 android:layout_weight="13"
                 android:indeterminate="false"
                 android:max="30"
                 android:progress="3"
                 android:progressTint="@color/blue"
-                android:thumbTint="@color/blue"></SeekBar>
+                android:thumbTint="@color/blue"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -164,7 +165,7 @@
                 android:id="@+id/feedingSB"
                 style="@android:style/Widget.DeviceDefault.Light.SeekBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="42dp"
                 android:layout_weight="15"
                 android:indeterminate="false"
                 android:max="30"
@@ -203,8 +204,8 @@
             <SeekBar
                 android:id="@+id/sprayingSB"
                 style="@android:style/Widget.DeviceDefault.Light.SeekBar"
-                android:layout_width="387dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
                 android:layout_weight="15"
                 android:indeterminate="false"
                 android:max="30"

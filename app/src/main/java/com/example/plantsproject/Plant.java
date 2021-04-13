@@ -51,4 +51,19 @@ public class Plant implements Serializable {
         return notes;
     }
 
+    public String getAction() {
+        Plant plant = this;
+        String action = "";
+        if(plant.getWatering()!=0) {
+            action = "полив";
+        }
+        if(plant.getFeeding()!=0) {
+            action = action +  ", удобрение";
+        }
+        if(plant.getSpraying()!=0) {
+            action = action + ", опрыскивание";
+        }
+        return action;
+    }
+
 }
