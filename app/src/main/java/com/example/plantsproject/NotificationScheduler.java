@@ -18,7 +18,7 @@ public class NotificationScheduler {
 
     public static final int REMINDER_REQUEST_CODE=100;
 
-    public static void showNotification(Context context, Class<?> cls, String title, String content) {
+    public static void showNotification(Context context, Class<?> cls, Plant plant) {
         Intent notificationIntent = new Intent(context, cls);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -32,8 +32,8 @@ public class NotificationScheduler {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "CHANNEL_ID")
                         .setSmallIcon(R.drawable.plantpicture)
-                        .setContentTitle(title)
-                        .setContentText(content)
+                        .setContentTitle("Требуется уход за растением")
+                        .setContentText("Растение" + plant.getName() + "требует " + plant.getAction())
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setContentIntent(pendingIntent)
                         .addAction(R.drawable.plant, "Открыть", pendingIntent)
@@ -59,7 +59,7 @@ public class NotificationScheduler {
         pendingIntent.cancel();
     }
 
-    public static void setReminder(Context context,Class<?> cls, long period) {
+    public static void setReminder(Context context,Class<?> cls, long period, Plant plant) {
 
         ComponentName receiver = new ComponentName(context, cls);
         PackageManager pm = context.getPackageManager();
@@ -69,11 +69,12 @@ public class NotificationScheduler {
                 PackageManager.DONT_KILL_APP);
 
         Intent intent1 = new Intent(context, cls);
+        intent1.putExtra("plant", plant);
+        intent1.putExtra("some", "123");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + period*1000*60*60*24, period*1000*60*60*24, pendingIntent);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + period*1000, period*1000, pendingIntent);
 
         Toast.makeText(context, "Уведомления установлены", Toast.LENGTH_SHORT).show();
 

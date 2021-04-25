@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <receiver android:name=".AlarmReceiver"
-            android:enabled="false">
+            android:enabled="false"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

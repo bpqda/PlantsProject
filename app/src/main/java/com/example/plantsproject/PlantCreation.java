@@ -58,6 +58,13 @@ public class PlantCreation extends AppCompatActivity {
                setPlantParameters(plant.getWatering(), sCB, sInf, sSB);
                notes.setText(plant.getNotes());
            } else {
+               wCB.setChecked(false);
+               fCB.setChecked(false);
+               sCB.setChecked(false);
+               wSB.setProgress(0);
+               fSB.setProgress(0);
+               sSB.setProgress(0);
+               notes.setText("");
                tipsTxt.setText("Растение не найдено");
            }
         });
@@ -88,14 +95,14 @@ public class PlantCreation extends AppCompatActivity {
                 plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
 
             if(plant.getWatering()!=0)
-            {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering());}
+                {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);}
             else {}
-            if(plant.getSpraying()!=0)
-            {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding());}
-            else {}
-            if(plant.getSpraying()!=0)
-            {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying());}
-            else {}
+            //if(plant.getSpraying()!=0)
+            //{NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding());}
+            //else {}
+            //if(plant.getSpraying()!=0)
+            //{NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying());}
+            //else {}
 
             finish();
         });
