@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 public class PlantDialog extends DialogFragment {
     Plant plant;
     Context context;
-   PlantAdapter adapter;
+    PlantAdapter adapter;
 
     public PlantDialog(Plant plant) {
         this.plant = plant;
@@ -62,14 +62,14 @@ public class PlantDialog extends DialogFragment {
 
         builder.setView(view);
 
-        builder.setPositiveButton("Редактировать", (dialog, which) -> {
-            Intent i = new Intent(getActivity(), PlantCreation.class);
-            i.putExtra("plant", plant);
-            startActivity(i);
-        });
-        //builder.setNeutralButton("Отмена", (dialog, which) -> {
-        //    return;
+        //builder.setPositiveButton("Редактировать", (dialog, which) -> {
+        //    Intent i = new Intent(getActivity(), PlantCreation.class);
+        //    i.putExtra("plant", plant);
+        //    startActivity(i);
         //});
+        builder.setNeutralButton("Отмена", (dialog, which) -> {
+            return;
+        });
         builder.setNegativeButton("Больше информации", (dialog, which) -> {
             Intent i = new Intent(context, PlantInfoActivity.class);
             i.putExtra("plant", plant);

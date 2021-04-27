@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -89,6 +90,8 @@ public class PlantCreation extends AppCompatActivity {
             plantID = -1;
         }
 
+        Intent i = new Intent(PlantCreation.this, MainActivity.class);
+
         create.setOnClickListener(v -> {
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -105,19 +108,11 @@ public class PlantCreation extends AppCompatActivity {
 
             if(plant.getWatering()!=0)
                 {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);}
-            else {}
-            //if(plant.getSpraying()!=0)
-            //{NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding());}
-            //else {}
-            //if(plant.getSpraying()!=0)
-            //{NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying());}
-            //else {}
-
-            finish();
+           startActivity(i);
         });
 
         back.setOnClickListener(v -> {
-            finish();
+            startActivity(i);
         });
     }
 
