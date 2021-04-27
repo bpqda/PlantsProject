@@ -73,6 +73,11 @@ public class PlantDialog extends DialogFragment {
         builder.setNeutralButton("Отмена", (dialog, which) -> {
             return;
         });
+        builder.setNeutralButton("Больше информации", (dialog, which) -> {
+            Intent i = new Intent(context, PlantInfoActivity.class);
+            i.putExtra("plant", plant);
+            startActivity(i);
+        });
         builder.setNegativeButton("Удалить растение", (dialog, which) -> {
             DBPlants db = new DBPlants(context);
             db.delete(plant.getId());
