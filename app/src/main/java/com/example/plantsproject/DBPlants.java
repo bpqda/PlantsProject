@@ -65,6 +65,18 @@ public class DBPlants {
     public void delete(long id) {
         mDataBase.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
     }
+    public Plant select(long id) {
+        Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
+
+        mCursor.moveToFirst();
+        String plantName = mCursor.getString(NUM_COLUMN_NAME);
+        String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
+        int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
+        int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
+        int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
+        String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
+        return new Plant(id, plantName, plantNotes, plantWatering,plantFeeding, plantSpraying, creationDate);
+    }
 
     public ArrayList<Plant> selectAll() {
         Cursor mCursor = mDataBase.query(TABLE_NAME, null, null, null, null, null, "id desc");

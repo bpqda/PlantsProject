@@ -7,14 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
-import org.w3c.dom.Text;
 
 public class PlantDialog extends DialogFragment {
     Plant plant;
@@ -70,21 +67,21 @@ public class PlantDialog extends DialogFragment {
             i.putExtra("plant", plant);
             startActivity(i);
         });
-        builder.setNeutralButton("Отмена", (dialog, which) -> {
-            return;
-        });
-        builder.setNeutralButton("Больше информации", (dialog, which) -> {
+        //builder.setNeutralButton("Отмена", (dialog, which) -> {
+        //    return;
+        //});
+        builder.setNegativeButton("Больше информации", (dialog, which) -> {
             Intent i = new Intent(context, PlantInfoActivity.class);
             i.putExtra("plant", plant);
             startActivity(i);
         });
-        builder.setNegativeButton("Удалить растение", (dialog, which) -> {
-            DBPlants db = new DBPlants(context);
-            db.delete(plant.getId());
-            DBPlants plants= new DBPlants(context);
-            adapter.setArrayMyData(plants.selectAll());
-            adapter.notifyDataSetChanged();
-        });
+        //builder.setNegativeButton("Удалить растение", (dialog, which) -> {
+        //    DBPlants db = new DBPlants(context);
+        //    db.delete(plant.getId());
+        //    DBPlants plants= new DBPlants(context);
+        //    adapter.setArrayMyData(plants.selectAll());
+        //    adapter.notifyDataSetChanged();
+        //});
 
         builder.setCancelable(true);
         return builder.create();

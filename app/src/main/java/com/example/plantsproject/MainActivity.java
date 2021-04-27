@@ -79,8 +79,11 @@ public class MainActivity extends AppCompatActivity {
                 updateList();
                 return true;
             case R.id.action_delete:
-                plants.deleteAll();
-                NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
+                //plants.deleteAll();
+                //NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
+                DeleteDialog dialog = new DeleteDialog(this, null, "Вы действительно хотите удалить все растения?", 100, adapter);
+                FragmentManager manager = getSupportFragmentManager();
+                dialog.show(manager, "dialog");
                 updateList();
                 return true;
         }
