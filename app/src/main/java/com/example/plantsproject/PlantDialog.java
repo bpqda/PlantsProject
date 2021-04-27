@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import org.w3c.dom.Text;
+
 public class PlantDialog extends DialogFragment {
     Plant plant;
     Context context;
@@ -40,6 +42,7 @@ public class PlantDialog extends DialogFragment {
         TextView feeding = view.findViewById(R.id.feeding);
         TextView spraying = view.findViewById(R.id.spraying);
         TextView notes = view.findViewById(R.id.notes);
+        TextView date = view.findViewById(R.id.date);
 
         name.setText(plant.getName());
         if(plant.getWatering()!=0) {
@@ -58,6 +61,7 @@ public class PlantDialog extends DialogFragment {
             spraying.setText("Периодичность опрыскивания:   -");
         }
         notes.setText(plant.getNotes());
+        date.setText("Дата создания: " + plant.getCreationDate());
 
         builder.setView(view);
 

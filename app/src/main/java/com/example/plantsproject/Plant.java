@@ -9,14 +9,18 @@ public class Plant implements Serializable {
     int feeding;
     int spraying;
     long id;
+    String creationDate;
 
-    public Plant(long id, String name, String notes, int watering, int feeding, int spraying) {
+
+
+    public Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate) {
         this.id = id;
         this.name = name;
         this.notes = notes;
         this.watering = watering;
         this.feeding = feeding;
         this.spraying = spraying;
+        this.creationDate = creationDate;
     }
 
     public String getName() {
@@ -50,6 +54,14 @@ public class Plant implements Serializable {
     public String getNotes() {
         return notes;
     }
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
 
     public String getAction() {
         Plant plant = this;

@@ -3,12 +3,18 @@ package com.example.plantsproject;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class PlantCreation extends AppCompatActivity {
     TextView plantName, notes, wInf, fInf, sInf, tipsTxt;
@@ -84,15 +90,18 @@ public class PlantCreation extends AppCompatActivity {
         }
 
         create.setOnClickListener(v -> {
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate= formatter.format(date);
             Plant plant =new Plant(plantID,
                     plantName.getText().toString(), notes.getText().toString(),
                     wSB.getProgress(),
                     fSB.getProgress(),
-                    sSB.getProgress());
+                    sSB.getProgress(), strDate);
             if(add)
                 plants.update(plant);
              else
-                plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying());
+                plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying(), strDate);
 
             if(plant.getWatering()!=0)
                 {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);}
@@ -148,4 +157,6 @@ public class PlantCreation extends AppCompatActivity {
             tv.setText("---");
         }
     }
-}
+    }
+
+

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBTips {
     private static final String DATABASE_NAME = "tips.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
     private static final String TABLE_NAME_TIPS = "tableTips";
 
     private static final String TIPS_COLUMN_ID = "id";
@@ -44,7 +44,7 @@ public class DBTips {
                     int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
                     int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
                     int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-                    return new Plant(id, plantName, plantNotes, plantWatering, plantFeeding, plantSpraying);
+                    return new Plant(id, plantName, plantNotes, plantWatering, plantFeeding, plantSpraying, "");
                 }
             } while (mCursor.moveToNext());
         }
@@ -65,7 +65,7 @@ public class DBTips {
                     TIPS_COLUMN_NOTES+" TEXT, "+
                     TIPS_COLUMN_WATERING + " INT," +
                     TIPS_COLUMN_FEEDING + " INT,"+
-                    TIPS_COLUMN_SPRAYING+" INT);";
+                    TIPS_COLUMN_SPRAYING+" INT); ";
             db.execSQL(queryTipsDB);
 
             ContentValues cv=new ContentValues();
@@ -122,3 +122,10 @@ public class DBTips {
 
     }
 }
+
+
+
+
+
+
+

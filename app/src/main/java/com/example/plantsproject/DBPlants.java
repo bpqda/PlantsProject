@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
     private static final String TABLE_NAME = "tablePlants";
 
     private static final String COLUMN_ID = "id";
@@ -19,6 +19,7 @@ public class DBPlants {
     private static final String COLUMN_WATERING = "Watering";
     private static final String COLUMN_FEEDING = "Feeding";
     private static final String COLUMN_SPRAYING = "Spraying";
+    private static final String COLUMN_CREATION = "Creation";
 
     private static final int NUM_COLUMN_ID = 0;
     private static final int NUM_COLUMN_NAME= 1;
@@ -26,6 +27,7 @@ public class DBPlants {
     private static final int NUM_COLUMN_WATERING = 3;
     private static final int NUM_COLUMN_FEEDING = 4;
     private static final int NUM_COLUMN_SPRAYING = 5;
+    private static final int NUM_COLUMN_CREATION= 6;
     private SQLiteDatabase mDataBase;
 
 
@@ -34,13 +36,14 @@ public class DBPlants {
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    public long insert(String name, String notes, int watering, int feeding, int spraying) {
+    public long insert(String name, String notes, int watering, int feeding, int spraying, String creationDate) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, name);
         cv.put(COLUMN_NOTES, notes);
         cv.put(COLUMN_WATERING, watering);
         cv.put(COLUMN_FEEDING, feeding);
         cv.put(COLUMN_SPRAYING,spraying);
+        cv.put(COLUMN_CREATION, creationDate);
         return mDataBase.insert(TABLE_NAME, null, cv);
     }
 
@@ -51,6 +54,7 @@ public class DBPlants {
         cv.put(COLUMN_WATERING, plant.getWatering());
         cv.put(COLUMN_FEEDING, plant.getFeeding());
         cv.put(COLUMN_SPRAYING,plant.getSpraying());
+        cv.put(COLUMN_CREATION, plant.getCreationDate());
         return mDataBase.update(TABLE_NAME, cv, COLUMN_ID + " = ?",new String[] { String.valueOf(plant.getId())});
     }
 
@@ -75,7 +79,8 @@ public class DBPlants {
                 int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
                 int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
                 int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-                arr.add(new Plant(id, plantName, plantNotes, plantWatering, plantFeeding,plantSpraying));
+                String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
+                arr.add(new Plant(id, plantName, plantNotes, plantWatering, plantFeeding,plantSpraying, creationDate));
             } while (mCursor.moveToNext());
         }
         return arr;
@@ -88,14 +93,14 @@ public class DBPlants {
         }
         @Override
         public void onCreate(SQLiteDatabase db) {
-            //many
             String queryPlantsDB = "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_NAME+ " TEXT, " +
                     COLUMN_NOTES+" TEXT, "+
                     COLUMN_WATERING + " INT," +
                     COLUMN_FEEDING + " INT,"+
-                    COLUMN_SPRAYING+" INT);";
+                    COLUMN_SPRAYING+" INT, "+
+                    COLUMN_CREATION+" TEXT);";
             db.execSQL(queryPlantsDB);
         }
 
