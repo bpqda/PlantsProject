@@ -93,18 +93,16 @@ public class PlantCreation extends AppCompatActivity {
         Intent i = new Intent(PlantCreation.this, MainActivity.class);
 
         create.setOnClickListener(v -> {
-            Date date = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            String strDate= formatter.format(date);
+            DateDefiner def = new DateDefiner("dd/MM/yyyy");
             Plant plant =new Plant(plantID,
                     plantName.getText().toString(), notes.getText().toString(),
                     wSB.getProgress(),
                     fSB.getProgress(),
-                    sSB.getProgress(), strDate);
+                    sSB.getProgress(), def.defineDate());
             if(add)
                 plants.update(plant);
              else
-                plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying(), strDate);
+                plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying(), def.defineDate());
 
             if(plant.getWatering()!=0)
                 {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);}

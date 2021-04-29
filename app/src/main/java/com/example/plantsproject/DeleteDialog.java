@@ -30,7 +30,7 @@ public class DeleteDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
         builder.setTitle("Удаление растения")
                 .setMessage(content)
                 .setPositiveButton("Да", (dialog, id) -> {
@@ -44,12 +44,11 @@ public class DeleteDialog extends DialogFragment {
                             return;
                         case 200:
                             plants.delete(plant.getId());
-                            adapter.setArrayMyData(plants.selectAll());
-                            adapter.notifyDataSetChanged();
+                            Intent i = new Intent(context, MainActivity.class);
+                            startActivity(i);
                             return;
                     }
-                    Intent i = new Intent(context, MainActivity.class);
-                    startActivity(i);
+
                 });
         builder.setNegativeButton("Нет", (dialog, which) -> {
             dialog.cancel();

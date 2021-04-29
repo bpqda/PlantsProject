@@ -33,7 +33,7 @@ public class NotificationScheduler {
                 new NotificationCompat.Builder(context, "CHANNEL_ID")
                         .setSmallIcon(R.drawable.plantpicture)
                         .setContentTitle("Требуется уход за растением")
-                        .setContentText("Растение" + plant.getName() + "требует " + plant.getAction())
+      //                  .setContentText("Растение" + plant.getName() + "требует " + plant.getAction())
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setContentIntent(pendingIntent)
                         .addAction(R.drawable.plant, "Открыть", pendingIntent)

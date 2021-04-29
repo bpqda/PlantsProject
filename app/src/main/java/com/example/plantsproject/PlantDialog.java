@@ -7,22 +7,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.Date;
+
 public class PlantDialog extends DialogFragment {
     Plant plant;
     Context context;
     PlantAdapter adapter;
 
-    public PlantDialog(Plant plant) {
-        this.plant = plant;
-    }
     public PlantDialog(Plant plant, Context context, PlantAdapter adapter) {
-        this(plant);
+        this.plant = plant;
         this.context = context;
         this.adapter = adapter;
     }
@@ -38,35 +38,43 @@ public class PlantDialog extends DialogFragment {
         TextView watering = view.findViewById(R.id.watering);
         TextView feeding = view.findViewById(R.id.feeding);
         TextView spraying = view.findViewById(R.id.spraying);
-        TextView notes = view.findViewById(R.id.notes);
-        TextView date = view.findViewById(R.id.date);
+        Button water = view.findViewById(R.id.water);
+        Button feed = view.findViewById(R.id.feed);
+        Button spray = view.findViewById(R.id.spray);
+        DateDefiner def = new DateDefiner("dd/MM/yyyy HH:mm");
+
 
         name.setText(plant.getName());
         if(plant.getWatering()!=0) {
-            watering.setText("Периодичность полива:   " + plant.getWatering()+ " дней");
+            watering.setText("Полито:  " + plant.getLastW());
         } else {
-            watering.setText("Периодичность полива:   -");
+            watering.setText("Полив отключено");
         }
         if(plant.getFeeding()!=0) {
-            feeding.setText("Периодичность удобрения:   " + plant.getFeeding()+ " дней");
+            feeding.setText("Удобрено:   " + plant.getLastF());
         } else {
-            feeding.setText("Периодичность удобрения:   -");
+            feeding.setText("Удобрение отключено");
         }
         if(plant.getSpraying()!=0) {
-            spraying.setText("Периодичность опрыскивания:   " + plant.getSpraying()+ " дней");
+            spraying.setText("Опрыскано   " + plant.getLastS());
         } else {
-            spraying.setText("Периодичность опрыскивания:   -");
+            spraying.setText("Опрыскивание отключено");
         }
-        notes.setText(plant.getNotes());
-        date.setText("Дата создания: " + plant.getCreationDate());
+
+        water.setOnClickListener(v -> {
+            plant.setLastW(def.defineDate());
+            watering.setText("Полито:  " + plant.getLastW());
+        });
+        feed.setOnClickListener(v -> {
+            plant.setLastF(def.defineDate());
+            feeding.setText("Удобрено:   " + plant.getLastF());
+        });
+        spray.setOnClickListener(v -> {
+            plant.setLastS(def.defineDate());
+            spraying.setText("Опрыскано   " + plant.getLastS());
+        });
 
         builder.setView(view);
-
-        //builder.setPositiveButton("Редактировать", (dialog, which) -> {
-        //    Intent i = new Intent(getActivity(), PlantCreation.class);
-        //    i.putExtra("plant", plant);
-        //    startActivity(i);
-        //});
         builder.setNeutralButton("Отмена", (dialog, which) -> {
             return;
         });
@@ -75,13 +83,6 @@ public class PlantDialog extends DialogFragment {
             i.putExtra("plant", plant);
             startActivity(i);
         });
-        //builder.setNegativeButton("Удалить растение", (dialog, which) -> {
-        //    DBPlants db = new DBPlants(context);
-        //    db.delete(plant.getId());
-        //    DBPlants plants= new DBPlants(context);
-        //    adapter.setArrayMyData(plants.selectAll());
-        //    adapter.notifyDataSetChanged();
-        //});
 
         builder.setCancelable(true);
         return builder.create();

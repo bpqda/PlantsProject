@@ -10,6 +10,10 @@ public class Plant implements Serializable {
     int spraying;
     long id;
     String creationDate;
+    String lastW = "нет";
+    String lastF = "нет";
+    String lastS = "нет";
+
 
 
 
@@ -58,11 +62,6 @@ public class Plant implements Serializable {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
-    }
-
-
     public String getAction() {
         Plant plant = this;
         String action = "";
@@ -78,4 +77,27 @@ public class Plant implements Serializable {
         return action;
     }
 
+    public String getLastW() {
+        return lastW;
+    }
+
+    public void setLastW(String lastW) {
+        this.lastW = lastW;
+    }
+
+    public String getLastF() {
+        return lastF;
+    }
+
+    public void setLastF(String lastF) {
+        this.lastF = lastF;
+    }
+
+    public String getLastS() {
+        return lastS;
+    }
+
+    public void setLastS(String lastS) {
+        this.lastS = lastS;
+    }
 }

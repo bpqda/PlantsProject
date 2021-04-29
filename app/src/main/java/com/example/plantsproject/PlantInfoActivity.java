@@ -1,17 +1,20 @@
 package com.example.plantsproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class PlantInfoActivity extends AppCompatActivity {
     Button edit, delete;
-    TextView name;
+    TextView name, creationDate;
     Plant plant;
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +23,12 @@ public class PlantInfoActivity extends AppCompatActivity {
         edit = findViewById(R.id.edit);
         delete = findViewById(R.id.delete);
         name = findViewById(R.id.name);
+        back = findViewById(R.id.back);
+        creationDate = findViewById(R.id.creationDate);
 
-        Intent i = new Intent();
-        Plant plant = (Plant) getIntent().getSerializableExtra("plant");
+        plant = (Plant) getIntent().getSerializableExtra("plant");
                 name.setText(plant.getName());
+                creationDate.setText(plant.getCreationDate());
 
         edit.setOnClickListener(v -> {
             Intent j = new Intent(PlantInfoActivity.this, PlantCreation.class);
@@ -31,10 +36,17 @@ public class PlantInfoActivity extends AppCompatActivity {
             startActivity(j);
         });
         delete.setOnClickListener(v -> {
-            DBPlants plants = new DBPlants(this);
-            plants.delete(plant.getId());
-            Intent k = new Intent(PlantInfoActivity.this, MainActivity.class);
-            startActivity(k);
+            //DBPlants plants = new DBPlants(this);
+            //plants.delete(plant.getId());
+            //Intent k = new Intent(PlantInfoActivity.this, MainActivity.class);
+            //startActivity(k);
+            DeleteDialog dialog = new DeleteDialog(this, plant, "Вы уверены что хотите удалить растение "+ plant.getName() + "?", 200, null);
+            FragmentManager manager = getSupportFragmentManager();
+            dialog.show(manager, "dialog");
+        });
+        back.setOnClickListener(v -> {
+            Intent i = new Intent(PlantInfoActivity.this, MainActivity.class);
+            startActivity(i);
         });
 
     }
