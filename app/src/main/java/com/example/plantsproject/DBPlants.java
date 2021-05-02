@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 13;
     private static final String TABLE_NAME = "tablePlants";
 
     private static final String COLUMN_ID = "id";
@@ -20,6 +20,9 @@ public class DBPlants {
     private static final String COLUMN_FEEDING = "Feeding";
     private static final String COLUMN_SPRAYING = "Spraying";
     private static final String COLUMN_CREATION = "Creation";
+    private static final String COLUMN_LASTWAT = "WateringLast";
+    private static final String COLUMN_LASTFEED = "FeedingLast";
+    private static final String COLUMN_LASTSPR = "SprayingLast";
 
     private static final int NUM_COLUMN_ID = 0;
     private static final int NUM_COLUMN_NAME= 1;
@@ -28,6 +31,9 @@ public class DBPlants {
     private static final int NUM_COLUMN_FEEDING = 4;
     private static final int NUM_COLUMN_SPRAYING = 5;
     private static final int NUM_COLUMN_CREATION= 6;
+    private static final int NUM_COLUMN_LASTWAT= 7;
+    private static final int NUM_COLUMN_LASTFEED= 8;
+    private static final int NUM_COLUMN_LASTSPR= 9;
     private SQLiteDatabase mDataBase;
 
 
@@ -36,7 +42,7 @@ public class DBPlants {
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    public long insert(String name, String notes, int watering, int feeding, int spraying, String creationDate) {
+    public long insert(String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, name);
         cv.put(COLUMN_NOTES, notes);
@@ -44,6 +50,9 @@ public class DBPlants {
         cv.put(COLUMN_FEEDING, feeding);
         cv.put(COLUMN_SPRAYING,spraying);
         cv.put(COLUMN_CREATION, creationDate);
+        cv.put(COLUMN_LASTWAT, lastW);
+        cv.put(COLUMN_LASTFEED, lastF);
+        cv.put(COLUMN_LASTSPR, lastS);
         return mDataBase.insert(TABLE_NAME, null, cv);
     }
 
@@ -55,6 +64,9 @@ public class DBPlants {
         cv.put(COLUMN_FEEDING, plant.getFeeding());
         cv.put(COLUMN_SPRAYING,plant.getSpraying());
         cv.put(COLUMN_CREATION, plant.getCreationDate());
+        cv.put(COLUMN_LASTWAT, plant.getLastW());
+        cv.put(COLUMN_LASTFEED, plant.getLastF());
+        cv.put(COLUMN_LASTSPR, plant.getLastS());
         return mDataBase.update(TABLE_NAME, cv, COLUMN_ID + " = ?",new String[] { String.valueOf(plant.getId())});
     }
 
@@ -65,18 +77,17 @@ public class DBPlants {
     public void delete(long id) {
         mDataBase.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
     }
-    public Plant select(long id) {
-        Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
-
-        mCursor.moveToFirst();
-        String plantName = mCursor.getString(NUM_COLUMN_NAME);
-        String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
-        int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
-        int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
-        int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-        String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
-        return new Plant(id, plantName, plantNotes, plantWatering,plantFeeding, plantSpraying, creationDate);
-    }
+    //public Plant select(long id) {
+    //    Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
+    //    mCursor.moveToFirst();
+    //    String plantName = mCursor.getString(NUM_COLUMN_NAME);
+    //    String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
+    //    int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
+    //    int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
+    //    int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
+    //    String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
+    //    return new Plant(id, plantName, plantNotes, plantWatering,plantFeeding, plantSpraying, creationDate);
+    //}
 
     public ArrayList<Plant> selectAll() {
         Cursor mCursor = mDataBase.query(TABLE_NAME, null, null, null, null, null, "id desc");
@@ -92,7 +103,10 @@ public class DBPlants {
                 int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
                 int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
                 String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
-                arr.add(new Plant(id, plantName, plantNotes, plantWatering, plantFeeding,plantSpraying, creationDate));
+                String lastW = mCursor.getString(NUM_COLUMN_LASTWAT);
+                String lastF = mCursor.getString(NUM_COLUMN_LASTFEED);
+                String lastS = mCursor.getString(NUM_COLUMN_LASTSPR);
+                arr.add(new Plant(id, plantName, plantNotes, plantWatering, plantFeeding,plantSpraying, creationDate, lastW, lastF, lastS));
             } while (mCursor.moveToNext());
         }
         return arr;
@@ -111,8 +125,11 @@ public class DBPlants {
                     COLUMN_NOTES+" TEXT, "+
                     COLUMN_WATERING + " INT," +
                     COLUMN_FEEDING + " INT,"+
-                    COLUMN_SPRAYING+" INT, "+
-                    COLUMN_CREATION+" TEXT);";
+                    COLUMN_SPRAYING+ " INT, "+
+                    COLUMN_CREATION+ " TEXT, " +
+                    COLUMN_LASTWAT+ " TEXT, " +
+                    COLUMN_LASTFEED+ " TEXT, " +
+                    COLUMN_LASTSPR+ " TEXT);";
             db.execSQL(queryPlantsDB);
         }
 

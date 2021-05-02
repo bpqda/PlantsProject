@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,7 @@ public class PlantInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_info);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         edit = findViewById(R.id.edit);
         delete = findViewById(R.id.delete);
         name = findViewById(R.id.name);
@@ -36,11 +38,9 @@ public class PlantInfoActivity extends AppCompatActivity {
             startActivity(j);
         });
         delete.setOnClickListener(v -> {
-            //DBPlants plants = new DBPlants(this);
-            //plants.delete(plant.getId());
-            //Intent k = new Intent(PlantInfoActivity.this, MainActivity.class);
-            //startActivity(k);
-            DeleteDialog dialog = new DeleteDialog(this, plant, "Вы уверены что хотите удалить растение "+ plant.getName() + "?", 200, null);
+            DeleteDialog dialog = new DeleteDialog(this, plant,
+                    "Вы уверены что хотите удалить растение "+ plant.getName() + "?",
+                    false, null);
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");
         });

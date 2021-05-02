@@ -3,6 +3,8 @@ package com.example.plantsproject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,25 +29,37 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ListView list;
     Toolbar toolbar;
     PlantAdapter adapter;
     DBPlants plants;
+    LinearLayout layout;
+    ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         toolbar = findViewById(R.id.toolbar);
         list = findViewById(R.id.list);
         setSupportActionBar(toolbar);
-
+        layout = findViewById(R.id.layout);
         plants = new DBPlants(this);
 
         adapter = new PlantAdapter(this, plants.selectAll());
         list.setAdapter(adapter);
+        img = new ImageView(MainActivity.this);
+        img.setImageResource(R.drawable.empty_list_pic);
+        LinearLayout.LayoutParams imageViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        img.setLayoutParams(imageViewLayoutParams);
+
+        if(list.getCount()==0) {
+            changeListToImage(list, img, layout);
+        }
 
         list.setOnItemClickListener((parent, view, position, id) -> {
             Plant selectedPlant = (Plant) adapter.getItem(position);
@@ -79,12 +95,15 @@ public class MainActivity extends AppCompatActivity {
                 updateList();
                 return true;
             case R.id.action_delete:
-                //plants.deleteAll();
                 //NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
-                DeleteDialog dialog = new DeleteDialog(this, null, "Вы действительно хотите удалить все растения?", 100, adapter);
+                DeleteDialog dialog = new DeleteDialog(this, null,
+                        "Вы действительно хотите удалить все растения?",
+                        true, adapter);
                 FragmentManager manager = getSupportFragmentManager();
                 dialog.show(manager, "dialog");
-                updateList();
+                if (getIntent().hasExtra("deletedAll")) {
+                    changeListToImage(list, img, layout);
+                }
                 return true;
         }
             return super.onOptionsItemSelected(item);
@@ -108,6 +127,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         updateList();
     }
+    private void changeListToImage (ListView lis, ImageView im, LinearLayout lay) {
+        lay.removeView(lis);
+        lay.addView(im);
+    }
+
 }
 
     class PlantAdapter extends BaseAdapter {

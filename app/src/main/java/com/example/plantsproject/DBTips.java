@@ -44,7 +44,7 @@ public class DBTips {
                     int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
                     int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
                     int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-                    return new Plant(id, plantName, plantNotes, plantWatering, plantFeeding, plantSpraying, "");
+                    return new Plant(id, plantName, plantNotes, plantWatering, plantFeeding, plantSpraying, "", "", "", "");
                 }
             } while (mCursor.moveToNext());
         }

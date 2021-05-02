@@ -15,17 +15,28 @@ public class Plant implements Serializable {
     String lastS = "нет";
 
 
-
-
-    public Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate) {
-        this.id = id;
+    public Plant(long id, String name, String notes, int watering, int feeding, int spraying,  String creationDate, String lastW, String lastF, String lastS) {
         this.name = name;
         this.notes = notes;
         this.watering = watering;
         this.feeding = feeding;
         this.spraying = spraying;
+        this.id = id;
         this.creationDate = creationDate;
+        this.lastW = lastW;
+        this.lastF = lastF;
+        this.lastS = lastS;
     }
+
+    //public Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate) {
+    //    this.id = id;
+    //    this.name = name;
+    //    this.notes = notes;
+    //    this.watering = watering;
+    //    this.feeding = feeding;
+    //    this.spraying = spraying;
+    //    this.creationDate = creationDate;
+    //}
 
     public String getName() {
         return name;

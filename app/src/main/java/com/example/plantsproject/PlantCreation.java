@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -23,13 +24,15 @@ public class PlantCreation extends AppCompatActivity {
     CheckBox wCB, fCB, sCB;
     SeekBar wSB, fSB, sSB;
     long plantID;
-    private boolean add;
+    private boolean update;
+    Plant plant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_creation);
         setTheme(R.style.AppTheme);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         back = findViewById(R.id.back);
         create = findViewById(R.id.create);
@@ -57,13 +60,14 @@ public class PlantCreation extends AppCompatActivity {
         DBTips tips = new DBTips(this);
 
         checkName.setOnClickListener(view -> {
-           Plant plant = tips.findString(plantName.getText().toString());
-           if(plant!=null) {
+           Plant planttip = tips.findString(plantName.getText().toString());
+           if(planttip!=null) {
+               //TODO:
                tipsTxt.setText("Рекомендуемый уход установлен.\nВы можете его отредактировать");
-               setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
-               setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
-               setPlantParameters(plant.getWatering(), sCB, sInf, sSB);
-               notes.setText(plant.getNotes());
+               setPlantParameters(planttip.getWatering(), wCB, wInf, wSB);
+               setPlantParameters(planttip.getFeeding(), fCB, fInf, fSB);
+               setPlantParameters(planttip.getWatering(), sCB, sInf, sSB);
+               notes.setText(planttip.getNotes());
            } else {
                wCB.setChecked(false);
                fCB.setChecked(false);
@@ -77,14 +81,14 @@ public class PlantCreation extends AppCompatActivity {
         });
 
         if(getIntent().hasExtra("plant")) {
-            Plant plant = (Plant) getIntent().getSerializableExtra("plant");
+            plant = (Plant) getIntent().getSerializableExtra("plant");
             plantName.setText(plant.getName());
             notes.setText(plant.getNotes());
             setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
             setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
             setPlantParameters(plant.getSpraying(), sCB, sInf, sSB);
             plantID = plant.getId();
-            add = true;
+            update = true;
 
         } else {
             plantID = -1;
@@ -94,24 +98,35 @@ public class PlantCreation extends AppCompatActivity {
 
         create.setOnClickListener(v -> {
             DateDefiner def = new DateDefiner("dd/MM/yyyy");
-            Plant plant =new Plant(plantID,
-                    plantName.getText().toString(), notes.getText().toString(),
-                    wSB.getProgress(),
-                    fSB.getProgress(),
-                    sSB.getProgress(), def.defineDate());
-            if(add)
+            //if(plant!=null) {
+            //}
+
+            if(update) {
+                plant = new Plant(plantID,
+                        plantName.getText().toString(),
+                        notes.getText().toString(),
+                        wSB.getProgress(),
+                        fSB.getProgress(),
+                        sSB.getProgress(),
+                        def.defineDate(),
+                        plant.getLastW(), plant.getLastF(), plant.lastS);
                 plants.update(plant);
-             else
-                plants.insert(plant.getName(), plant.getNotes(), plant.getWatering(), plant.getFeeding(), plant.getSpraying(), def.defineDate());
+            } else {
+                plants.insert(plantName.getText().toString(),
+                        notes.getText().toString(),
+                        wSB.getProgress(),
+                        fSB.getProgress(),
+                        sSB.getProgress(),
+                        def.defineDate(),
+                        "нет", "нет", "нет");
+            }
 
-            if(plant.getWatering()!=0)
-                {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);}
+//            if(plant.getWatering()!=0)
+//                {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);}
            startActivity(i);
-        });
+      });
 
-        back.setOnClickListener(v -> {
-            startActivity(i);
-        });
+        back.setOnClickListener(v -> startActivity(i));
     }
 
     private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
