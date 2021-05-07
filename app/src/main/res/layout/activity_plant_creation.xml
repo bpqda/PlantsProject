@@ -19,12 +19,11 @@
 
             <ImageButton
                 android:id="@+id/back"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/colorMain"
-                android:rotation="270"
-                app:srcCompat="@drawable/ic_group_expand_15" />
+                android:src="@drawable/ic_arrow_back_black_24dp" />
 
             <TextView
                 android:id="@+id/appBarTV"
@@ -43,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@color/colorMain"
-                app:srcCompat="@drawable/ic_checked_checkbox" />
+                app:srcCompat="@drawable/ic_check_black_24dp" />
 
         </LinearLayout>
 
@@ -106,7 +105,7 @@
                     android:layout_weight="20"
                     android:buttonTint="@color/blue"
                     android:checked="true"
-                    android:text="@string/water"
+                    android:text="@string/watering"
                     android:textColor="#0F427A"
                     android:textColorLink="@color/blue" />
 
@@ -146,7 +145,7 @@
                     android:layout_weight="20"
                     android:buttonTint="@color/yellow"
                     android:checked="true"
-                    android:text="@string/feed"
+                    android:text="@string/feeding"
                     android:textColor="#633F01"
                     android:textColorLink="@color/yellow" />
 
@@ -186,7 +185,7 @@
                     android:layout_weight="20"
                     android:buttonTint="@color/colorMain"
                     android:checked="true"
-                    android:text="@string/spray"
+                    android:text="@string/spraying"
                     android:textColor="#124D09"
                     android:textColorLink="@color/colorMain" />
 

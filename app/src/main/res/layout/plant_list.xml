@@ -6,15 +6,15 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="75dp"
+        android:layout_width="100dp"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/plantpicture" />
+        app:srcCompat="@drawable/plant_picture" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="vertical"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:paddingRight="5dp"
         android:paddingBottom="10dp">
 
@@ -22,42 +22,30 @@
             android:id="@+id/nameTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
             android:text="Название"
             android:textColor="@color/darkGreen"
             android:textSize="20sp" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/stateWater"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp" />
 
-            <TextView
-                android:id="@+id/plantWatering"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="Полив"
-                android:textSize="18sp" />
+        <TextView
+            android:id="@+id/stateFeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="В порядке" />
 
-            <TextView
-                android:id="@+id/plantFeeding"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="Удобрение"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/plantSpraying"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:text="Опрыскивание"
-                android:textSize="18sp" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/stateSpray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp" />
 
     </LinearLayout>
 

@@ -9,11 +9,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-            Plant plant = (Plant) intent.getSerializableExtra("plant");
-       //     if (intent.getStringExtra("some") == null)
-       //         System.out.println("NULL");
-       // else System.out.println(intent.getStringExtra("some"));
-            NotificationScheduler.showNotification(context, MainActivity.class, plant);
+            String plantName = intent.getStringExtra("plantName");
+            String plantActions =  intent.getStringExtra("plantActions");
+            NotificationScheduler.showNotification(context, MainActivity.class, plantName, plantActions);
     }
 
 }

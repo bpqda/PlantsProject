@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
     private static final String TABLE_NAME = "tablePlants";
 
     private static final String COLUMN_ID = "id";
@@ -23,6 +23,9 @@ public class DBPlants {
     private static final String COLUMN_LASTWAT = "WateringLast";
     private static final String COLUMN_LASTFEED = "FeedingLast";
     private static final String COLUMN_LASTSPR = "SprayingLast";
+    private static final String COLUMN_LASTMILWAT= "WateringLastInMillis";
+    private static final String COLUMN_LASTMILFEED= "FeedingLastInMillis";
+    private static final String COLUMN_LASTMILSPRAY= "SprayingLastInMillis";
 
     private static final int NUM_COLUMN_ID = 0;
     private static final int NUM_COLUMN_NAME= 1;
@@ -34,6 +37,9 @@ public class DBPlants {
     private static final int NUM_COLUMN_LASTWAT= 7;
     private static final int NUM_COLUMN_LASTFEED= 8;
     private static final int NUM_COLUMN_LASTSPR= 9;
+    private static final int NUM_COLUMN_LASTMILWAT= 10;
+    private static final int NUM_COLUMN_LASTMILFEED= 11;
+    private static final int NUM_COLUMN_LASTMILSPRAY= 12;
     private SQLiteDatabase mDataBase;
 
 
@@ -42,7 +48,7 @@ public class DBPlants {
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    public long insert(String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS) {
+    public long insert(String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, name);
         cv.put(COLUMN_NOTES, notes);
@@ -53,6 +59,9 @@ public class DBPlants {
         cv.put(COLUMN_LASTWAT, lastW);
         cv.put(COLUMN_LASTFEED, lastF);
         cv.put(COLUMN_LASTSPR, lastS);
+        cv.put(COLUMN_LASTMILWAT, lastMilWat);
+        cv.put(COLUMN_LASTMILFEED, lastMilFeed);
+        cv.put(COLUMN_LASTMILSPRAY, lastMilSpray);
         return mDataBase.insert(TABLE_NAME, null, cv);
     }
 
@@ -67,6 +76,9 @@ public class DBPlants {
         cv.put(COLUMN_LASTWAT, plant.getLastW());
         cv.put(COLUMN_LASTFEED, plant.getLastF());
         cv.put(COLUMN_LASTSPR, plant.getLastS());
+        cv.put(COLUMN_LASTMILWAT, plant.getLastMilWat());
+        cv.put(COLUMN_LASTMILFEED, plant.getLastMilFeed());
+        cv.put(COLUMN_LASTMILSPRAY, plant.getLastMilSpray());
         return mDataBase.update(TABLE_NAME, cv, COLUMN_ID + " = ?",new String[] { String.valueOf(plant.getId())});
     }
 
@@ -106,10 +118,15 @@ public class DBPlants {
                 String lastW = mCursor.getString(NUM_COLUMN_LASTWAT);
                 String lastF = mCursor.getString(NUM_COLUMN_LASTFEED);
                 String lastS = mCursor.getString(NUM_COLUMN_LASTSPR);
-                arr.add(new Plant(id, plantName, plantNotes, plantWatering, plantFeeding,plantSpraying, creationDate, lastW, lastF, lastS));
+                long lastMilWat = mCursor.getLong(NUM_COLUMN_LASTMILWAT);
+                long lastMilFeed = mCursor.getLong(NUM_COLUMN_LASTMILFEED);
+                long lastMilSpray = mCursor.getLong(NUM_COLUMN_LASTMILSPRAY);
+                arr.add(new Plant(id, plantName, plantNotes, plantWatering, plantFeeding, plantSpraying, creationDate, lastW, lastF, lastS, lastMilWat, lastMilFeed, lastMilSpray));
             } while (mCursor.moveToNext());
         }
         return arr;
+
+
     }
 
     private class OpenHelper extends SQLiteOpenHelper {
@@ -129,7 +146,10 @@ public class DBPlants {
                     COLUMN_CREATION+ " TEXT, " +
                     COLUMN_LASTWAT+ " TEXT, " +
                     COLUMN_LASTFEED+ " TEXT, " +
-                    COLUMN_LASTSPR+ " TEXT);";
+                    COLUMN_LASTSPR+ " TEXT, " +
+                    COLUMN_LASTMILWAT + " INTEGER, " +
+                    COLUMN_LASTMILFEED + " INTEGER, " +
+                    COLUMN_LASTMILSPRAY + " INTEGER);";
             db.execSQL(queryPlantsDB);
         }
 

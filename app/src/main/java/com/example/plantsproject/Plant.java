@@ -5,17 +5,20 @@ import java.io.Serializable;
 public class Plant implements Serializable {
     String name;
     String notes;
-    int watering;
-    int feeding;
-    int spraying;
+    long watering;
+    long feeding;
+    long spraying;
     long id;
     String creationDate;
-    String lastW = "нет";
-    String lastF = "нет";
-    String lastS = "нет";
+    String lastW;
+    String lastF;
+    String lastS;
+    long lastMilWat;
+    long lastMilFeed;
+    long lastMilSpray;
 
 
-    public Plant(long id, String name, String notes, int watering, int feeding, int spraying,  String creationDate, String lastW, String lastF, String lastS) {
+    public Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
         this.name = name;
         this.notes = notes;
         this.watering = watering;
@@ -26,17 +29,34 @@ public class Plant implements Serializable {
         this.lastW = lastW;
         this.lastF = lastF;
         this.lastS = lastS;
+        this.lastMilWat = lastMilWat;
+        this.lastMilFeed = lastMilFeed;
+        this.lastMilSpray = lastMilSpray;
     }
 
-    //public Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate) {
-    //    this.id = id;
-    //    this.name = name;
-    //    this.notes = notes;
-    //    this.watering = watering;
-    //    this.feeding = feeding;
-    //    this.spraying = spraying;
-    //    this.creationDate = creationDate;
-    //}
+    public long getLastMilWat() {
+        return lastMilWat;
+    }
+
+    public void setLastMilWat(long lastMilWat) {
+        this.lastMilWat = lastMilWat;
+    }
+
+    public long getLastMilFeed() {
+        return lastMilFeed;
+    }
+
+    public void setLastMilFeed(long lastMilFeed) {
+        this.lastMilFeed = lastMilFeed;
+    }
+
+    public long getLastMilSpray() {
+        return lastMilSpray;
+    }
+
+    public void setLastMilSpray(long lastMilSpray) {
+        this.lastMilSpray = lastMilSpray;
+    }
 
     public String getName() {
         return name;
@@ -46,15 +66,13 @@ public class Plant implements Serializable {
         this.name = name;
     }
 
-    public int getWatering() {
+    public long getWatering() {
         return watering;
     }
-
-    public int getFeeding() {
+    public long getFeeding() {
         return feeding;
     }
-
-    public int getSpraying() {
+    public long getSpraying() {
         return spraying;
     }
 
@@ -80,10 +98,10 @@ public class Plant implements Serializable {
             action = "полив";
         }
         if(plant.getFeeding()!=0) {
-            action = action +  ", удобрение";
+            action = action +  "  удобрение";
         }
         if(plant.getSpraying()!=0) {
-            action = action + ", опрыскивание";
+            action = action + "  опрыскивание";
         }
         return action;
     }

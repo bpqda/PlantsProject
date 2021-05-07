@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class PlantInfoActivity extends AppCompatActivity {
     Button edit, delete;
-    TextView name, creationDate;
+    TextView name, creationDate, watering, feeding, spraying, notes;
     Plant plant;
     ImageButton back;
 
@@ -27,27 +27,49 @@ public class PlantInfoActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         back = findViewById(R.id.back);
         creationDate = findViewById(R.id.creationDate);
+        watering = findViewById(R.id.watering);
+        feeding = findViewById(R.id.feeding);
+        spraying = findViewById(R.id.spraying);
+        notes = findViewById(R.id.notes);
 
         plant = (Plant) getIntent().getSerializableExtra("plant");
-                name.setText(plant.getName());
-                creationDate.setText(plant.getCreationDate());
+        name.setText(plant.getName());
+        creationDate.setText(plant.getCreationDate());
 
-        edit.setOnClickListener(v -> {
-            Intent j = new Intent(PlantInfoActivity.this, PlantCreation.class);
-            j.putExtra("plant", plant);
-            startActivity(j);
-        });
-        delete.setOnClickListener(v -> {
-            DeleteDialog dialog = new DeleteDialog(this, plant,
-                    "Вы уверены что хотите удалить растение "+ plant.getName() + "?",
-                    false, null);
-            FragmentManager manager = getSupportFragmentManager();
-            dialog.show(manager, "dialog");
-        });
-        back.setOnClickListener(v -> {
-            Intent i = new Intent(PlantInfoActivity.this, MainActivity.class);
-            startActivity(i);
-        });
+        if (plant.getWatering() != 0)
+            watering.setText(String.valueOf(plant.getWatering()));
+        else
+            watering.setText(R.string.disabled);
 
+        if (plant.getFeeding() != 0)
+            feeding.setText(String.valueOf(plant.getFeeding()));
+         else
+            feeding.setText(R.string.disabled);
+
+        if (plant.getSpraying() != 0)
+            spraying.setText(String.valueOf(plant.getSpraying()));
+        else
+            spraying.setText(R.string.disabled);
+
+            notes.setText(plant.getNotes());
+
+            edit.setOnClickListener(v -> {
+                Intent j = new Intent(PlantInfoActivity.this, PlantCreation.class);
+                j.putExtra("plant", plant);
+                startActivity(j);
+            });
+            delete.setOnClickListener(v -> {
+                DeleteDialog dialog = new DeleteDialog(this, plant,
+                        R.string.sure2 + plant.getName() + " ?",
+                        false, null);
+                FragmentManager manager = getSupportFragmentManager();
+                dialog.show(manager, "dialog");
+            });
+            back.setOnClickListener(v -> {
+                Intent i = new Intent(PlantInfoActivity.this, MainActivity.class);
+                startActivity(i);
+            });
+
+        }
     }
-}
+

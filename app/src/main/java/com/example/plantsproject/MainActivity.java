@@ -1,10 +1,13 @@
 package com.example.plantsproject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Canvas;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,12 +27,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ListView list;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         img.setLayoutParams(imageViewLayoutParams);
 
         if(list.getCount()==0) {
-            changeListToImage(list, img, layout);
+            adapter.changeListToImage(list, img, layout);
         }
 
         list.setOnItemClickListener((parent, view, position, id) -> {
@@ -92,44 +91,38 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_settings:
-                updateList();
+                adapter.update(this);
                 return true;
             case R.id.action_delete:
-                //NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
+                NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
                 DeleteDialog dialog = new DeleteDialog(this, null,
-                        "Вы действительно хотите удалить все растения?",
-                        true, adapter);
+                        getString(R.string.sure),
+                        true,
+                        adapter);
                 FragmentManager manager = getSupportFragmentManager();
                 dialog.show(manager, "dialog");
-                if (getIntent().hasExtra("deletedAll")) {
-                    changeListToImage(list, img, layout);
-                }
                 return true;
         }
             return super.onOptionsItemSelected(item);
         }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            updateList();
-        }
-    }
+    //@Override
+   //protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+   //    super.onActivityResult(requestCode, resultCode, data);
+   //    if (resultCode == Activity.RESULT_OK) {
+   //        adapter.update();
+   //    }
+    //}
 
-    private void updateList () {
-        adapter.setArrayMyData(plants.selectAll());
-        adapter.notifyDataSetChanged();
-    }
+   // private void updateList () {
+   //     adapter.setArrayMyData(plants.selectAll());
+   //     adapter.notifyDataSetChanged();
+   // }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateList();
-    }
-    private void changeListToImage (ListView lis, ImageView im, LinearLayout lay) {
-        lay.removeView(lis);
-        lay.addView(im);
+        adapter.update(this);
     }
 
 }
@@ -173,28 +166,36 @@ public class MainActivity extends AppCompatActivity {
                 view = inflater.inflate(R.layout.plant_list, null);
             }
             TextView name = view.findViewById(R.id.nameTxt);
-            TextView watering = view.findViewById(R.id.plantWatering);
-            TextView feeding = view.findViewById(R.id.plantFeeding);
-            TextView spraying = view.findViewById(R.id.plantSpraying);
+            TextView stateWater = view.findViewById(R.id.stateWater);
+            TextView stateFeed = view.findViewById(R.id.stateFeed);
+            TextView stateSpray = view.findViewById(R.id.stateSpray);
 
             Plant plant = plants.get(i);
             name.setText(plant.getName());
-            if(plant.getWatering()!=0) {
-                watering.setText("Полив\n" + plant.getWatering());
-            } else {
-                watering.setText("Полив\n-");
-            }
-            if(plant.getFeeding()!=0) {
-                feeding.setText("Удобрение\n" + plant.getFeeding());
-            } else {
-                feeding.setText("Удобрение\n-");
-            }
-            if(plant.getSpraying()!=0) {
-                spraying.setText("Опрыскивание\n" + plant.getSpraying());
-            } else {
-                spraying.setText("Опрыскивание\n-");
-            }
-            return view;
 
+            if (plant.getWatering()!=0 && System.currentTimeMillis() > plant.getLastMilWat() + plant.getWatering() * 1000*60*60*24) {
+                stateWater.setText(R.string.need_w);
+                stateFeed.setText("");
+            }
+            if(plant.getSpraying()!=0 && System.currentTimeMillis() > plant.getLastMilSpray() + plant.getSpraying() * 1000*60*60*24) {
+                stateFeed.setText("");
+                stateSpray.setText(R.string.need_s);
+            }
+
+            if (plant.getFeeding()!=0 && System.currentTimeMillis() > plant.getLastMilFeed() + plant.getFeeding() * 1000*60*60*24)
+                    stateFeed.setText(R.string.need_f);
+
+            return view;
         }
+        public void update(Context ctx) {
+            PlantAdapter adapter = this;
+            DBPlants plantsDB = new DBPlants(ctx);
+            adapter.setArrayMyData(plantsDB.selectAll());
+            adapter.notifyDataSetChanged();
+        }
+        public void changeListToImage (ListView lis, ImageView im, LinearLayout lay) {
+            lay.removeView(lis);
+            lay.addView(im);
+        }
+
     }

@@ -2,10 +2,17 @@ package com.example.plantsproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -26,6 +33,8 @@ public class PlantCreation extends AppCompatActivity {
     long plantID;
     private boolean update;
     Plant plant;
+    Intent i;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,48 +69,43 @@ public class PlantCreation extends AppCompatActivity {
         DBTips tips = new DBTips(this);
 
         checkName.setOnClickListener(view -> {
-           Plant planttip = tips.findString(plantName.getText().toString());
-           if(planttip!=null) {
-               //TODO:
-               tipsTxt.setText("Рекомендуемый уход установлен.\nВы можете его отредактировать");
-               setPlantParameters(planttip.getWatering(), wCB, wInf, wSB);
-               setPlantParameters(planttip.getFeeding(), fCB, fInf, fSB);
-               setPlantParameters(planttip.getWatering(), sCB, sInf, sSB);
-               notes.setText(planttip.getNotes());
-           } else {
-               wCB.setChecked(false);
-               fCB.setChecked(false);
-               sCB.setChecked(false);
-               wSB.setProgress(0);
-               fSB.setProgress(0);
-               sSB.setProgress(0);
-               notes.setText("");
-               tipsTxt.setText("Растение не найдено");
-           }
+            Plant planttip = tips.findString(plantName.getText().toString());
+            if (planttip != null) {
+                //TODO:
+                tipsTxt.setText("Рекомендуемый уход установлен.\nВы можете его отредактировать");
+                setPlantParameters((int) planttip.getWatering(), wCB, wInf, wSB);
+                setPlantParameters((int) planttip.getFeeding(), fCB, fInf, fSB);
+                setPlantParameters((int) planttip.getWatering(), sCB, sInf, sSB);
+                notes.setText(planttip.getNotes());
+            } else {
+                wCB.setChecked(false);
+                fCB.setChecked(false);
+                sCB.setChecked(false);
+                wSB.setProgress(0);
+                fSB.setProgress(0);
+                sSB.setProgress(0);
+                notes.setText("");
+                tipsTxt.setText(getString(R.string.plant_not_found));
+            }
         });
 
-        if(getIntent().hasExtra("plant")) {
+        if (getIntent().hasExtra("plant")) {
             plant = (Plant) getIntent().getSerializableExtra("plant");
             plantName.setText(plant.getName());
             notes.setText(plant.getNotes());
-            setPlantParameters(plant.getWatering(), wCB, wInf, wSB);
-            setPlantParameters(plant.getFeeding(), fCB, fInf, fSB);
-            setPlantParameters(plant.getSpraying(), sCB, sInf, sSB);
+            setPlantParameters((int) plant.getWatering(), wCB, wInf, wSB);
+            setPlantParameters((int) plant.getFeeding(), fCB, fInf, fSB);
+            setPlantParameters((int) plant.getSpraying(), sCB, sInf, sSB);
             plantID = plant.getId();
             update = true;
-
         } else {
             plantID = -1;
         }
 
-        Intent i = new Intent(PlantCreation.this, MainActivity.class);
-
         create.setOnClickListener(v -> {
             DateDefiner def = new DateDefiner("dd/MM/yyyy");
-            //if(plant!=null) {
-            //}
 
-            if(update) {
+            if (update) {
                 plant = new Plant(plantID,
                         plantName.getText().toString(),
                         notes.getText().toString(),
@@ -109,40 +113,67 @@ public class PlantCreation extends AppCompatActivity {
                         fSB.getProgress(),
                         sSB.getProgress(),
                         def.defineDate(),
-                        plant.getLastW(), plant.getLastF(), plant.lastS);
+                        plant.getLastW(), plant.getLastF(), plant.lastS, plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray());
                 plants.update(plant);
+
+                NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
+                setPlantReminder(plant);
+
+                i = new Intent(PlantCreation.this, PlantInfoActivity.class);
+                i.putExtra("plant", plant);
+                startActivity(i);
             } else {
+                plant = new Plant(0, plantName.getText().toString(),
+                        notes.getText().toString(),
+                        wSB.getProgress(),
+                        fSB.getProgress(),
+                        sSB.getProgress(),
+                        def.defineDate(),
+                        "нет", "нет", "нет",
+                        0, 0, 0);
+
                 plants.insert(plantName.getText().toString(),
                         notes.getText().toString(),
                         wSB.getProgress(),
                         fSB.getProgress(),
                         sSB.getProgress(),
                         def.defineDate(),
-                        "нет", "нет", "нет");
+                        "нет", "нет", "нет",
+                        0, 0, 0);
+
+                setPlantReminder(plant);
+
+                i = new Intent(PlantCreation.this, MainActivity.class);
+                startActivity(i);
             }
 
-//            if(plant.getWatering()!=0)
-//                {NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);}
-           startActivity(i);
-      });
 
-        back.setOnClickListener(v -> startActivity(i));
+        });
+
+        back.setOnClickListener(v -> {
+            i = new Intent(PlantCreation.this, MainActivity.class);
+            startActivity(i);
+        });
     }
 
     private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
 
-       sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    txt.setText(String.valueOf(seekBar.getProgress()));
+                txt.setText(String.valueOf(seekBar.getProgress()));
             }
+
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar){}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar){}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
         cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(isChecked) {
+            if (isChecked) {
                 sb.setEnabled(true);
                 txt.setText(String.valueOf(sb.getProgress()));
                 sb.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
@@ -156,15 +187,28 @@ public class PlantCreation extends AppCompatActivity {
     }
 
     private void setPlantParameters(int parameter, CheckBox cb, TextView tv, SeekBar sb) {
-        if(parameter!=0){
+        if (parameter != 0) {
             cb.setChecked(true);
-            tv.setText(parameter+"");
+            tv.setText(String.valueOf(parameter));
             sb.setProgress(parameter);
         } else {
             cb.setChecked(false);
             tv.setText("---");
         }
     }
+
+    private void setPlantReminder(Plant plant) {
+        if (plant.getWatering() != 0) {
+            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);
+        }
+        if ((plant.getFeeding() != 0)) {
+            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding(), plant);
+        }
+        if (plant.getSpraying() != 0) {
+            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying(), plant);
+        }
     }
+
+}
 
 

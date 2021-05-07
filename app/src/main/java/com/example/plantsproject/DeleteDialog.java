@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 public class DeleteDialog extends DialogFragment {
@@ -31,28 +32,22 @@ public class DeleteDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-        builder.setTitle("Удаление растения")
+        builder.setTitle(R.string.delete)
                 .setMessage(content)
                 .setPositiveButton("Да", (dialog, id) -> {
                     DBPlants plants = new DBPlants(context);
-
                     if(deleteAll) {
                         plants.deleteAll();
-                        Intent bool = new Intent(context, MainActivity.class);
-                        bool.putExtra("deletedAll", true);
-                        startActivity(bool);
+                        adapter.update(context);
                     } else {
                         plants.delete(plant.getId());
+                        NotificationScheduler.cancelReminder(context, AlarmReceiver.class);
                         Intent i = new Intent(context, MainActivity.class);
                         startActivity(i);
                     }
 
-
-
                 });
-        builder.setNegativeButton("Нет", (dialog, which) -> {
-            dialog.cancel();
-        });
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
         return builder.create();
     }
 }

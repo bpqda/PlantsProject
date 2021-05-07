@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,41 +44,73 @@ public class PlantDialog extends DialogFragment {
         Button water = view.findViewById(R.id.water);
         Button feed = view.findViewById(R.id.feed);
         Button spray = view.findViewById(R.id.spray);
-        DateDefiner def = new DateDefiner("dd/MM/yyyy HH:mm");
-
+        LinearLayout btnLay = view.findViewById(R.id.btnLayout);
+        Space space1 = view.findViewById(R.id.space1);
+        Space space2 = view.findViewById(R.id.space2);
+        TextView actions = view.findViewById(R.id.actions);
+        LinearLayout perLay = view.findViewById(R.id.periodLay);
+        DateDefiner def = new DateDefiner("dd/MM/yyyy\t\t\t\tHH:mm");
+        DBPlants plants = new DBPlants(context);
+        LinearLayout waterLay = view.findViewById(R.id.wateringLay);
+        LinearLayout feedLay = view.findViewById(R.id.feedingLay);
+        LinearLayout sprayLay = view.findViewById(R.id.sprayingLay);
 
         name.setText(plant.getName());
         if(plant.getWatering()!=0) {
-            watering.setText("Полито:  " + plant.getLastW());
+            watering.setText(plant.getLastW());
         } else {
-            watering.setText("Полив отключено");
+            perLay.removeView(waterLay);
+            btnLay.removeView(water);
+            btnLay.removeView(space1);
         }
         if(plant.getFeeding()!=0) {
-            feeding.setText("Удобрено:   " + plant.getLastF());
+            feeding.setText(plant.getLastF());
         } else {
-            feeding.setText("Удобрение отключено");
+            perLay.removeView(feedLay);
+            btnLay.removeView(feed);
+            btnLay.removeView(space1);
         }
         if(plant.getSpraying()!=0) {
-            spraying.setText("Опрыскано   " + plant.getLastS());
+            spraying.setText(plant.getLastS());
         } else {
-            spraying.setText("Опрыскивание отключено");
+            perLay.removeView(sprayLay);
+            btnLay.removeView(spray);
+            btnLay.removeView(space2);
+        }
+        if(plant.getWatering()==0&&plant.getFeeding()==0&&plant.getSpraying()==0) {
+            actions.setText(R.string.actions_are_disabled);
+            btnLay.removeView(btnLay);
+            perLay.removeView(perLay);
         }
 
         water.setOnClickListener(v -> {
+            water.setOnClickListener(v13 -> Toast.makeText(context, "Уже полито", Toast.LENGTH_SHORT).show());
+
             plant.setLastW(def.defineDate());
-            watering.setText("Полито:  " + plant.getLastW());
+            plant.setLastMilWat(System.currentTimeMillis());
+            plants.update(plant);
+            watering.setText(plant.getLastW());
+
         });
         feed.setOnClickListener(v -> {
+            feed.setOnClickListener(v12 -> Toast.makeText(context, "Уже удобрено", Toast.LENGTH_SHORT).show());
+
             plant.setLastF(def.defineDate());
-            feeding.setText("Удобрено:   " + plant.getLastF());
+            plant.setLastMilFeed(System.currentTimeMillis());
+            plants.update(plant);
+            feeding.setText(plant.getLastF());
         });
         spray.setOnClickListener(v -> {
+            spray.setOnClickListener(v1 -> Toast.makeText(context, "Уже опрыскано", Toast.LENGTH_SHORT).show());
+
             plant.setLastS(def.defineDate());
-            spraying.setText("Опрыскано   " + plant.getLastS());
+            plant.setLastMilSpray(System.currentTimeMillis());
+            plants.update(plant);
+            spraying.setText(plant.getLastS());
         });
 
         builder.setView(view);
-        builder.setNeutralButton("Отмена", (dialog, which) -> {
+        builder.setNeutralButton("Выйти", (dialog, which) -> {
             return;
         });
         builder.setNegativeButton("Больше информации", (dialog, which) -> {
@@ -86,5 +121,12 @@ public class PlantDialog extends DialogFragment {
 
         builder.setCancelable(true);
         return builder.create();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+       //TODO: обновить list
     }
 }

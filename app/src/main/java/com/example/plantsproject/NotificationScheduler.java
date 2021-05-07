@@ -18,7 +18,7 @@ public class NotificationScheduler {
 
     public static final int REMINDER_REQUEST_CODE=100;
 
-    public static void showNotification(Context context, Class<?> cls, Plant plant) {
+    public static void showNotification(Context context, Class<?> cls, String plantName, String plantActions) {
         Intent notificationIntent = new Intent(context, cls);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -28,22 +28,24 @@ public class NotificationScheduler {
 
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(
                 REMINDER_REQUEST_CODE,PendingIntent.FLAG_UPDATE_CURRENT);
+        String bigText = R.string.plant + plantName + R.string.need + plantActions;
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "CHANNEL_ID")
-                        .setSmallIcon(R.drawable.plantpicture)
-                        .setContentTitle("Требуется уход за растением")
-      //                  .setContentText("Растение" + plant.getName() + "требует " + plant.getAction())
+                        .setSmallIcon(R.drawable.plant_picture)
+                        .setContentTitle("Менеджер растений")
+                        .setContentText(R.string.plant + plantName + R.string.need + plantActions)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setContentIntent(pendingIntent)
-                        .addAction(R.drawable.plant, "Открыть", pendingIntent)
+                        .addAction(R.drawable.plant_picture, "Открыть", pendingIntent)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(bigText))
                         .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(REMINDER_REQUEST_CODE, builder.build());
     }
 
-    public static void cancelReminder(Context context,Class<?> cls) {
+    public static void cancelReminder(Context context, Class<?> cls) {
 
         ComponentName receiver = new ComponentName(context, cls);
         PackageManager pm = context.getPackageManager();
@@ -69,14 +71,15 @@ public class NotificationScheduler {
                 PackageManager.DONT_KILL_APP);
 
         Intent intent1 = new Intent(context, cls);
-        intent1.putExtra("plant", plant);
-        intent1.putExtra("some", "123");
+        intent1.putExtra("plantName", plant.getName());
+        intent1.putExtra("plantActions", plant.getAction());
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + period*1000, period*1000, pendingIntent);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + period*1000*60*60*24, period*1000*60*60*24, pendingIntent);
 
-        Toast.makeText(context, "Уведомления установлены", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.notifs_setted, Toast.LENGTH_SHORT).show();
 
     }
 
