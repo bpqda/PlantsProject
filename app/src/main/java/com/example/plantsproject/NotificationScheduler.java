@@ -14,11 +14,11 @@ import androidx.core.app.TaskStackBuilder;
 
 import static android.content.Context.ALARM_SERVICE;
 
-public class NotificationScheduler {
+class NotificationScheduler {
 
-    public static final int REMINDER_REQUEST_CODE=100;
+    private static final int REMINDER_REQUEST_CODE=100;
 
-    public static void showNotification(Context context, Class<?> cls, String plantName, String plantActions) {
+    static void showNotification(Context context, Class<?> cls, String plantName, String plantActions) {
         Intent notificationIntent = new Intent(context, cls);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -28,13 +28,13 @@ public class NotificationScheduler {
 
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(
                 REMINDER_REQUEST_CODE,PendingIntent.FLAG_UPDATE_CURRENT);
-        String bigText = R.string.plant + plantName + R.string.need + plantActions;
+        String bigText = "Растение " + plantName + " требует " +plantActions;
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, "CHANNEL_ID")
                         .setSmallIcon(R.drawable.plant_picture)
                         .setContentTitle("Менеджер растений")
-                        .setContentText(R.string.plant + plantName + R.string.need + plantActions)
+                        .setContentText("Растение " + plantName + " требует " + plantActions)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setContentIntent(pendingIntent)
                         .addAction(R.drawable.plant_picture, "Открыть", pendingIntent)
@@ -45,7 +45,7 @@ public class NotificationScheduler {
         notificationManager.notify(REMINDER_REQUEST_CODE, builder.build());
     }
 
-    public static void cancelReminder(Context context, Class<?> cls) {
+    static void cancelReminder(Context context, Class<?> cls) {
 
         ComponentName receiver = new ComponentName(context, cls);
         PackageManager pm = context.getPackageManager();
@@ -61,7 +61,7 @@ public class NotificationScheduler {
         pendingIntent.cancel();
     }
 
-    public static void setReminder(Context context,Class<?> cls, long period, Plant plant) {
+    static void setReminder(Context context,Class<?> cls, long period, Plant plant) {
 
         ComponentName receiver = new ComponentName(context, cls);
         PackageManager pm = context.getPackageManager();

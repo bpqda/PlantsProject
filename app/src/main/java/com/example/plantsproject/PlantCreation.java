@@ -2,28 +2,15 @@ package com.example.plantsproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 public class PlantCreation extends AppCompatActivity {
     TextView plantName, notes, wInf, fInf, sInf, tipsTxt;
@@ -113,7 +100,7 @@ public class PlantCreation extends AppCompatActivity {
                         fSB.getProgress(),
                         sSB.getProgress(),
                         def.defineDate(),
-                        plant.getLastW(), plant.getLastF(), plant.lastS, plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray());
+                        plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray());
                 plants.update(plant);
 
                 NotificationScheduler.cancelReminder(this, AlarmReceiver.class);

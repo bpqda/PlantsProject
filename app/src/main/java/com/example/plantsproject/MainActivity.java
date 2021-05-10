@@ -1,18 +1,12 @@
 package com.example.plantsproject;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -106,18 +100,6 @@ public class MainActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
 
-    //@Override
-   //protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-   //    super.onActivityResult(requestCode, resultCode, data);
-   //    if (resultCode == Activity.RESULT_OK) {
-   //        adapter.update();
-   //    }
-    //}
-
-   // private void updateList () {
-   //     adapter.setArrayMyData(plants.selectAll());
-   //     adapter.notifyDataSetChanged();
-   // }
 
     @Override
     protected void onResume() {
@@ -131,12 +113,12 @@ public class MainActivity extends AppCompatActivity {
         private LayoutInflater inflater;
         private ArrayList<Plant> plants;
 
-        public PlantAdapter(Context ctx, ArrayList<Plant> array) {
+        PlantAdapter(Context ctx, ArrayList<Plant> array) {
             inflater = LayoutInflater.from(ctx);
             setArrayMyData(array);
         }
 
-        public void setArrayMyData(ArrayList<Plant> arrayMyData) {
+        private void setArrayMyData(ArrayList<Plant> arrayMyData) {
             this.plants = arrayMyData;
         }
 
@@ -187,13 +169,13 @@ public class MainActivity extends AppCompatActivity {
 
             return view;
         }
-        public void update(Context ctx) {
+        void update(Context ctx) {
             PlantAdapter adapter = this;
             DBPlants plantsDB = new DBPlants(ctx);
             adapter.setArrayMyData(plantsDB.selectAll());
             adapter.notifyDataSetChanged();
         }
-        public void changeListToImage (ListView lis, ImageView im, LinearLayout lay) {
+        void changeListToImage (ListView lis, ImageView im, LinearLayout lay) {
             lay.removeView(lis);
             lay.addView(im);
         }

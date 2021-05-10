@@ -2,23 +2,23 @@ package com.example.plantsproject;
 
 import java.io.Serializable;
 
-public class Plant implements Serializable {
-    String name;
-    String notes;
-    long watering;
-    long feeding;
-    long spraying;
-    long id;
-    String creationDate;
-    String lastW;
-    String lastF;
-    String lastS;
-    long lastMilWat;
-    long lastMilFeed;
-    long lastMilSpray;
+class Plant implements Serializable {
+    private String name;
+    private String notes;
+    private long watering;
+    private long feeding;
+    private long spraying;
+    private long id;
+    private String creationDate;
+    private String lastW;
+    private String lastF;
+    private String lastS;
+    private long lastMilWat;
+    private long lastMilFeed;
+    private long lastMilSpray;
 
 
-    public Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
+    Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
         this.name = name;
         this.notes = notes;
         this.watering = watering;
@@ -34,99 +34,91 @@ public class Plant implements Serializable {
         this.lastMilSpray = lastMilSpray;
     }
 
-    public long getLastMilWat() {
+    long getLastMilWat() {
         return lastMilWat;
     }
 
-    public void setLastMilWat(long lastMilWat) {
+    void setLastMilWat(long lastMilWat) {
         this.lastMilWat = lastMilWat;
     }
 
-    public long getLastMilFeed() {
+    long getLastMilFeed() {
         return lastMilFeed;
     }
 
-    public void setLastMilFeed(long lastMilFeed) {
+    void setLastMilFeed(long lastMilFeed) {
         this.lastMilFeed = lastMilFeed;
     }
 
-    public long getLastMilSpray() {
+    long getLastMilSpray() {
         return lastMilSpray;
     }
 
-    public void setLastMilSpray(long lastMilSpray) {
+    void setLastMilSpray(long lastMilSpray) {
         this.lastMilSpray = lastMilSpray;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getWatering() {
+    long getWatering() {
         return watering;
     }
-    public long getFeeding() {
+    long getFeeding() {
         return feeding;
     }
-    public long getSpraying() {
+    long getSpraying() {
         return spraying;
     }
 
-    public long getId() {
+    long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNotes() {
+    String getNotes() {
         return notes;
     }
-    public String getCreationDate() {
+    String getCreationDate() {
         return creationDate;
     }
 
-    public String getAction() {
+    String getAction() {
         Plant plant = this;
         String action = "";
         if(plant.getWatering()!=0) {
-            action = "полив";
+            action = "полива";
         }
         if(plant.getFeeding()!=0) {
-            action = action +  "  удобрение";
+            action += ", удобрения";
         }
         if(plant.getSpraying()!=0) {
-            action = action + "  опрыскивание";
+            action +=", опрыскивания";
         }
         return action;
     }
 
-    public String getLastW() {
+    String getLastW() {
         return lastW;
     }
 
-    public void setLastW(String lastW) {
+    void setLastW(String lastW) {
         this.lastW = lastW;
     }
 
-    public String getLastF() {
+    String getLastF() {
         return lastF;
     }
 
-    public void setLastF(String lastF) {
+    void setLastF(String lastF) {
         this.lastF = lastF;
     }
 
-    public String getLastS() {
+    String getLastS() {
         return lastS;
     }
 
-    public void setLastS(String lastS) {
+    void setLastS(String lastS) {
         this.lastS = lastS;
     }
 }

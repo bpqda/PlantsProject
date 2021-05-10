@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="Название"
             android:textColor="@color/darkGreen"
             android:textSize="20sp" />
 

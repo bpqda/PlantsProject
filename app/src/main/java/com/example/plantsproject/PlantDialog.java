@@ -17,14 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import java.util.Date;
-
 public class PlantDialog extends DialogFragment {
-    Plant plant;
-    Context context;
-    PlantAdapter adapter;
+    private Plant plant;
+    private Context context;
+    private PlantAdapter adapter;
 
-    public PlantDialog(Plant plant, Context context, PlantAdapter adapter) {
+    PlantDialog(Plant plant, Context context, PlantAdapter adapter) {
         this.plant = plant;
         this.context = context;
         this.adapter = adapter;
@@ -110,9 +108,7 @@ public class PlantDialog extends DialogFragment {
         });
 
         builder.setView(view);
-        builder.setNeutralButton("Выйти", (dialog, which) -> {
-            return;
-        });
+        builder.setNeutralButton("Выйти", (dialog, which) -> {});
         builder.setNegativeButton("Больше информации", (dialog, which) -> {
             Intent i = new Intent(context, PlantInfoActivity.class);
             i.putExtra("plant", plant);

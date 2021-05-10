@@ -20,12 +20,11 @@
     <string name="actions">Действия:</string>
     <string name="no">Нет</string>
     <string name="sure">Вы действительно хотите удалить все растения?</string>
-    <string name="need">требует</string>
     <string name="need_w">Требует полива</string>
     <string name="need_f">Требует удобрения</string>
     <string name="need_s">Требует опрыскивания</string>
     <string name="notifs_setted">Открыть</string>
-    <string name="plant_not_found">Застение не найдено</string>
+    <string name="plant_not_found">Растение не найдено</string>
     <string name="watered">Полито:</string>
     <string name="feeded">Удобрено:</string>
     <string name="sprayed">Опрыскано:</string>
