@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DBTips {
+class DBTips {
     private static final String DATABASE_NAME = "tips.db";
     private static final int DATABASE_VERSION = 12;
     private static final String TABLE_NAME_TIPS = "tableTips";
@@ -26,12 +26,12 @@ public class DBTips {
     private static final int NUM_COLUMN_SPRAYING = 5;
     private SQLiteDatabase mDataBase;
 
-    public DBTips(Context context) {
+    DBTips(Context context) {
         DBTips.TipsOpenHelper myOpenHelper = new DBTips.TipsOpenHelper(context);
         mDataBase = myOpenHelper.getWritableDatabase();
     }
 
-    public Plant findString(String str) {
+    Plant findString(String str) {
         Cursor mCursor = mDataBase.query(TABLE_NAME_TIPS, null, null, null, null, null, null);
         mCursor.moveToFirst();
         if(!mCursor.isAfterLast()) {

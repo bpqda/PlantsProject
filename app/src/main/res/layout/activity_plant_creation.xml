@@ -85,13 +85,15 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="#00FFFFFF"
-                    app:srcCompat="@android:drawable/ic_menu_search" />
+                    app:srcCompat="@drawable/ic_search_black_24dp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tips"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Поиск советов по уходу" />
 
             <LinearLayout
                 android:layout_width="match_parent"

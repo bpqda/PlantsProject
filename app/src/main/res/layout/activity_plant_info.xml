@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            android:text="@string/water" />
+            android:text="@string/watering" />
 
         <TextView
             android:id="@+id/watering"
@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            android:text="@string/feed" />
+            android:text="@string/feeding" />
 
         <TextView
             android:id="@+id/feeding"
@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            android:text="@string/spray" />
+            android:text="@string/spraying" />
 
         <TextView
             android:id="@+id/spraying"

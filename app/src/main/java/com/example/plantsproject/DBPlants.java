@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
-public class DBPlants {
+class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
     private static final int DATABASE_VERSION = 14;
     private static final String TABLE_NAME = "tablePlants";
@@ -43,12 +43,12 @@ public class DBPlants {
     private SQLiteDatabase mDataBase;
 
 
-    public DBPlants(Context context) {
+    DBPlants(Context context) {
         OpenHelper mOpenHelper = new OpenHelper(context);
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    public long insert(String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
+    long insert(String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, name);
         cv.put(COLUMN_NOTES, notes);
@@ -65,7 +65,7 @@ public class DBPlants {
         return mDataBase.insert(TABLE_NAME, null, cv);
     }
 
-    public int update(Plant plant) {
+    int update(Plant plant) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, plant.getName());
         cv.put(COLUMN_NOTES, plant.getNotes());
@@ -82,11 +82,11 @@ public class DBPlants {
         return mDataBase.update(TABLE_NAME, cv, COLUMN_ID + " = ?",new String[] { String.valueOf(plant.getId())});
     }
 
-    public void deleteAll() {
+    void deleteAll() {
         mDataBase.delete(TABLE_NAME, null, null);
     }
 
-    public void delete(long id) {
+     void delete(long id) {
         mDataBase.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
     }
     //public Plant select(long id) {
@@ -101,7 +101,7 @@ public class DBPlants {
     //    return new Plant(id, plantName, plantNotes, plantWatering,plantFeeding, plantSpraying, creationDate);
     //}
 
-    public ArrayList<Plant> selectAll() {
+     ArrayList<Plant> selectAll() {
         Cursor mCursor = mDataBase.query(TABLE_NAME, null, null, null, null, null, "id desc");
 
         ArrayList<Plant> arr = new ArrayList<>();

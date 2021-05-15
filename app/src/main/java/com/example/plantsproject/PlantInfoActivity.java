@@ -38,7 +38,7 @@ public class PlantInfoActivity extends AppCompatActivity {
         if (plant.getWatering() != 0)
             watering.setText(String.valueOf(plant.getWatering()));
         else
-            watering.setText(R.string.disabled);
+            watering.setText(getText(R.string.disabled));
 
         if (plant.getFeeding() != 0)
             feeding.setText(String.valueOf(plant.getFeeding()));
@@ -59,7 +59,7 @@ public class PlantInfoActivity extends AppCompatActivity {
             });
             delete.setOnClickListener(v -> {
                 DeleteDialog dialog = new DeleteDialog(this, plant,
-                        R.string.sure2 + plant.getName() + " ?",
+                        getString(R.string.sure2) + plant.getName() + " ?",
                         false, null);
                 FragmentManager manager = getSupportFragmentManager();
                 dialog.show(manager, "dialog");

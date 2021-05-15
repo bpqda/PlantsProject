@@ -108,21 +108,20 @@ public class PlantDialog extends DialogFragment {
         });
 
         builder.setView(view);
-        builder.setNeutralButton("Выйти", (dialog, which) -> {});
+        builder.setNeutralButton("Выйти", (dialog, which) -> {
+            Intent i = new Intent(context, MainActivity.class);
+            startActivity(i);
+        });
         builder.setNegativeButton("Больше информации", (dialog, which) -> {
             Intent i = new Intent(context, PlantInfoActivity.class);
             i.putExtra("plant", plant);
             startActivity(i);
         });
 
-        builder.setCancelable(true);
+        builder.setCancelable(false);
         return builder.create();
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-       //TODO: обновить list
-    }
+
 }

@@ -23,7 +23,7 @@
     <string name="need_w">Требует полива</string>
     <string name="need_f">Требует удобрения</string>
     <string name="need_s">Требует опрыскивания</string>
-    <string name="notifs_setted">Открыть</string>
+    <string name="notifs_setted">Уведомления установлены</string>
     <string name="plant_not_found">Растение не найдено</string>
     <string name="watered">Полито:</string>
     <string name="feeded">Удобрено:</string>
