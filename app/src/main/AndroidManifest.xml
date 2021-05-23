@@ -18,7 +18,7 @@
         <activity
             android:name=".CreationActivity"
             android:label="@string/title_activity_creation"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
             android:name=".PlantInfoActivity"
             android:label="@string/title_activity_plant_info"

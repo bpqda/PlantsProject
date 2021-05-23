@@ -27,6 +27,7 @@ public class CreationActivity extends AppCompatActivity {
     private boolean update;
     Plant plant;
     Intent i;
+    CollapsingToolbarLayout toolbarLayout;
 
 
     @Override
@@ -38,13 +39,16 @@ public class CreationActivity extends AppCompatActivity {
 
 
 
-        CollapsingToolbarLayout toolbarLayout = findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle("Новое растение");
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         FloatingActionButton create = findViewById(R.id.fab);
+
+        toolbarLayout = findViewById(R.id.toolbar_layout);
+        toolbarLayout.setTitle("Новое растение");
 
             plantName = findViewById(R.id.nameTxt);
             notes = findViewById(R.id.notes);
