@@ -5,13 +5,15 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class PlantInfoActivity extends AppCompatActivity {
-    Button edit, delete;
+    Button edit, delete, url;
     TextView name, creationDate, watering, feeding, spraying, notes;
     Plant plant;
     ImageButton back;
@@ -30,6 +32,7 @@ public class PlantInfoActivity extends AppCompatActivity {
         feeding = findViewById(R.id.feeding);
         spraying = findViewById(R.id.spraying);
         notes = findViewById(R.id.notes);
+        url = findViewById(R.id.urlBtn);
 
         plant = (Plant) getIntent().getSerializableExtra("plant");
         name.setText(plant.getName());
@@ -53,7 +56,7 @@ public class PlantInfoActivity extends AppCompatActivity {
             notes.setText(plant.getNotes());
 
             edit.setOnClickListener(v -> {
-                Intent j = new Intent(PlantInfoActivity.this, PlantCreation.class);
+                Intent j = new Intent(PlantInfoActivity.this, CreationActivity.class);
                 j.putExtra("plant", plant);
                 startActivity(j);
             });
@@ -67,6 +70,11 @@ public class PlantInfoActivity extends AppCompatActivity {
             back.setOnClickListener(v -> {
                 Intent i = new Intent(PlantInfoActivity.this, MainActivity.class);
                 startActivity(i);
+            });
+
+            url.setOnClickListener(v -> {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ru.wikipedia.org/wiki/"+ plant.convertName()));
+                startActivity(browserIntent);
             });
 
         }

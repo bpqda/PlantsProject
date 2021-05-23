@@ -121,4 +121,11 @@ class Plant implements Serializable {
     void setLastS(String lastS) {
         this.lastS = lastS;
     }
+
+    String convertName () {
+        if(name.contains(" ")) {
+            name.replace(" ", "_");
+        }
+        return name.toLowerCase();
+    }
 }

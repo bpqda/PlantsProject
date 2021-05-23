@@ -1,52 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".PlantCreation">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/back"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/colorMain"
-                android:src="@drawable/ic_arrow_back_black_24dp" />
-
-            <TextView
-                android:id="@+id/appBarTV"
-                style="@android:style/Widget.TextView.PopupMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="9"
-                android:gravity="center_horizontal|left|center_vertical"
-                android:text="@string/plant_creation_bar"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:id="@+id/create"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@color/colorMain"
-                app:srcCompat="@drawable/ic_check_black_24dp" />
-
-        </LinearLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".CreationActivity"
+    tools:showIn="@layout/activity_creation">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -56,6 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
 
             <TextView
                 android:id="@+id/textView"
@@ -77,7 +41,8 @@
                     android:inputType="textPersonName"
                     android:text="Мое растение"
                     android:textColor="@color/darkGreen"
-                    android:backgroundTint="@color/darkGreen"/>
+                    android:backgroundTint="@color/darkGreen"
+                    android:imeOptions="actionSearch"/>
 
                 <ImageButton
                     android:id="@+id/checkName"
@@ -233,4 +198,4 @@
     </ScrollView>
 
 
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

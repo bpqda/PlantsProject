@@ -33,12 +33,13 @@ public class DeleteDialog extends DialogFragment {
         builder.setTitle(R.string.delete)
                 .setMessage(content)
                 .setPositiveButton("Да", (dialog, id) -> {
-                    DBPlants plants = new DBPlants(context);
+                    DBPlants plantsDB = new DBPlants(context);
                     if(deleteAll) {
-                        plants.deleteAll();
-                        adapter.update(context);
+                        plantsDB.deleteAll();
+                        adapter.setArrayMyData(plantsDB.selectAll());
+                        adapter.notifyDataSetChanged();
                     } else {
-                        plants.delete(plant.getId());
+                        plantsDB.delete(plant.getId());
                         NotificationScheduler.cancelReminder(context, AlarmReceiver.class);
                         Intent i = new Intent(context, MainActivity.class);
                         startActivity(i);

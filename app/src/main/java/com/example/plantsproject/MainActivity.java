@@ -56,15 +56,17 @@ public class MainActivity extends AppCompatActivity {
 
         list.setOnItemClickListener((parent, view, position, id) -> {
             Plant selectedPlant = (Plant) adapter.getItem(position);
-            PlantDialog dialog = new PlantDialog(selectedPlant, this, adapter);
+            PlantDialog dialog = new PlantDialog(selectedPlant, this);
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");
+
         });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, PlantCreation.class);
+            Intent i = new Intent(MainActivity.this, CreationActivity.class);
             startActivityForResult(i, RESULT_OK);
+
         });
     }
 
@@ -84,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_settings:
-                adapter.update(this);
+            case R.id.disable_notifications:
+                NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
                 return true;
             case R.id.action_delete:
                 NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
@@ -101,12 +103,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.update(this);
-    }
-
 }
 
     class PlantAdapter extends BaseAdapter {
@@ -118,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             setArrayMyData(array);
         }
 
-        private void setArrayMyData(ArrayList<Plant> arrayMyData) {
+        void setArrayMyData(ArrayList<Plant> arrayMyData) {
             this.plants = arrayMyData;
         }
 
@@ -172,8 +168,6 @@ public class MainActivity extends AppCompatActivity {
         void update(Context ctx) {
             PlantAdapter adapter = this;
             DBPlants plantsDB = new DBPlants(ctx);
-            adapter.setArrayMyData(plantsDB.selectAll());
-            adapter.notifyDataSetChanged();
         }
         void changeListToImage (ListView lis, ImageView im, LinearLayout lay) {
             lay.removeView(lis);

@@ -20,12 +20,10 @@ import androidx.fragment.app.DialogFragment;
 public class PlantDialog extends DialogFragment {
     private Plant plant;
     private Context context;
-    private PlantAdapter adapter;
 
-    PlantDialog(Plant plant, Context context, PlantAdapter adapter) {
+    PlantDialog(Plant plant, Context context) {
         this.plant = plant;
         this.context = context;
-        this.adapter = adapter;
     }
 
     @NonNull
@@ -33,22 +31,28 @@ public class PlantDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_plant, null);
+
         TextView name = view.findViewById(R.id.name);
         TextView watering = view.findViewById(R.id.watering);
         TextView feeding = view.findViewById(R.id.feeding);
         TextView spraying = view.findViewById(R.id.spraying);
+        TextView actions = view.findViewById(R.id.actions);
+
         Button water = view.findViewById(R.id.water);
         Button feed = view.findViewById(R.id.feed);
         Button spray = view.findViewById(R.id.spray);
+
         LinearLayout btnLay = view.findViewById(R.id.btnLayout);
         Space space1 = view.findViewById(R.id.space1);
         Space space2 = view.findViewById(R.id.space2);
-        TextView actions = view.findViewById(R.id.actions);
         LinearLayout perLay = view.findViewById(R.id.periodLay);
+
         DateDefiner def = new DateDefiner("dd/MM/yyyy\t\t\t\tHH:mm");
         DBPlants plants = new DBPlants(context);
+
         LinearLayout waterLay = view.findViewById(R.id.wateringLay);
         LinearLayout feedLay = view.findViewById(R.id.feedingLay);
         LinearLayout sprayLay = view.findViewById(R.id.sprayingLay);
@@ -108,7 +112,7 @@ public class PlantDialog extends DialogFragment {
         });
 
         builder.setView(view);
-        builder.setNeutralButton("Выйти", (dialog, which) -> {
+        builder.setNeutralButton("Сохранить", (dialog, which) -> {
             Intent i = new Intent(context, MainActivity.class);
             startActivity(i);
         });
@@ -122,6 +126,5 @@ public class PlantDialog extends DialogFragment {
         return builder.create();
 
     }
-
 
 }
