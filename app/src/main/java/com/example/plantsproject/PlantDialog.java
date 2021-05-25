@@ -117,7 +117,7 @@ public class PlantDialog extends DialogFragment {
             startActivity(i);
         });
         builder.setNegativeButton("Больше информации", (dialog, which) -> {
-            Intent i = new Intent(context, PlantInfoActivity.class);
+            Intent i = new Intent(context, InfoPlantActivity.class);
             i.putExtra("plant", plant);
             startActivity(i);
         });

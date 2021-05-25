@@ -127,7 +127,7 @@ public class CreationActivity extends AppCompatActivity {
                     NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
                     setPlantReminder(plant);
 
-                    i = new Intent(CreationActivity.this, PlantInfoActivity.class);
+                    i = new Intent(CreationActivity.this, InfoPlantActivity.class);
                     i.putExtra("plant", plant);
                     startActivity(i);
                 } else {
