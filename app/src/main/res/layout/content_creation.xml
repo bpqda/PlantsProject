@@ -60,125 +60,173 @@
                 android:gravity="right"
                 android:text="Поиск советов по уходу" />
 
-            <LinearLayout
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/wateringCB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="20"
-                    android:buttonTint="@color/blue"
-                    android:checked="true"
-                    android:text="@string/watering"
-                    android:textColor="#0F427A"
-                    android:textColorLink="@color/blue" />
-
-
-                <TextView
-                    android:id="@+id/wateringInf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="---"
-                    android:textColor="@color/blue"
-                    android:textSize="24sp" />
-
-            </LinearLayout>
-
-            <SeekBar
-                android:id="@+id/wateringSB"
-                style="@android:style/Widget.DeviceDefault.Light.SeekBar"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_weight="13"
-                android:indeterminate="false"
-                android:max="30"
-                android:progress="3"
-                android:progressTint="@color/blue"
-                android:thumbTint="@color/blue"/>
+                android:layout_height="20dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/black_square"
+                android:orientation="vertical">
 
-                <CheckBox
-                    android:id="@+id/feedingCB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="20"
-                    android:buttonTint="@color/yellow"
-                    android:checked="true"
-                    android:text="@string/feeding"
-                    android:textColor="#633F01"
-                    android:textColorLink="@color/yellow" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/feedingInf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="---"
-                    android:textColor="@color/yellow"
-                    android:textSize="24sp" />
+                    <CheckBox
+                        android:id="@+id/wateringCB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="20"
+                        android:buttonTint="@color/blue"
+                        android:checked="true"
+                        android:text="@string/watering"
+                        android:textColor="#0F427A"
+                        android:textColorLink="@color/blue" />
 
+
+                    <TextView
+                        android:id="@+id/wateringInf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="---"
+                        android:textColor="@color/blue"
+                        android:textSize="24sp" />
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/wateringSB"
+                    style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_weight="13"
+                    android:indeterminate="false"
+                    android:max="30"
+                    android:progress="3"
+                    android:progressTint="@color/blue"
+                    android:thumbTint="@color/blue" />
 
             </LinearLayout>
 
-            <SeekBar
-                android:id="@+id/feedingSB"
-                style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_weight="15"
-                android:indeterminate="false"
-                android:max="30"
-                android:progress="3"
-                android:progressTint="@color/yellow"
-                android:thumbTint="@color/yellow"></SeekBar>
+                android:layout_height="5dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/black_square"
+                android:orientation="vertical">
 
-                <CheckBox
-                    android:id="@+id/sprayingCB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="20"
-                    android:buttonTint="@color/colorMain"
-                    android:checked="true"
-                    android:text="@string/spraying"
-                    android:textColor="#124D09"
-                    android:textColorLink="@color/colorMain" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/feedingCB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="20"
+                        android:buttonTint="@color/yellow"
+                        android:checked="true"
+                        android:text="@string/feeding"
+                        android:textColor="#633F01"
+                        android:textColorLink="@color/yellow" />
+
+                    <TextView
+                        android:id="@+id/feedingInf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="---"
+                        android:textColor="@color/yellow"
+                        android:textSize="24sp" />
 
 
-                <TextView
-                    android:id="@+id/sprayingInf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="---"
-                    android:textColor="@color/colorMain"
-                    android:textSize="24sp" />
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/feedingSB"
+                    style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_weight="15"
+                    android:indeterminate="false"
+                    android:max="30"
+                    android:progress="3"
+                    android:progressTint="@color/yellow"
+                    android:thumbTint="@color/yellow"></SeekBar>
 
             </LinearLayout>
 
-            <SeekBar
-                android:id="@+id/sprayingSB"
-                style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_weight="15"
-                android:indeterminate="false"
-                android:max="30"
-                android:progress="3"
-                android:progressTint="@color/colorMain"
-                android:thumbTint="@color/colorMain"></SeekBar>
+                android:layout_height="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/black_square"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/sprayingCB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="20"
+                        android:buttonTint="@color/colorMain"
+                        android:checked="true"
+                        android:text="@string/spraying"
+                        android:textColor="#124D09"
+                        android:textColorLink="@color/colorMain" />
+
+
+                    <TextView
+                        android:id="@+id/sprayingInf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="---"
+                        android:textColor="@color/colorMain"
+                        android:textSize="24sp" />
+
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/sprayingSB"
+                    style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_weight="15"
+                    android:indeterminate="false"
+                    android:max="30"
+                    android:progress="3"
+                    android:progressTint="@color/colorMain"
+                    android:thumbTint="@color/colorMain"></SeekBar>
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_weight="1" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -194,6 +242,7 @@
                     android:backgroundTint="@color/darkGreen"
                     android:drawableTint="@color/darkGreen"/>
             </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
     </ScrollView>
 

@@ -21,7 +21,6 @@ public class InfoPlantActivity extends AppCompatActivity {
     TextView name, creationDate, watering, feeding, spraying, notes;
     Plant plant;
     ImageButton back;
-    //CollapsingToolbarLayout toolbarLayout2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

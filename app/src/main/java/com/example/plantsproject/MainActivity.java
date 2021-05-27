@@ -1,14 +1,18 @@
 package com.example.plantsproject;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
@@ -147,28 +151,30 @@ public class MainActivity extends AppCompatActivity {
             TextView stateWater = view.findViewById(R.id.stateWater);
             TextView stateFeed = view.findViewById(R.id.stateFeed);
             TextView stateSpray = view.findViewById(R.id.stateSpray);
+            LinearLayout lay = view.findViewById(R.id.linLay);
 
             Plant plant = plants.get(i);
             name.setText(plant.getName());
 
             if (plant.getWatering()!=0 && System.currentTimeMillis() > plant.getLastMilWat() + plant.getWatering() * 1000*60*60*24) {
                 stateWater.setText(R.string.need_w);
+                lay.setBackgroundResource(R.drawable.plant_needsmth_background);
                 stateFeed.setText("");
             }
             if(plant.getSpraying()!=0 && System.currentTimeMillis() > plant.getLastMilSpray() + plant.getSpraying() * 1000*60*60*24) {
                 stateFeed.setText("");
+                lay.setBackgroundResource(R.drawable.plant_needsmth_background);
                 stateSpray.setText(R.string.need_s);
             }
 
-            if (plant.getFeeding()!=0 && System.currentTimeMillis() > plant.getLastMilFeed() + plant.getFeeding() * 1000*60*60*24)
-                    stateFeed.setText(R.string.need_f);
+            if (plant.getFeeding()!=0 && System.currentTimeMillis() > plant.getLastMilFeed() + plant.getFeeding() * 1000*60*60*24) {
+                stateFeed.setText(R.string.need_f);
+                lay.setBackgroundResource(R.drawable.plant_needsmth_background);
+            }
 
             return view;
         }
-        void update(Context ctx) {
-            PlantAdapter adapter = this;
-            DBPlants plantsDB = new DBPlants(ctx);
-        }
+
         void changeListToImage (ListView lis, ImageView im, LinearLayout lay) {
             lay.removeView(lis);
             lay.addView(im);

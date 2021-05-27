@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
-                android:text="Периодичность полива"
+                android:text="@string/watering"
                 android:textSize="15sp" />
 
             <TextView
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
-                android:text="Периодичность удобрения"
+                android:text="@string/feeding"
                 android:textSize="15sp" />
 
             <TextView
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
-                android:text="Периодичность опрыскивания"
+                android:text="@string/spraying"
                 android:textSize="15sp" />
 
             <TextView
@@ -121,7 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/darkBrown"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
         <Space
         android:layout_width="match_parent"
