@@ -17,7 +17,6 @@ class Plant implements Serializable {
     private long lastMilFeed;
     private long lastMilSpray;
 
-
     Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
         this.name = name;
         this.notes = notes;

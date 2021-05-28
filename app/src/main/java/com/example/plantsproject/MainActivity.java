@@ -1,18 +1,14 @@
 package com.example.plantsproject;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
@@ -74,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -105,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         }
             return super.onOptionsItemSelected(item);
         }
-
 
 }
 

@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:text="В порядке" />
+            android:text="@string/plant_ok" />
 
         <TextView
             android:id="@+id/stateSpray"

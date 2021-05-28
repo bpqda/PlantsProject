@@ -29,7 +29,6 @@ public class CreationActivity extends AppCompatActivity {
     Intent i;
     CollapsingToolbarLayout toolbarLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,18 +36,13 @@ public class CreationActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
-
-
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         FloatingActionButton create = findViewById(R.id.fab);
 
         toolbarLayout = findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle("Новое растение");
+        toolbarLayout.setTitle(getString(R.string.plant_creation_bar));
 
             plantName = findViewById(R.id.nameTxt);
             notes = findViewById(R.id.notes);
@@ -74,8 +68,6 @@ public class CreationActivity extends AppCompatActivity {
             DBPlants plants = new DBPlants(this);
             DBTips tips = new DBTips(this);
 
-
-
             checkName.setOnClickListener(view -> {
                 Plant planttip = tips.findString(plantName.getText().toString());
                 if (planttip != null) {
@@ -97,7 +89,7 @@ public class CreationActivity extends AppCompatActivity {
             });
 
             if (getIntent().hasExtra("plant")) {
-                toolbarLayout.setTitle("Редактирование");
+                toolbarLayout.setTitle(getString(R.string.edit));
                 plant = (Plant) getIntent().getSerializableExtra("plant");
                 plantName.setText(plant.getName());
                 notes.setText(plant.getNotes());

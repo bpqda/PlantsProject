@@ -50,7 +50,7 @@ public class PlantDialog extends DialogFragment {
         Space space2 = view.findViewById(R.id.space2);
         LinearLayout perLay = view.findViewById(R.id.periodLay);
 
-        DateDefiner def = new DateDefiner("dd/MM/yyyy\t\t\t\tHH:mm");
+        DateDefiner def = new DateDefiner("dd/MM\t\t\t\tHH:mm");
         DBPlants plants = new DBPlants(context);
 
         LinearLayout waterLay = view.findViewById(R.id.wateringLay);
@@ -86,7 +86,7 @@ public class PlantDialog extends DialogFragment {
         }
 
         water.setOnClickListener(v -> {
-            water.setOnClickListener(v13 -> Toast.makeText(context, "Уже полито", Toast.LENGTH_SHORT).show());
+            water.setOnClickListener(v13 -> Toast.makeText(context, getString(R.string.already_watered), Toast.LENGTH_SHORT).show());
 
             plant.setLastW(def.defineDate());
             plant.setLastMilWat(System.currentTimeMillis());
@@ -95,7 +95,7 @@ public class PlantDialog extends DialogFragment {
 
         });
         feed.setOnClickListener(v -> {
-            feed.setOnClickListener(v12 -> Toast.makeText(context, "Уже удобрено", Toast.LENGTH_SHORT).show());
+            feed.setOnClickListener(v12 -> Toast.makeText(context, getString(R.string.already_feeded), Toast.LENGTH_SHORT).show());
 
             plant.setLastF(def.defineDate());
             plant.setLastMilFeed(System.currentTimeMillis());
@@ -103,7 +103,7 @@ public class PlantDialog extends DialogFragment {
             feeding.setText(plant.getLastF());
         });
         spray.setOnClickListener(v -> {
-            spray.setOnClickListener(v1 -> Toast.makeText(context, "Уже опрыскано", Toast.LENGTH_SHORT).show());
+            spray.setOnClickListener(v1 -> Toast.makeText(context, getString(R.string.already_sprayed), Toast.LENGTH_SHORT).show());
 
             plant.setLastS(def.defineDate());
             plant.setLastMilSpray(System.currentTimeMillis());
@@ -112,11 +112,11 @@ public class PlantDialog extends DialogFragment {
         });
 
         builder.setView(view);
-        builder.setNeutralButton("Сохранить", (dialog, which) -> {
+        builder.setNeutralButton(getString(R.string.save), (dialog, which) -> {
             Intent i = new Intent(context, MainActivity.class);
             startActivity(i);
         });
-        builder.setNegativeButton("Больше информации", (dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.more), (dialog, which) -> {
             Intent i = new Intent(context, InfoPlantActivity.class);
             i.putExtra("plant", plant);
             startActivity(i);

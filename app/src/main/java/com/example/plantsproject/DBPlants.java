@@ -42,7 +42,6 @@ class DBPlants {
     private static final int NUM_COLUMN_LASTMILSPRAY= 12;
     private SQLiteDatabase mDataBase;
 
-
     DBPlants(Context context) {
         OpenHelper mOpenHelper = new OpenHelper(context);
         mDataBase = mOpenHelper.getWritableDatabase();
@@ -125,7 +124,6 @@ class DBPlants {
             } while (mCursor.moveToNext());
         }
         return arr;
-
 
     }
 

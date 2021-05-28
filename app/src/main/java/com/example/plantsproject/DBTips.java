@@ -71,14 +71,6 @@ class DBTips {
                     TIPS_COLUMN_SPRAYING+" INT); ";
             db.execSQL(queryTipsDB);
 
-            ContentValues cv=new ContentValues();
-            cv.put(TIPS_COLUMN_NAME, "Огурцы");
-            cv.put(TIPS_COLUMN_NOTES, "Рекомендуемое удобрение - перегной.");
-            cv.put(TIPS_COLUMN_WATERING, 5);
-            cv.put(TIPS_COLUMN_FEEDING, 30);
-            cv.put(TIPS_COLUMN_SPRAYING, 0);
-            db.insert(TABLE_NAME_TIPS, null, cv);
-
             ContentValues cv2=new ContentValues();
             cv2.put(TIPS_COLUMN_NAME, "Орхидея");
             cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни;\nПересаживать раз в 2-3 года.");
@@ -86,14 +78,6 @@ class DBTips {
             cv2.put(TIPS_COLUMN_FEEDING, 30);
             cv2.put(TIPS_COLUMN_SPRAYING, 1);
             db.insert(TABLE_NAME_TIPS, null, cv2);
-
-            ContentValues cv3=new ContentValues();
-            cv3.put(TIPS_COLUMN_NAME, "Лук репчатый");
-            cv3.put(TIPS_COLUMN_NOTES, "Нельзя обрезать перо лука.");
-            cv3.put(TIPS_COLUMN_WATERING, 4);
-            cv3.put(TIPS_COLUMN_FEEDING, 30);
-            cv3.put(TIPS_COLUMN_SPRAYING, 0);
-            db.insert(TABLE_NAME_TIPS, null, cv3);
 
             ContentValues cv4=new ContentValues();
             cv4.put(TIPS_COLUMN_NAME, "Фиалка");

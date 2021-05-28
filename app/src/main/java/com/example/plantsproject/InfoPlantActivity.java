@@ -1,12 +1,16 @@
 package com.example.plantsproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -14,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class InfoPlantActivity extends AppCompatActivity {
 
@@ -37,13 +42,22 @@ public class InfoPlantActivity extends AppCompatActivity {
         spraying = findViewById(R.id.spraying);
         notes = findViewById(R.id.notes);
 
+        plant = (Plant) getIntent().getSerializableExtra("plant");
+
        FloatingActionButton search = findViewById(R.id.fab);
        search.setOnClickListener(v -> {
-           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ru.wikipedia.org/wiki/"+ plant.convertName()));
-           startActivity(browserIntent);
+           if (isOnline()) {
+               Intent i = new Intent(InfoPlantActivity.this, WebInfoActivity.class);
+               i.putExtra("plant", plant);
+               startActivity(i);
+           } else {
+               Snackbar.make(v,getString(R.string.no_internet), Snackbar.LENGTH_LONG)
+                       .setAction("Action", null).show();
+               //Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+           }
        });
 
-        plant = (Plant) getIntent().getSerializableExtra("plant");
+
         name.setText(plant.getName());
         creationDate.setText(plant.getCreationDate());
 
@@ -81,6 +95,13 @@ public class InfoPlantActivity extends AppCompatActivity {
             startActivity(i);
         });
 
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
 
