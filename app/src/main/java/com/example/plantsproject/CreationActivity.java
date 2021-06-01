@@ -1,8 +1,10 @@
 package com.example.plantsproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -16,6 +18,31 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CreationActivity extends AppCompatActivity {
 
@@ -31,6 +58,7 @@ public class CreationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creation);
         setTheme(R.style.AppTheme);
@@ -69,12 +97,14 @@ public class CreationActivity extends AppCompatActivity {
             DBTips tips = new DBTips(this);
 
             checkName.setOnClickListener(view -> {
-                Plant planttip = tips.findString(plantName.getText().toString());
+                fillPlantTipsDB(this);
+
+                PlantTip planttip = tips.findString(plantName.getText().toString());
                 if (planttip != null) {
-                    tipsTxt.setText("Рекомендуемый уход установлен.\nВы можете его отредактировать");
-                    setPlantParameters((int) planttip.getWatering(), wCB, wInf, wSB);
-                    setPlantParameters((int) planttip.getFeeding(), fCB, fInf, fSB);
-                    setPlantParameters((int) planttip.getWatering(), sCB, sInf, sSB);
+                    tipsTxt.setText(getString(R.string.recommend_uxod));
+                    setPlantParameters(planttip.getWatering(), wCB, wInf, wSB);
+                    setPlantParameters(planttip.getFeeding(), fCB, fInf, fSB);
+                    setPlantParameters(planttip.getWatering(), sCB, sInf, sSB);
                     notes.setText(planttip.getNotes());
                 } else {
                     wCB.setChecked(false);
@@ -129,7 +159,7 @@ public class CreationActivity extends AppCompatActivity {
                             fSB.getProgress(),
                             sSB.getProgress(),
                             def.defineDate(),
-                            "нет", "нет", "нет",
+                            getString(R.string.no), getString(R.string.no), getString(R.string.no),
                             0, 0, 0);
 
                     plants.insert(plantName.getText().toString(),
@@ -138,7 +168,7 @@ public class CreationActivity extends AppCompatActivity {
                             fSB.getProgress(),
                             sSB.getProgress(),
                             def.defineDate(),
-                            "нет", "нет", "нет",
+                            getString(R.string.no), getString(R.string.no), getString(R.string.no),
                             0, 0, 0);
 
                     setPlantReminder(plant);
@@ -146,7 +176,6 @@ public class CreationActivity extends AppCompatActivity {
                     i = new Intent(CreationActivity.this, MainActivity.class);
                     startActivity(i);
                 }
-
 
             });
 
@@ -161,58 +190,100 @@ public class CreationActivity extends AppCompatActivity {
             });
         }
 
+        private void fillPlantTipsDB(Context ctx) {
+
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:8080")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            ServicePlantTips service = retrofit.create(ServicePlantTips.class);
+            Call<List<PlantTip>> call = service.getAllPlants();
+
+            call.enqueue(new Callback<List<PlantTip>>() {
+                @Override
+                public void onResponse(Call<List<PlantTip>> call, Response<List<PlantTip>> response) {
+
+                    List<PlantTip> plantTips = response.body();
+
+                    DBTips db = new DBTips(ctx);
+
+                    for (int i = 0; i < plantTips.size(); i++) {
+                        System.out.println(plantTips.get(i).toString());
+
+                        db.update(plantTips.get(i));
+
+                        //if (plantName.toLowerCase().contains(plantTips.get(i).getName().toLowerCase())) {
+                        //    plantTipToReturn = plantTips.get(i);
+                        //}
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<List<PlantTip>> call, Throwable t) {
+                    t.printStackTrace();
+                    Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+
+        }
+
         private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
 
-            sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    txt.setText(String.valueOf(seekBar.getProgress()));
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
-            cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (isChecked) {
-                    sb.setEnabled(true);
-                    txt.setText(String.valueOf(sb.getProgress()));
-                    sb.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
-                } else {
-                    sb.getProgressDrawable().setColorFilter(ContextCompat.getColor(CreationActivity.this, R.color.gray), PorterDuff.Mode.MULTIPLY);
-                    sb.setProgress(0);
-                    txt.setText("---");
-                    sb.setEnabled(false);
-                }
-            });
-        }
-
-        private void setPlantParameters(int parameter, CheckBox cb, TextView tv, SeekBar sb) {
-            if (parameter != 0) {
-                cb.setChecked(true);
-                tv.setText(String.valueOf(parameter));
-                sb.setProgress(parameter);
-            } else {
-                cb.setChecked(false);
-                tv.setText("---");
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                txt.setText(String.valueOf(seekBar.getProgress()));
             }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        cb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                sb.setEnabled(true);
+                txt.setText(String.valueOf(sb.getProgress()));
+                sb.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+            } else {
+                sb.getProgressDrawable().setColorFilter(ContextCompat.getColor(CreationActivity.this, R.color.gray), PorterDuff.Mode.MULTIPLY);
+                sb.setProgress(0);
+                txt.setText("---");
+                sb.setEnabled(false);
+            }
+        });
+    }
+
+        private void setPlantParameters(long parameter, CheckBox cb, TextView tv, SeekBar sb) {
+        if (parameter != 0) {
+            cb.setChecked(true);
+            tv.setText(String.valueOf(parameter));
+            sb.setProgress((int) parameter);
+        } else {
+            cb.setChecked(false);
+            tv.setText("---");
         }
+    }
 
         private void setPlantReminder(Plant plant) {
-            if (plant.getWatering() != 0) {
-                NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);
-            }
-            if ((plant.getFeeding() != 0)) {
-                NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding(), plant);
-            }
-            if (plant.getSpraying() != 0) {
-                NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying(), plant);
-            }
+        if (plant.getWatering() != 0) {
+            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);
         }
+        if ((plant.getFeeding() != 0)) {
+            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding(), plant);
+        }
+        if (plant.getSpraying() != 0) {
+            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying(), plant);
+        }
+    }
 
     }
 

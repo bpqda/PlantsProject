@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 class DBTips {
     private static final String DATABASE_NAME = "tips.db";
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
     private static final String TABLE_NAME_TIPS = "tableTips";
 
     private static final String TIPS_COLUMN_ID = "id";
@@ -31,28 +31,41 @@ class DBTips {
         mDataBase = myOpenHelper.getWritableDatabase();
     }
 
-    Plant findString(String str) {
+    PlantTip findString(String str) {
         Cursor mCursor = mDataBase.query(TABLE_NAME_TIPS, null, null, null, null, null, null);
         mCursor.moveToFirst();
         if(!mCursor.isAfterLast()) {
             do {
                 System.out.println(mCursor.getString(NUM_COLUMN_NAME));
                 if (str.toLowerCase().contains(mCursor.getString(NUM_COLUMN_NAME).toLowerCase())) {
-                    long id = mCursor.getLong(NUM_COLUMN_ID);
+
                     String plantName = mCursor.getString(NUM_COLUMN_NAME);
                     String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
                     int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
                     int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
                     int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-                    return new Plant(id, plantName, plantNotes,
-                            plantWatering, plantFeeding, plantSpraying,
-                            "", "", "", "",
-                            0, 0, 0);
+
+                    return new PlantTip(plantName, plantWatering, plantFeeding, plantSpraying,  plantNotes);
                 }
             } while (mCursor.moveToNext());
         }
         return null;
     }
+
+    long update(PlantTip plantTip) {
+        ContentValues cv = new ContentValues();
+        cv.put(TIPS_COLUMN_NAME, plantTip.getName());
+        cv.put(TIPS_COLUMN_NOTES, plantTip.getNotes());
+        cv.put(TIPS_COLUMN_WATERING, plantTip.getWatering());
+        cv.put(TIPS_COLUMN_FEEDING, plantTip.getFeeding());
+        cv.put(TIPS_COLUMN_SPRAYING, plantTip.getSpraying());
+
+        return mDataBase.update(TABLE_NAME_TIPS, cv, TIPS_COLUMN_ID + " = ?",new String[] { String.valueOf(plantTip.getId())});
+    }
+    void deleteAll() {
+        mDataBase.delete(TABLE_NAME_TIPS, null, null);
+    }
+
 
     private class TipsOpenHelper extends SQLiteOpenHelper {
 
@@ -71,33 +84,31 @@ class DBTips {
                     TIPS_COLUMN_SPRAYING+" INT); ";
             db.execSQL(queryTipsDB);
 
-            ContentValues cv2=new ContentValues();
-            cv2.put(TIPS_COLUMN_NAME, "Орхидея");
-            cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни;\nПересаживать раз в 2-3 года.");
-            cv2.put(TIPS_COLUMN_WATERING, 5);
-            cv2.put(TIPS_COLUMN_FEEDING, 30);
-            cv2.put(TIPS_COLUMN_SPRAYING, 1);
-            db.insert(TABLE_NAME_TIPS, null, cv2);
-
-            ContentValues cv4=new ContentValues();
-            cv4.put(TIPS_COLUMN_NAME, "Фиалка");
-            cv4.put(TIPS_COLUMN_NOTES, "Нельзя опрыскивать;\n" +
-                    "Ставить в места с рассеяным солнечным светом;\n" +
-                    "Фиалки не любят резкие перепады температур.");
-            cv4.put(TIPS_COLUMN_WATERING, 5);
-            cv4.put(TIPS_COLUMN_FEEDING, 15);
-            cv4.put(TIPS_COLUMN_SPRAYING, 0);
-            db.insert(TABLE_NAME_TIPS, null, cv4);
-
-            ContentValues cv5=new ContentValues();
-            cv5.put(TIPS_COLUMN_NAME, "Фикус");
-            cv5.put(TIPS_COLUMN_NOTES, "Чем выше уровень влажности, тем лучше;\n" +
-                    "Не ставить под прямые солнечные лучи;\n" +
-                    "Пересаживать раз в 2-3 года.");
-            cv5.put(TIPS_COLUMN_WATERING, 7);
-            cv5.put(TIPS_COLUMN_FEEDING, 15);
-            cv5.put(TIPS_COLUMN_SPRAYING, 1);
-            db.insert(TABLE_NAME_TIPS, null, cv5);
+            //ContentValues cv2=new ContentValues();
+            //cv2.put(TIPS_COLUMN_NAME, "Орхидея");
+            //cv2.put(TIPS_COLUMN_NOTES, "Опрыскивать исключительно корни;\nПересаживать раз в 2-3 года.");
+            //cv2.put(TIPS_COLUMN_WATERING, 5);
+            //cv2.put(TIPS_COLUMN_FEEDING, 30);
+            //cv2.put(TIPS_COLUMN_SPRAYING, 1);
+            //db.insert(TABLE_NAME_TIPS, null, cv2);
+            //ContentValues cv4=new ContentValues();
+            //cv4.put(TIPS_COLUMN_NAME, "Фиалка");
+            //cv4.put(TIPS_COLUMN_NOTES, "Нельзя опрыскивать;\n" +
+            //        "Ставить в места с рассеяным солнечным светом;\n" +
+            //        "Фиалки не любят резкие перепады температур.");
+            //cv4.put(TIPS_COLUMN_WATERING, 5);
+            //cv4.put(TIPS_COLUMN_FEEDING, 15);
+            //cv4.put(TIPS_COLUMN_SPRAYING, 0);
+            //db.insert(TABLE_NAME_TIPS, null, cv4);
+            //ContentValues cv5=new ContentValues();
+            //cv5.put(TIPS_COLUMN_NAME, "Фикус");
+            //cv5.put(TIPS_COLUMN_NOTES, "Чем выше уровень влажности, тем лучше;\n" +
+            //        "Не ставить под прямые солнечные лучи;\n" +
+            //        "Пересаживать раз в 2-3 года.");
+            //cv5.put(TIPS_COLUMN_WATERING, 7);
+            //cv5.put(TIPS_COLUMN_FEEDING, 15);
+            //cv5.put(TIPS_COLUMN_SPRAYING, 1);
+            //db.insert(TABLE_NAME_TIPS, null, cv5);
 
         }
 

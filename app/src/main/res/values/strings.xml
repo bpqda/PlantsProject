@@ -44,5 +44,7 @@
     <string name="plant_ok">В порядке</string>
     <string name="title_activity_web_info">WebInfoActivity</string>
     <string name="no_internet">Проверьте подключение к сети и попробуйте снова</string>
+    <string name="recommend_uxod">Рекомендуемый уход установлен.
+Вы можете его отредактировать</string>
 
 </resources>
