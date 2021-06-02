@@ -32,9 +32,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'androidx.mediarouter:mediarouter:1.2.2'
-
-        compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
-        compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
 
 
 }

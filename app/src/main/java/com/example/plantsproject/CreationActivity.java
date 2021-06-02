@@ -96,27 +96,7 @@ public class CreationActivity extends AppCompatActivity {
             DBPlants plants = new DBPlants(this);
             DBTips tips = new DBTips(this);
 
-            checkName.setOnClickListener(view -> {
-                fillPlantTipsDB(this);
-
-                PlantTip planttip = tips.findString(plantName.getText().toString());
-                if (planttip != null) {
-                    tipsTxt.setText(getString(R.string.recommend_uxod));
-                    setPlantParameters(planttip.getWatering(), wCB, wInf, wSB);
-                    setPlantParameters(planttip.getFeeding(), fCB, fInf, fSB);
-                    setPlantParameters(planttip.getWatering(), sCB, sInf, sSB);
-                    notes.setText(planttip.getNotes());
-                } else {
-                    wCB.setChecked(false);
-                    fCB.setChecked(false);
-                    sCB.setChecked(false);
-                    wSB.setProgress(0);
-                    fSB.setProgress(0);
-                    sSB.setProgress(0);
-                    notes.setText("");
-                    tipsTxt.setText(getString(R.string.plant_not_found));
-                }
-            });
+            checkName.setOnClickListener(view -> searchPlantTip(this));
 
             if (getIntent().hasExtra("plant")) {
                 toolbarLayout.setTitle(getString(R.string.edit));
@@ -133,6 +113,11 @@ public class CreationActivity extends AppCompatActivity {
             }
 
             create.setOnClickListener(v -> {
+
+                if(plantName.getText().toString().equals("")) {
+                    Toast.makeText(this, "Введите название", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 DateDefiner def = new DateDefiner("dd/MM/yyyy");
 
                 if (update) {
@@ -190,47 +175,80 @@ public class CreationActivity extends AppCompatActivity {
             });
         }
 
-        private void fillPlantTipsDB(Context ctx) {
-
-
+        private void searchPlantTip(Context ctx) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8080")
+                    .baseUrl("http://192.168.1.4:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-
             ServicePlantTips service = retrofit.create(ServicePlantTips.class);
             Call<List<PlantTip>> call = service.getAllPlants();
-
             call.enqueue(new Callback<List<PlantTip>>() {
                 @Override
                 public void onResponse(Call<List<PlantTip>> call, Response<List<PlantTip>> response) {
-
                     List<PlantTip> plantTips = response.body();
-
                     DBTips db = new DBTips(ctx);
+                    for (int i = 0; i < plantTips.size(); i++){
+                        db.insert(plantTips.get(i));
+                    }
 
-                    for (int i = 0; i < plantTips.size(); i++) {
-                        System.out.println(plantTips.get(i).toString());
-
-                        db.update(plantTips.get(i));
-
-                        //if (plantName.toLowerCase().contains(plantTips.get(i).getName().toLowerCase())) {
-                        //    plantTipToReturn = plantTips.get(i);
-                        //}
+                    PlantTip planttip = db.findString(plantName.getText().toString());
+                    if (planttip != null) {
+                        tipsTxt.setText(getString(R.string.recommend_uxod));
+                        setPlantParameters(planttip.getWatering(), wCB, wInf, wSB);
+                        setPlantParameters(planttip.getFeeding(), fCB, fInf, fSB);
+                        setPlantParameters(planttip.getWatering(), sCB, sInf, sSB);
+                        notes.setText(planttip.getNotes());
+                    } else {
+                        wCB.setChecked(false);
+                        fCB.setChecked(false);
+                        sCB.setChecked(false);
+                        wSB.setProgress(0);
+                        fSB.setProgress(0);
+                        sSB.setProgress(0);
+                        notes.setText("");
+                        tipsTxt.setText(getString(R.string.plant_not_found));
                     }
 
                 }
-
                 @Override
                 public void onFailure(Call<List<PlantTip>> call, Throwable t) {
                     t.printStackTrace();
                     Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-
+                    tipsTxt.setText(getString(R.string.error));
                 }
             });
 
-
         }
+
+
+        //private void searchPlant(String str) {
+        //    Retrofit retrofit = new Retrofit.Builder()
+        //            .baseUrl("http://10.0.2.2:8080")
+        //            .addConverterFactory(GsonConverterFactory.create())
+        //            .build();
+        //    ServicePlantTips service = retrofit.create(ServicePlantTips.class);
+        //    Call<PlantTip> call = service.getPlantTipById(str);
+        //    call.enqueue(new Callback<PlantTip>() {
+        //        @Override
+        //        public void onResponse(Call<PlantTip> call, Response<PlantTip> response) {
+        //            PlantTip plantTip = response.body();
+        //            if(plantTip!=null) {
+        //                wSB.setProgress(plantTip.getWatering());
+        //                fSB.setProgress(plantTip.getFeeding());
+        //                sSB.setProgress(plantTip.getSpraying());
+        //                notes.setText(plantTip.getNotes());
+        //            } else {
+        //                tipsTxt.setText(getString(R.string.plant_not_found));
+        //            }
+        //        }
+        //        @Override
+        //        public void onFailure(Call<PlantTip> call, Throwable t) {
+        //            t.printStackTrace();
+        //            Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        //        }
+        //    });
+        //}
+
 
         private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
 

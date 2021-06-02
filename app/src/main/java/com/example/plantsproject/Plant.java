@@ -121,7 +121,7 @@ class Plant implements Serializable {
         this.lastS = lastS;
     }
 
-    String convertName () {
+    String convertNameToURLform() {
         if(name.contains(" ")) {
             name.replace(" ", "_");
         }

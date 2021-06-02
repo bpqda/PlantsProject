@@ -43,6 +43,8 @@
     <string name="more">Больше информации</string>
     <string name="plant_ok">В порядке</string>
     <string name="title_activity_web_info">WebInfoActivity</string>
+    <string name="error">Ошибка</string>
+    <string name="search_in_internet">Поиск в интернете</string>
     <string name="no_internet">Проверьте подключение к сети и попробуйте снова</string>
     <string name="recommend_uxod">Рекомендуемый уход установлен.
 Вы можете его отредактировать</string>

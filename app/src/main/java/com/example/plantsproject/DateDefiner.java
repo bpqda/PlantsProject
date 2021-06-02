@@ -4,14 +4,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
  class DateDefiner {
-    String formate;
+    private String format;
 
-     DateDefiner(String formate) {
-        this.formate = formate;
+     DateDefiner(String format) {
+        this.format = format;
     }
+
      String defineDate () {
         Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat(formate);
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
         String strDate= formatter.format(date);
         return strDate;
     }
