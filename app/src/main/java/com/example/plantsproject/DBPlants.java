@@ -47,20 +47,20 @@ class DBPlants {
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    long insert(String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
+    long insert(Plant plant) {
         ContentValues cv=new ContentValues();
-        cv.put(COLUMN_NAME, name);
-        cv.put(COLUMN_NOTES, notes);
-        cv.put(COLUMN_WATERING, watering);
-        cv.put(COLUMN_FEEDING, feeding);
-        cv.put(COLUMN_SPRAYING,spraying);
-        cv.put(COLUMN_CREATION, creationDate);
-        cv.put(COLUMN_LASTWAT, lastW);
-        cv.put(COLUMN_LASTFEED, lastF);
-        cv.put(COLUMN_LASTSPR, lastS);
-        cv.put(COLUMN_LASTMILWAT, lastMilWat);
-        cv.put(COLUMN_LASTMILFEED, lastMilFeed);
-        cv.put(COLUMN_LASTMILSPRAY, lastMilSpray);
+        cv.put(COLUMN_NAME, plant.getName());
+        cv.put(COLUMN_NOTES, plant.getNotes());
+        cv.put(COLUMN_WATERING, plant.getWatering());
+        cv.put(COLUMN_FEEDING, plant.getFeeding());
+        cv.put(COLUMN_SPRAYING,plant.getSpraying());
+        cv.put(COLUMN_CREATION, plant.getCreationDate());
+        cv.put(COLUMN_LASTWAT, plant.getLastW());
+        cv.put(COLUMN_LASTFEED, plant.getLastF());
+        cv.put(COLUMN_LASTSPR, plant.getLastS());
+        cv.put(COLUMN_LASTMILWAT, plant.getLastMilWat());
+        cv.put(COLUMN_LASTMILFEED, plant.getLastMilFeed());
+        cv.put(COLUMN_LASTMILSPRAY, plant.getLastMilSpray());
         return mDataBase.insert(TABLE_NAME, null, cv);
     }
 

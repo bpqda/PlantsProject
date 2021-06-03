@@ -94,12 +94,13 @@ public class CreationActivity extends AppCompatActivity {
             sCB.setChecked(false);
 
             DBPlants plants = new DBPlants(this);
-            DBTips tips = new DBTips(this);
 
             checkName.setOnClickListener(view -> searchPlantTip(this));
 
             if (getIntent().hasExtra("plant")) {
                 toolbarLayout.setTitle(getString(R.string.edit));
+                create.setImageResource(R.drawable.ic_check_black_24dp);
+                create.setRotation(0);
                 plant = (Plant) getIntent().getSerializableExtra("plant");
                 plantName.setText(plant.getName());
                 notes.setText(plant.getNotes());
@@ -115,7 +116,7 @@ public class CreationActivity extends AppCompatActivity {
             create.setOnClickListener(v -> {
 
                 if(plantName.getText().toString().equals("")) {
-                    Toast.makeText(this, "Введите название", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.input_name), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 DateDefiner def = new DateDefiner("dd/MM/yyyy");
@@ -129,6 +130,7 @@ public class CreationActivity extends AppCompatActivity {
                             sSB.getProgress(),
                             def.defineDate(),
                             plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray());
+
                     plants.update(plant);
 
                     NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
@@ -137,6 +139,7 @@ public class CreationActivity extends AppCompatActivity {
                     i = new Intent(CreationActivity.this, InfoPlantActivity.class);
                     i.putExtra("plant", plant);
                     startActivity(i);
+
                 } else {
                     plant = new Plant(0, plantName.getText().toString(),
                             notes.getText().toString(),
@@ -147,15 +150,7 @@ public class CreationActivity extends AppCompatActivity {
                             getString(R.string.no), getString(R.string.no), getString(R.string.no),
                             0, 0, 0);
 
-                    plants.insert(plantName.getText().toString(),
-                            notes.getText().toString(),
-                            wSB.getProgress(),
-                            fSB.getProgress(),
-                            sSB.getProgress(),
-                            def.defineDate(),
-                            getString(R.string.no), getString(R.string.no), getString(R.string.no),
-                            0, 0, 0);
-
+                    plants.insert(plant);
                     setPlantReminder(plant);
 
                     i = new Intent(CreationActivity.this, MainActivity.class);
@@ -176,8 +171,9 @@ public class CreationActivity extends AppCompatActivity {
         }
 
         private void searchPlantTip(Context ctx) {
+        tipsTxt.setText(getString(R.string.searching));
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.4:8080/")
+                    .baseUrl("http://192.168.1.5:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             ServicePlantTips service = retrofit.create(ServicePlantTips.class);
