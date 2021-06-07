@@ -50,16 +50,4 @@ public class PlantTip {
         return notes;
     }
 
-
-    @Override
-    public String toString() {
-        return "PlantTip{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", watering=" + watering +
-                ", feeding=" + feeding +
-                ", spraying=" + spraying +
-                ", notes='" + notes + '\'' +
-                '}';
-    }
 }
