@@ -1,4 +1,4 @@
-package com.example.plantsproject;
+package com.example.plantsproject.dialogues;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,11 +17,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.plantsproject.databases.DBPlants;
+import com.example.plantsproject.notifications.DateDefiner;
+import com.example.plantsproject.R;
+import com.example.plantsproject.activities.InfoPlantActivity;
+import com.example.plantsproject.activities.MainActivity;
+import com.example.plantsproject.entitys.Plant;
+
 public class PlantDialog extends DialogFragment {
     private Plant plant;
     private Context context;
 
-    PlantDialog(Plant plant, Context context) {
+    public PlantDialog(Plant plant, Context context) {
         this.plant = plant;
         this.context = context;
     }

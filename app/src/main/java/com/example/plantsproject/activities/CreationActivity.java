@@ -1,11 +1,19 @@
-package com.example.plantsproject;
+package com.example.plantsproject.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 
+import com.example.plantsproject.databases.DBPlants;
+import com.example.plantsproject.notifications.DateDefiner;
+import com.example.plantsproject.server.MyRetrofit;
+import com.example.plantsproject.R;
+import com.example.plantsproject.server.ServicePlantTips;
+import com.example.plantsproject.entitys.Plant;
+import com.example.plantsproject.entitys.PlantTip;
+import com.example.plantsproject.notifications.AlarmReceiver;
+import com.example.plantsproject.notifications.NotificationScheduler;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -13,20 +21,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CreationActivity extends AppCompatActivity {
 
@@ -35,7 +38,7 @@ public class CreationActivity extends AppCompatActivity {
     CheckBox wCB, fCB, sCB;
     SeekBar wSB, fSB, sSB;
     long plantID;
-    private boolean update;
+    private boolean update, fromPlantTipsList;
     Plant plant;
     Intent i;
     CollapsingToolbarLayout toolbarLayout;
@@ -87,6 +90,9 @@ public class CreationActivity extends AppCompatActivity {
                 create.setRotation(0);
 
                 plant = (Plant) getIntent().getSerializableExtra("plant");
+                fromPlantTipsList = getIntent().getBooleanExtra("from_plantTipsList", false);
+
+
 
                 plantName.setText(plant.getName());
                 notes.setText(plant.getNotes());
@@ -127,7 +133,23 @@ public class CreationActivity extends AppCompatActivity {
                     i.putExtra("plant", plant);
                     startActivity(i);
 
-                } else {
+                }
+                if(fromPlantTipsList) {
+                    plant = new Plant(plantID,
+                            plantName.getText().toString(),
+                            notes.getText().toString(),
+                            wSB.getProgress(),
+                            fSB.getProgress(),
+                            sSB.getProgress(),
+                            def.defineDate(),
+                            plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray());
+
+                    plants.insert(plant);
+
+                    i = new Intent(CreationActivity.this, MainActivity.class);
+                    startActivity(i);
+                }
+                else {
                     plant = new Plant(0, plantName.getText().toString(),
                             notes.getText().toString(),
                             wSB.getProgress(),
@@ -156,45 +178,6 @@ public class CreationActivity extends AppCompatActivity {
                 return true;
             });
         }
-
-        //private void searchPlantTip(Context ctx) {
-        //tipsTxt.setText(getString(R.string.searching));
-        //    ServicePlantTips service = MyRetrofit.createService();
-        //    Call<List<PlantTip>> call = service.getAllPlants();
-        //    call.enqueue(new Callback<List<PlantTip>>() {
-        //        @Override
-        //        public void onResponse(Call<List<PlantTip>> call, Response<List<PlantTip>> response) {
-        //            List<PlantTip> plantTips = response.body();
-        //            DBTips db = new DBTips(ctx);
-        //            for (int i = 0; i < plantTips.size(); i++){
-        //                db.insert(plantTips.get(i));
-        //            }
-        //            PlantTip planttip = db.findString(plantName.getText().toString());
-        //            if (planttip != null) {
-        //                tipsTxt.setText(getString(R.string.recommend_uxod));
-        //                setPlantParameters(planttip.getWatering(), wCB, wInf, wSB);
-        //                setPlantParameters(planttip.getFeeding(), fCB, fInf, fSB);
-        //                setPlantParameters(planttip.getWatering(), sCB, sInf, sSB);
-        //                notes.setText(planttip.getNotes());
-        //            } else {
-        //                wCB.setChecked(false);
-        //                fCB.setChecked(false);
-        //                sCB.setChecked(false);
-        //                wSB.setProgress(0);
-        //                fSB.setProgress(0);
-        //                sSB.setProgress(0);
-        //                notes.setText("");
-        //                tipsTxt.setText(getString(R.string.plant_not_found));
-        //            }
-        //        }
-        //        @Override
-        //        public void onFailure(Call<List<PlantTip>> call, Throwable t) {
-        //            t.printStackTrace();
-        //            Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-        //            tipsTxt.setText(getString(R.string.error));
-        //        }
-        //    });
-        //}
 
 
         private void searchPlant(String str) {
@@ -288,5 +271,3 @@ public class CreationActivity extends AppCompatActivity {
         });
     }
 }
-
-

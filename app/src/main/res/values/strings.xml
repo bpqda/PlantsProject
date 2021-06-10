@@ -50,6 +50,6 @@
     <string name="no_internet">Проверьте подключение к сети и попробуйте снова</string>
     <string name="recommend_uxod">Рекомендуемый уход установлен.
 Вы можете его отредактировать</string>
-    <string name="title_activity_plant_tips_list">PlantTipsListActivity</string>
+    <string name="title_activity_plant_tips_list">Список растений</string>
 
 </resources>

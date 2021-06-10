@@ -1,8 +1,8 @@
-package com.example.plantsproject;
+package com.example.plantsproject.entitys;
 
 import java.io.Serializable;
 
-public class PlantTip implements Serializable {
+public class PlantTip implements Serializable{
 
     int id;
 
@@ -15,11 +15,11 @@ public class PlantTip implements Serializable {
         this.notes = notes;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 
-    void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -29,11 +29,11 @@ public class PlantTip implements Serializable {
    private int spraying;
    private String notes;
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    PlantTip(String name, int watering, int feeding, int spraying, String notes) {
+    public PlantTip(String name, int watering, int feeding, int spraying, String notes) {
         this.name = name;
         this.watering = watering;
         this.feeding = feeding;
@@ -41,23 +41,23 @@ public class PlantTip implements Serializable {
         this.notes = notes;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    int getWatering() {
+    public int getWatering() {
         return watering;
     }
 
-    int getFeeding() {
+    public int getFeeding() {
         return feeding;
     }
 
 
-    int getSpraying() { return spraying; }
+    public int getSpraying() { return spraying; }
 
 
-    String getNotes() {
+    public String getNotes() {
         return notes;
     }
 
@@ -72,9 +72,10 @@ public class PlantTip implements Serializable {
                 ", notes='" + notes + '\'' +
                 '}';
     }
-    Plant toPlant() {
+    public Plant toPlant() {
         return new Plant(0, name, notes, watering,
                 feeding, spraying, "", "", "", "", 0, 0, 0);
     }
+
 
 }

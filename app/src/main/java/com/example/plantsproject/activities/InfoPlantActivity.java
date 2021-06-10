@@ -1,4 +1,4 @@
-package com.example.plantsproject;
+package com.example.plantsproject.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import com.example.plantsproject.dialogues.DeleteDialog;
+import com.example.plantsproject.R;
+import com.example.plantsproject.entitys.Plant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -83,7 +86,7 @@ public class InfoPlantActivity extends AppCompatActivity {
         delete.setOnClickListener(v -> {
             DeleteDialog dialog = new DeleteDialog(this, plant,
                     getString(R.string.sure2) + plant.getName() + " ?",
-                    false, null);
+                    false);
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");
         });

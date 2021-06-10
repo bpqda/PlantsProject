@@ -18,22 +18,22 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".PlantTipsListActivity"
+            android:name=".activities.PlantTipsListActivity"
             android:label="@string/title_activity_plant_tips_list"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
-            android:name=".WebInfoActivity"
+            android:name=".activities.WebInfoActivity"
             android:label="@string/title_activity_web_info"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
-            android:name=".InfoPlantActivity"
+            android:name=".activities.InfoPlantActivity"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
-            android:name=".CreationActivity"
+            android:name=".activities.CreationActivity"
             android:label="@string/title_activity_creation"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -44,7 +44,7 @@
         </activity>
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".notifications.AlarmReceiver"
             android:enabled="false"
             android:exported="true">
             <intent-filter>

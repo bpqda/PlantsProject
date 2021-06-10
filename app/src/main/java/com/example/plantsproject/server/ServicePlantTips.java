@@ -1,4 +1,6 @@
-package com.example.plantsproject;
+package com.example.plantsproject.server;
+
+import com.example.plantsproject.entitys.PlantTip;
 
 import java.util.List;
 

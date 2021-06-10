@@ -1,16 +1,16 @@
-package com.example.plantsproject;
+package com.example.plantsproject.notifications;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
- class DateDefiner {
+public class DateDefiner {
     private String format;
 
-     DateDefiner(String format) {
+    public DateDefiner(String format) {
         this.format = format;
     }
 
-     String defineDate () {
+    public String defineDate () {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         String strDate= formatter.format(date);

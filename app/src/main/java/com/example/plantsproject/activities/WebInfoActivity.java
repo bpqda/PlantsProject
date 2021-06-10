@@ -1,10 +1,12 @@
-package com.example.plantsproject;
+package com.example.plantsproject.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.plantsproject.R;
+import com.example.plantsproject.entitys.Plant;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

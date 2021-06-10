@@ -1,4 +1,4 @@
-package com.example.plantsproject;
+package com.example.plantsproject.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.plantsproject.entitys.Plant;
+
 import java.util.ArrayList;
 
-class DBPlants {
+public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
     private static final int DATABASE_VERSION = 14;
     private static final String TABLE_NAME = "tablePlants";
@@ -42,12 +44,12 @@ class DBPlants {
     private static final int NUM_COLUMN_LASTMILSPRAY= 12;
     private SQLiteDatabase mDataBase;
 
-    DBPlants(Context context) {
+    public DBPlants(Context context) {
         OpenHelper mOpenHelper = new OpenHelper(context);
         mDataBase = mOpenHelper.getWritableDatabase();
     }
 
-    long insert(Plant plant) {
+    public long insert(Plant plant) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, plant.getName());
         cv.put(COLUMN_NOTES, plant.getNotes());
@@ -64,7 +66,7 @@ class DBPlants {
         return mDataBase.insert(TABLE_NAME, null, cv);
     }
 
-    int update(Plant plant) {
+    public int update(Plant plant) {
         ContentValues cv=new ContentValues();
         cv.put(COLUMN_NAME, plant.getName());
         cv.put(COLUMN_NOTES, plant.getNotes());
@@ -81,11 +83,11 @@ class DBPlants {
         return mDataBase.update(TABLE_NAME, cv, COLUMN_ID + " = ?",new String[] { String.valueOf(plant.getId())});
     }
 
-    void deleteAll() {
+    public void deleteAll() {
         mDataBase.delete(TABLE_NAME, null, null);
     }
 
-     void delete(long id) {
+    public void delete(long id) {
         mDataBase.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
     }
     //public Plant select(long id) {
@@ -100,7 +102,7 @@ class DBPlants {
     //    return new Plant(id, plantName, plantNotes, plantWatering,plantFeeding, plantSpraying, creationDate);
     //}
 
-     ArrayList<Plant> selectAll() {
+    public ArrayList<Plant> selectAll() {
         Cursor mCursor = mDataBase.query(TABLE_NAME, null, null, null, null, null, "id desc");
 
         ArrayList<Plant> arr = new ArrayList<>();
@@ -127,7 +129,7 @@ class DBPlants {
 
     }
 
-    private class OpenHelper extends SQLiteOpenHelper {
+    public  class OpenHelper extends SQLiteOpenHelper {
 
         OpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);

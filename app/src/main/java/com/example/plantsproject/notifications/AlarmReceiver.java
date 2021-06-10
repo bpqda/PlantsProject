@@ -1,8 +1,10 @@
-package com.example.plantsproject;
+package com.example.plantsproject.notifications;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.example.plantsproject.activities.MainActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

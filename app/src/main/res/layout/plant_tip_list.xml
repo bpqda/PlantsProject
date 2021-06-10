@@ -13,7 +13,6 @@
         android:paddingTop="30dp"
         android:paddingRight="20dp"
         android:paddingBottom="30dp"
-        android:text="TextView"
         android:textColor="@color/darkGreen"
         android:textSize="20sp" />
 
@@ -21,7 +20,7 @@
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
+        android:layout_gravity="center_horizontal|center_vertical|end"
         android:layout_weight="0.20"
         android:paddingTop="30dp"
         android:paddingBottom="30dp"

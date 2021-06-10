@@ -1,8 +1,8 @@
-package com.example.plantsproject;
+package com.example.plantsproject.entitys;
 
 import java.io.Serializable;
 
-class Plant implements Serializable {
+public class Plant implements Serializable {
     private String name;
     private String notes;
     private long watering;
@@ -17,7 +17,7 @@ class Plant implements Serializable {
     private long lastMilFeed;
     private long lastMilSpray;
 
-    Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
+    public Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
         this.name = name;
         this.notes = notes;
         this.watering = watering;
@@ -33,56 +33,56 @@ class Plant implements Serializable {
         this.lastMilSpray = lastMilSpray;
     }
 
-    long getLastMilWat() {
+    public long getLastMilWat() {
         return lastMilWat;
     }
 
-    void setLastMilWat(long lastMilWat) {
+    public void setLastMilWat(long lastMilWat) {
         this.lastMilWat = lastMilWat;
     }
 
-    long getLastMilFeed() {
+    public long getLastMilFeed() {
         return lastMilFeed;
     }
 
-    void setLastMilFeed(long lastMilFeed) {
+    public void setLastMilFeed(long lastMilFeed) {
         this.lastMilFeed = lastMilFeed;
     }
 
-    long getLastMilSpray() {
+    public long getLastMilSpray() {
         return lastMilSpray;
     }
 
-    void setLastMilSpray(long lastMilSpray) {
+    public void setLastMilSpray(long lastMilSpray) {
         this.lastMilSpray = lastMilSpray;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    long getWatering() {
+    public long getWatering() {
         return watering;
     }
-    long getFeeding() {
+    public long getFeeding() {
         return feeding;
     }
-    long getSpraying() {
+    public long getSpraying() {
         return spraying;
     }
 
-    long getId() {
+    public long getId() {
         return id;
     }
 
-    String getNotes() {
+    public String getNotes() {
         return notes;
     }
-    String getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    String getAction() {
+    public String getAction() {
         Plant plant = this;
         String action = "";
         if(plant.getWatering()!=0) {
@@ -97,31 +97,31 @@ class Plant implements Serializable {
         return action;
     }
 
-    String getLastW() {
+    public String getLastW() {
         return lastW;
     }
 
-    void setLastW(String lastW) {
+    public void setLastW(String lastW) {
         this.lastW = lastW;
     }
 
-    String getLastF() {
+    public String getLastF() {
         return lastF;
     }
 
-    void setLastF(String lastF) {
+    public void setLastF(String lastF) {
         this.lastF = lastF;
     }
 
-    String getLastS() {
+    public String getLastS() {
         return lastS;
     }
 
-    void setLastS(String lastS) {
+    public void setLastS(String lastS) {
         this.lastS = lastS;
     }
 
-    String convertNameToURLform() {
+    public String convertNameToURLform() {
         if(name.contains(" ")) {
             name.replace(" ", "_");
         }

@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".CreationActivity"
+    tools:context=".activities.CreationActivity"
     tools:showIn="@layout/activity_creation">
 
     <ScrollView
@@ -15,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <Space
                 android:layout_width="match_parent"
@@ -37,12 +38,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="20"
+                    android:backgroundTint="@color/darkGreen"
                     android:ems="10"
+                    android:imeOptions="actionSearch"
                     android:inputType="textPersonName"
                     android:text="Мое растение"
-                    android:textColor="@color/darkGreen"
-                    android:backgroundTint="@color/darkGreen"
-                    android:imeOptions="actionSearch"/>
+                    android:textColor="@color/darkGreen" />
 
                 <ImageButton
                     android:id="@+id/checkName"
@@ -236,15 +237,15 @@
                     android:id="@+id/notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/darkGreen"
+                    android:drawableTint="@color/darkGreen"
                     android:hint="@string/notes"
                     android:textColorHighlight="@color/colorMain"
-                    android:textColorLink="@color/colorMain"
-                    android:backgroundTint="@color/darkGreen"
-                    android:drawableTint="@color/darkGreen"/>
+                    android:textColorLink="@color/colorMain" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </ScrollView>
 
 
-    </androidx.core.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

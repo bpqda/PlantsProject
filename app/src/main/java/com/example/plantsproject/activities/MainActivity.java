@@ -1,10 +1,18 @@
-package com.example.plantsproject;
+package com.example.plantsproject.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
+import com.example.plantsproject.databases.DBPlants;
+import com.example.plantsproject.dialogues.DeleteDialog;
+import com.example.plantsproject.dialogues.PlantDialog;
+import com.example.plantsproject.R;
+import com.example.plantsproject.entitys.Plant;
+import com.example.plantsproject.notifications.AlarmReceiver;
+import com.example.plantsproject.notifications.NotificationScheduler;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         layout = findViewById(R.id.layout);
         plants = new DBPlants(this);
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
+
+        setSupportActionBar(bottomAppBar);
+
 
         adapter = new PlantAdapter(this, plants.selectAll());
         list.setAdapter(adapter);
@@ -50,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout.LayoutParams imageViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         img.setLayoutParams(imageViewLayoutParams);
 
-        if(list.getCount()==0) {
+        if (list.getCount() == 0) {
             adapter.changeListToImage(list, img, layout);
         }
 
@@ -67,6 +79,14 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(MainActivity.this, CreationActivity.class);
             startActivityForResult(i, RESULT_OK);
 
+        });
+
+        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, PlantTipsListActivity.class);
+                startActivity(i);
+            }
         });
     }
 
@@ -92,8 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
                 DeleteDialog dialog = new DeleteDialog(this, null,
                         getString(R.string.sure),
-                        true,
-                        adapter);
+                        true);
                 FragmentManager manager = getSupportFragmentManager();
                 dialog.show(manager, "dialog");
                 return true;
@@ -102,80 +121,82 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
         }
-            return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
 }
 
-    class PlantAdapter extends BaseAdapter {
-        private LayoutInflater inflater;
-        private ArrayList<Plant> plants;
+class PlantAdapter extends BaseAdapter {
+    private LayoutInflater inflater;
+    private ArrayList<Plant> plants;
 
-        PlantAdapter(Context ctx, ArrayList<Plant> array) {
-            inflater = LayoutInflater.from(ctx);
-            setArrayMyData(array);
-        }
-
-        void setArrayMyData(ArrayList<Plant> arrayMyData) {
-            this.plants = arrayMyData;
-        }
-
-        @Override
-        public int getCount() {
-            return plants.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return plants.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            Plant plant = plants.get(i);
-            if (plant != null) {
-                return plant.getId();
-            }
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-
-            if (view == null) {
-                view = inflater.inflate(R.layout.plant_list, null);
-            }
-            TextView name = view.findViewById(R.id.nameTxt);
-            TextView stateWater = view.findViewById(R.id.stateWater);
-            TextView stateFeed = view.findViewById(R.id.stateFeed);
-            TextView stateSpray = view.findViewById(R.id.stateSpray);
-            LinearLayout lay = view.findViewById(R.id.linLay);
-
-            Plant plant = plants.get(i);
-            name.setText(plant.getName());
-
-            if (plant.getWatering()!=0 && System.currentTimeMillis() > plant.getLastMilWat() + plant.getWatering() * 1000*60*60*24) {
-                stateWater.setText(R.string.need_w);
-                lay.setBackgroundResource(R.drawable.plant_needsmth_background);
-                stateFeed.setText("");
-            }
-            if(plant.getSpraying()!=0 && System.currentTimeMillis() > plant.getLastMilSpray() + plant.getSpraying() * 1000*60*60*24) {
-                stateFeed.setText("");
-                lay.setBackgroundResource(R.drawable.plant_needsmth_background);
-                stateSpray.setText(R.string.need_s);
-            }
-
-            if (plant.getFeeding()!=0 && System.currentTimeMillis() > plant.getLastMilFeed() + plant.getFeeding() * 1000*60*60*24) {
-                stateFeed.setText(R.string.need_f);
-                lay.setBackgroundResource(R.drawable.plant_needsmth_background);
-            }
-
-            return view;
-        }
-
-        void changeListToImage (ListView lis, ImageView im, LinearLayout lay) {
-            lay.removeView(lis);
-            lay.addView(im);
-        }
-
+    PlantAdapter(Context ctx, ArrayList<Plant> array) {
+        inflater = LayoutInflater.from(ctx);
+        setArrayMyData(array);
     }
+
+    void setArrayMyData(ArrayList<Plant> arrayMyData) {
+        this.plants = arrayMyData;
+    }
+
+    @Override
+    public int getCount() {
+        return plants.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return plants.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        Plant plant = plants.get(i);
+        if (plant != null) {
+            return plant.getId();
+        }
+        return 0;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+
+        if (view == null) {
+            view = inflater.inflate(R.layout.plant_list, null);
+        }
+        TextView name = view.findViewById(R.id.nameTxt);
+        TextView stateWater = view.findViewById(R.id.stateWater);
+        TextView stateFeed = view.findViewById(R.id.stateFeed);
+        TextView stateSpray = view.findViewById(R.id.stateSpray);
+        LinearLayout lay = view.findViewById(R.id.linLay);
+
+        Plant plant = plants.get(i);
+        name.setText(plant.getName());
+
+        if (plant.getWatering() != 0 && System.currentTimeMillis() > plant.getLastMilWat() + plant.getWatering() * 1000 * 60 * 60 * 24) {
+            stateWater.setText(R.string.need_w);
+            lay.setBackgroundResource(R.drawable.plant_needsmth_background);
+            stateFeed.setText("");
+        }
+        if (plant.getSpraying() != 0 && System.currentTimeMillis() > plant.getLastMilSpray() + plant.getSpraying() * 1000 * 60 * 60 * 24) {
+            stateFeed.setText("");
+            lay.setBackgroundResource(R.drawable.plant_needsmth_background);
+            stateSpray.setText(R.string.need_s);
+        }
+
+        if (plant.getFeeding() != 0 && System.currentTimeMillis() > plant.getLastMilFeed() + plant.getFeeding() * 1000 * 60 * 60 * 24) {
+            stateFeed.setText(R.string.need_f);
+            lay.setBackgroundResource(R.drawable.plant_needsmth_background);
+        }
+
+        return view;
+    }
+
+    void changeListToImage(ListView lis, ImageView im, LinearLayout lay) {
+        lay.removeView(lis);
+        lay.addView(im);
+    }
+
+}

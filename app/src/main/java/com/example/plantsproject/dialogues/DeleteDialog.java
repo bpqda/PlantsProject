@@ -1,4 +1,4 @@
-package com.example.plantsproject;
+package com.example.plantsproject.dialogues;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,19 +10,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.plantsproject.databases.DBPlants;
+import com.example.plantsproject.R;
+import com.example.plantsproject.activities.MainActivity;
+import com.example.plantsproject.entitys.Plant;
+import com.example.plantsproject.notifications.AlarmReceiver;
+import com.example.plantsproject.notifications.NotificationScheduler;
+
 public class DeleteDialog extends DialogFragment {
     private Context context;
     private Plant plant;
     private String content;
     private boolean deleteAll;
-    private PlantAdapter adapter;
+    //private PlantAdapter adapter;
 
-    DeleteDialog(Context context, Plant plant, String content, boolean deleteAll, PlantAdapter adapter) {
+    public DeleteDialog(Context context, Plant plant, String content, boolean deleteAll) {
         this.context = context;
         this.plant = plant;
         this.content = content;
         this.deleteAll = deleteAll;
-        this.adapter = adapter;
+        //this.adapter = adapter;
     }
 
     @NonNull
@@ -36,8 +43,8 @@ public class DeleteDialog extends DialogFragment {
                     DBPlants plantsDB = new DBPlants(context);
                     if(deleteAll) {
                         plantsDB.deleteAll();
-                        adapter.setArrayMyData(plantsDB.selectAll());
-                        adapter.notifyDataSetChanged();
+                        Intent i = new Intent(context, MainActivity.class);
+                        startActivity(i);
                     } else {
                         plantsDB.delete(plant.getId());
                         NotificationScheduler.cancelReminder(context, AlarmReceiver.class);
