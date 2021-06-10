@@ -7,10 +7,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ServicePlantTips {
-    @GET("/database/getallplants/")
+    @GET("/getallplants/")
     Call<List<PlantTip>> getAllPlants();
 
-    @GET("/database/getplant/{name}")
-    Call<PlantTip> getPlantTipById(@Query("name") String name);
+    @GET("/getplant/")
+    Call<PlantTip> getPlantTipByName(@Query("name") String name);
 
 }

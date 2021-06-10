@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
+
 class DBTips {
     private static final String DATABASE_NAME = "tips.db";
     private static final int DATABASE_VERSION = 13;
@@ -51,8 +55,30 @@ class DBTips {
         return null;
     }
 
-    long insert(PlantTip plantTip) {
+    ArrayList<PlantTip> selectAll() {
+        Cursor mCursor = mDataBase.query(TABLE_NAME_TIPS, null, null, null, null, null, "name");
+
+        ArrayList<PlantTip> arr = new ArrayList<>();
+        mCursor.moveToFirst();
+        if (!mCursor.isAfterLast()) {
+            do {
+                //int id = mCursor.getInt(NUM_COLUMN_ID);
+                String plantName = mCursor.getString(NUM_COLUMN_NAME);
+                int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
+                int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
+                int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
+                String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
+
+                arr.add(new PlantTip(plantName, plantWatering, plantFeeding, plantSpraying, plantNotes));
+            } while (mCursor.moveToNext());
+        }
+        return arr;
+    }
+
+
+        long insert(PlantTip plantTip) {
         ContentValues cv = new ContentValues();
+        //cv.put(TIPS_COLUMN_ID, plantTip.getId());
         cv.put(TIPS_COLUMN_NAME, plantTip.getName());
         cv.put(TIPS_COLUMN_NOTES, plantTip.getNotes());
         cv.put(TIPS_COLUMN_WATERING, plantTip.getWatering());
@@ -62,22 +88,17 @@ class DBTips {
         return mDataBase.insert(TABLE_NAME_TIPS, null, cv);
     }
 
-    //ArrayList<PlantTip> selectAll() {
-    //    Cursor mCursor = mDataBase.query(TABLE_NAME_TIPS, null, null, null, null, null, "id desc");
-    //    ArrayList<PlantTip> arr = new ArrayList<>();
-    //    mCursor.moveToFirst();
-    //    if (!mCursor.isAfterLast()) {
-    //        do {
-    //            String plantName = mCursor.getString(NUM_COLUMN_NAME);
-    //            String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
-    //            int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
-    //            int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
-    //            int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-    //            arr.add(new PlantTip(plantName, plantWatering, plantFeeding, plantSpraying, plantNotes));
-    //        } while (mCursor.moveToNext());
-    //    }
-    //    return arr;
-    //}
+    long update(PlantTip plantTip) {
+        ContentValues cv = new ContentValues();
+        cv.put(TIPS_COLUMN_ID, plantTip.getId());
+        cv.put(TIPS_COLUMN_NAME, plantTip.getName());
+        cv.put(TIPS_COLUMN_NOTES, plantTip.getNotes());
+        cv.put(TIPS_COLUMN_WATERING, plantTip.getWatering());
+        cv.put(TIPS_COLUMN_FEEDING, plantTip.getFeeding());
+        cv.put(TIPS_COLUMN_SPRAYING, plantTip.getSpraying());
+
+        return mDataBase.update(TABLE_NAME_TIPS, cv, TIPS_COLUMN_ID + " = ?",new String[] { String.valueOf(plantTip.getId())});
+    }
 
     private class TipsOpenHelper extends SQLiteOpenHelper {
 

@@ -79,13 +79,15 @@ public class CreationActivity extends AppCompatActivity {
 
             DBPlants plants = new DBPlants(this);
 
-            checkName.setOnClickListener(view -> searchPlantTip(this));
+            checkName.setOnClickListener(view -> searchPlant(plantName.getText().toString()));
 
             if (getIntent().hasExtra("plant")) {
                 toolbarLayout.setTitle(getString(R.string.edit));
                 create.setImageResource(R.drawable.ic_check_black_24dp);
                 create.setRotation(0);
+
                 plant = (Plant) getIntent().getSerializableExtra("plant");
+
                 plantName.setText(plant.getName());
                 notes.setText(plant.getNotes());
                 setPlantParameters((int) plant.getWatering(), wCB, wInf, wSB);
@@ -97,10 +99,6 @@ public class CreationActivity extends AppCompatActivity {
                 plantID = -1;
             }
 
-            plantName.setOnClickListener(view -> {
-                plantName.setText("");
-                plantName.setOnClickListener(null);
-            });
 
             create.setOnClickListener(v -> {
 
@@ -159,80 +157,73 @@ public class CreationActivity extends AppCompatActivity {
             });
         }
 
-        private void searchPlantTip(Context ctx) {
-        tipsTxt.setText(getString(R.string.searching));
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.5:8080/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            ServicePlantTips service = retrofit.create(ServicePlantTips.class);
-            Call<List<PlantTip>> call = service.getAllPlants();
-            call.enqueue(new Callback<List<PlantTip>>() {
-                @Override
-                public void onResponse(Call<List<PlantTip>> call, Response<List<PlantTip>> response) {
-                    List<PlantTip> plantTips = response.body();
-                    DBTips db = new DBTips(ctx);
-                    for (int i = 0; i < plantTips.size(); i++){
-                        db.insert(plantTips.get(i));
-                    }
-
-                    PlantTip planttip = db.findString(plantName.getText().toString());
-                    if (planttip != null) {
-                        tipsTxt.setText(getString(R.string.recommend_uxod));
-                        setPlantParameters(planttip.getWatering(), wCB, wInf, wSB);
-                        setPlantParameters(planttip.getFeeding(), fCB, fInf, fSB);
-                        setPlantParameters(planttip.getWatering(), sCB, sInf, sSB);
-                        notes.setText(planttip.getNotes());
-                    } else {
-                        wCB.setChecked(false);
-                        fCB.setChecked(false);
-                        sCB.setChecked(false);
-                        wSB.setProgress(0);
-                        fSB.setProgress(0);
-                        sSB.setProgress(0);
-                        notes.setText("");
-                        tipsTxt.setText(getString(R.string.plant_not_found));
-                    }
-
-                }
-                @Override
-                public void onFailure(Call<List<PlantTip>> call, Throwable t) {
-                    t.printStackTrace();
-                    Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                    tipsTxt.setText(getString(R.string.error));
-                }
-            });
-
-        }
-
-
-        //private void searchPlant(String str) {
-        //    Retrofit retrofit = new Retrofit.Builder()
-        //            .baseUrl("http://10.0.2.2:8080")
-        //            .addConverterFactory(GsonConverterFactory.create())
-        //            .build();
-        //    ServicePlantTips service = retrofit.create(ServicePlantTips.class);
-        //    Call<PlantTip> call = service.getPlantTipById(str);
-        //    call.enqueue(new Callback<PlantTip>() {
+        //private void searchPlantTip(Context ctx) {
+        //tipsTxt.setText(getString(R.string.searching));
+        //    ServicePlantTips service = MyRetrofit.createService();
+        //    Call<List<PlantTip>> call = service.getAllPlants();
+        //    call.enqueue(new Callback<List<PlantTip>>() {
         //        @Override
-        //        public void onResponse(Call<PlantTip> call, Response<PlantTip> response) {
-        //            PlantTip plantTip = response.body();
-        //            if(plantTip!=null) {
-        //                wSB.setProgress(plantTip.getWatering());
-        //                fSB.setProgress(plantTip.getFeeding());
-        //                sSB.setProgress(plantTip.getSpraying());
-        //                notes.setText(plantTip.getNotes());
+        //        public void onResponse(Call<List<PlantTip>> call, Response<List<PlantTip>> response) {
+        //            List<PlantTip> plantTips = response.body();
+        //            DBTips db = new DBTips(ctx);
+        //            for (int i = 0; i < plantTips.size(); i++){
+        //                db.insert(plantTips.get(i));
+        //            }
+        //            PlantTip planttip = db.findString(plantName.getText().toString());
+        //            if (planttip != null) {
+        //                tipsTxt.setText(getString(R.string.recommend_uxod));
+        //                setPlantParameters(planttip.getWatering(), wCB, wInf, wSB);
+        //                setPlantParameters(planttip.getFeeding(), fCB, fInf, fSB);
+        //                setPlantParameters(planttip.getWatering(), sCB, sInf, sSB);
+        //                notes.setText(planttip.getNotes());
         //            } else {
+        //                wCB.setChecked(false);
+        //                fCB.setChecked(false);
+        //                sCB.setChecked(false);
+        //                wSB.setProgress(0);
+        //                fSB.setProgress(0);
+        //                sSB.setProgress(0);
+        //                notes.setText("");
         //                tipsTxt.setText(getString(R.string.plant_not_found));
         //            }
         //        }
         //        @Override
-        //        public void onFailure(Call<PlantTip> call, Throwable t) {
+        //        public void onFailure(Call<List<PlantTip>> call, Throwable t) {
         //            t.printStackTrace();
         //            Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        //            tipsTxt.setText(getString(R.string.error));
         //        }
         //    });
         //}
+
+
+        private void searchPlant(String str) {
+
+            tipsTxt.setText(getString(R.string.searching));
+            ServicePlantTips service = MyRetrofit.createService();
+
+            Call<PlantTip> call = service.getPlantTipByName(str);
+            call.enqueue(new Callback<PlantTip>() {
+                @Override
+                public void onResponse(Call<PlantTip> call, Response<PlantTip> response) {
+                    PlantTip plantTip = response.body();
+                    if(plantTip!=null) {
+                        wSB.setProgress(plantTip.getWatering());
+                        fSB.setProgress(plantTip.getFeeding());
+                        sSB.setProgress(plantTip.getSpraying());
+                        notes.setText(plantTip.getNotes());
+                        tipsTxt.setText(getString(R.string.recommend_uxod));
+                    } else {
+                        tipsTxt.setText(getString(R.string.plant_not_found));
+                    }
+                }
+                @Override
+                public void onFailure(Call<PlantTip> call, Throwable t) {
+                    t.printStackTrace();
+                    Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
 
         private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
@@ -288,6 +279,14 @@ public class CreationActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        plantName.setOnClickListener(view -> {
+            plantName.setText("");
+            plantName.setOnClickListener(null);
+        });
     }
+}
 
 

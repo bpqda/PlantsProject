@@ -18,6 +18,10 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".PlantTipsListActivity"
+            android:label="@string/title_activity_plant_tips_list"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+        <activity
             android:name=".WebInfoActivity"
             android:label="@string/title_activity_web_info"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
@@ -48,6 +52,5 @@
             </intent-filter>
         </receiver>
     </application>
-
 
 </manifest>

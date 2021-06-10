@@ -12,4 +12,7 @@
         android:orderInCategory="100"
         android:title="@string/delete_all"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/plant_tips"
+        android:title="Виды растений" />
 </menu>

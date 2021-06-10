@@ -1,8 +1,19 @@
 package com.example.plantsproject;
 
-public class PlantTip {
+import java.io.Serializable;
+
+public class PlantTip implements Serializable {
 
     int id;
+
+    public PlantTip(int id, String name, int watering, int feeding, int spraying, String notes) {
+        this.id = id;
+        this.name = name;
+        this.watering = watering;
+        this.feeding = feeding;
+        this.spraying = spraying;
+        this.notes = notes;
+    }
 
     int getId() {
         return id;
@@ -48,6 +59,22 @@ public class PlantTip {
 
     String getNotes() {
         return notes;
+    }
+
+    @Override
+    public String toString() {
+        return "PlantTip{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", watering=" + watering +
+                ", feeding=" + feeding +
+                ", spraying=" + spraying +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
+    Plant toPlant() {
+        return new Plant(0, name, notes, watering,
+                feeding, spraying, "", "", "", "", 0, 0, 0);
     }
 
 }

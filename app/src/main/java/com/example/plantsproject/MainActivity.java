@@ -97,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager manager = getSupportFragmentManager();
                 dialog.show(manager, "dialog");
                 return true;
+            case R.id.plant_tips:
+                Intent i = new Intent(MainActivity.this, PlantTipsListActivity.class);
+                startActivity(i);
+                return true;
         }
             return super.onOptionsItemSelected(item);
         }

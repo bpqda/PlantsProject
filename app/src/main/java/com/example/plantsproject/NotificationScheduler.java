@@ -74,13 +74,20 @@ class NotificationScheduler {
         intent1.putExtra("plantName", plant.getName());
         intent1.putExtra("plantActions", plant.getAction());
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                REMINDER_REQUEST_CODE,
+                intent1,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + period*1000*60*60*24, period*1000*60*60*24, pendingIntent);
+        am.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + period*1000*60*60*24,
+                period*1000*60*60*24,
+                pendingIntent);
 
         Toast.makeText(context, R.string.notifs_setted, Toast.LENGTH_SHORT).show();
-
     }
 
 }
