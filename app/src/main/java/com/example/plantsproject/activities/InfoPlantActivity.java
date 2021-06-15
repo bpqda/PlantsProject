@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class InfoPlantActivity extends AppCompatActivity {
@@ -26,6 +27,7 @@ public class InfoPlantActivity extends AppCompatActivity {
     TextView name, creationDate, watering, feeding, spraying, notes;
     Plant plant;
     ImageButton back;
+    ImageView photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,10 @@ public class InfoPlantActivity extends AppCompatActivity {
         feeding = findViewById(R.id.feeding);
         spraying = findViewById(R.id.spraying);
         notes = findViewById(R.id.notes);
+        photo = findViewById(R.id.imageView2);
 
         plant = (Plant) getIntent().getSerializableExtra("plant");
+        photo.setImageResource(plant.getPhoto());
 
        FloatingActionButton search = findViewById(R.id.fab);
        search.setOnClickListener(v -> {
@@ -53,7 +57,6 @@ public class InfoPlantActivity extends AppCompatActivity {
            } else {
                Snackbar.make(v,getString(R.string.no_internet), Snackbar.LENGTH_LONG)
                        .setAction("Action", null).show();
-               //Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
            }
        });
 
@@ -85,7 +88,7 @@ public class InfoPlantActivity extends AppCompatActivity {
         });
         delete.setOnClickListener(v -> {
             DeleteDialog dialog = new DeleteDialog(this, plant,
-                    getString(R.string.sure2) + plant.getName() + " ?",
+                    getString(R.string.sure2) + " " + plant.getName() + " ?",
                     false);
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");

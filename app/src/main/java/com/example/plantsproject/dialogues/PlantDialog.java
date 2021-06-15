@@ -57,7 +57,7 @@ public class PlantDialog extends DialogFragment {
         Space space2 = view.findViewById(R.id.space2);
         LinearLayout perLay = view.findViewById(R.id.periodLay);
 
-        DateDefiner def = new DateDefiner("dd/MM\t\t\t\tHH:mm");
+        DateDefiner def = new DateDefiner(context, false);
         DBPlants plants = new DBPlants(context);
 
         LinearLayout waterLay = view.findViewById(R.id.wateringLay);

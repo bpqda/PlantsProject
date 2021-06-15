@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Менеджер растений</string>
+    <string name="action_settings">Настройки</string>
+    <string name="my_plants">Мои растения</string>
+    <string name="name">Название</string>
+    <string name="plant_creation_bar">Новое растение</string>
+    <string name="watering">Периодичность полива (сутки)</string>
+    <string name="feeding">Периодичность удобрения (сутки)</string>
+    <string name="spraying">Периодичность опрыскивания (сутки)</string>
+    <string name="notes">Заметки</string>
+    <string name="delete_all">Удалить все растения</string>
+    <string name="disable_notifications">Уведомления отключены</string>
+    <string name="refresh">Обновить</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="plant">Растение</string>
+    <string name="title_activity_plant_info">PlantInfoActivity</string>
+    <string name="water">полить</string>
+    <string name="feed">удобрить</string>
+    <string name="spray">опрыскать</string>
+    <string name="actions">Действия:</string>
+    <string name="no">Нет</string>
+    <string name="sure">Вы действительно хотите удалить все растения?</string>
+    <string name="need_w">Требует полива</string>
+    <string name="need_f">Требует удобрения</string>
+    <string name="need_s">Требует опрыскивания</string>
+    <string name="notifs_setted">Уведомления установлены</string>
+    <string name="plant_not_found">Растение не найдено</string>
+    <string name="watered">Полито:</string>
+    <string name="feeded">Удобрено:</string>
+    <string name="sprayed">Опрыскано:</string>
+    <string name="sure2">Вы уверены что хотите удалить растение </string>
+    <string name="disabled">отключено</string>
+    <string name="actions_are_disabled">Действия отключены</string>
+    <string name="create">создать</string>
+    <string name="title_activity_creation">CreationActivity</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="title_activity_info_plant">InfoPlantActivity</string>
+    <string name="already_watered">Уже полито</string>
+    <string name="already_feeded">Уже удобрено</string>
+    <string name="already_sprayed">Уже опрыскано</string>
+    <string name="save">Сохранить</string>
+    <string name="more">Больше информации</string>
+    <string name="plant_ok">В порядке</string>
+    <string name="title_activity_web_info">WebInfoActivity</string>
+    <string name="input_name">Введите название</string>
+    <string name="error">Ошибка</string>
+    <string name="searching">Поиск...</string>
+    <string name="search_in_internet">Поиск в интернете</string>
+    <string name="no_internet">Проверьте подключение к сети и попробуйте снова</string>
+    <string name="recommend_uxod">Рекомендуемый уход установлен.
+Вы можете его отредактировать</string>
+    <string name="title_activity_plant_tips_list">Список растений</string>
+    <string name="search_tips">Поиск советов по уходу</string>
+    <string name="my_plant">Мое растение</string>
+    <string name="date_of_creation">Дата создания</string>
+
+    <string name="date">Дата:</string>
+    <string name="time">Время:</string>
+    <string name="App_interface">Интерфейс приложения</string>
+    <string name="lang">Язык</string>
+    <string name="ch_lang">Выберите язык</string>
+    <string name="notifs">Уведомления</string>
+    <string name="get_notifs">Получать уведомления</string>
+
+
+</resources>

@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class PlantTipsListActivity extends AppCompatActivity {
     PlantTipAdapter adapter;
     EditText plantTipName;
     List<PlantTip> plantTips;
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,14 @@ public class PlantTipsListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         list = findViewById(R.id.list);
         plantTipName = findViewById(R.id.plantTipName);
+        back = findViewById(R.id.back);
         fillPlantTips();
+
+        back.setOnClickListener(v -> {
+
+            Intent i = new Intent(PlantTipsListActivity.this, MainActivity.class);
+            startActivity(i);
+        });
 
         list.setOnItemClickListener((parent, view, position, id) -> {
             Plant selectedPlant = (Plant) adapter.getItem(position);

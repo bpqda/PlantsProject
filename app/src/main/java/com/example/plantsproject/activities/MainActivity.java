@@ -28,9 +28,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ListView list;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     DBPlants plants;
     LinearLayout layout;
     ImageView img;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
         list = findViewById(R.id.list);
         setSupportActionBar(toolbar);
         layout = findViewById(R.id.layout);
+        searchView = findViewById(R.id.searchView);
         plants = new DBPlants(this);
-        BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
+        BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
 
         setSupportActionBar(bottomAppBar);
-
 
         adapter = new PlantAdapter(this, plants.selectAll());
         list.setAdapter(adapter);
@@ -67,12 +70,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         list.setOnItemClickListener((parent, view, position, id) -> {
-            Plant selectedPlant = (Plant) adapter.getItem(position);
+            Plant selectedPlant = adapter.getItem(position);
             PlantDialog dialog = new PlantDialog(selectedPlant, this);
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");
 
         });
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
@@ -81,13 +85,26 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+        bottomAppBar.setNavigationOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, PlantTipsListActivity.class);
+            startActivity(i);
+        });
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, PlantTipsListActivity.class);
-                startActivity(i);
+            public boolean onQueryTextSubmit(String query) {
+
+                searchItem(query);
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchItem(newText);
+                return true;
             }
         });
+
     }
 
     @Override
@@ -105,8 +122,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.disable_notifications:
-                NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
+            case R.id.action_settings:
+                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(i);
                 return true;
             case R.id.action_delete:
                 NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
@@ -116,28 +134,35 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager manager = getSupportFragmentManager();
                 dialog.show(manager, "dialog");
                 return true;
-            case R.id.plant_tips:
-                Intent i = new Intent(MainActivity.this, PlantTipsListActivity.class);
-                startActivity(i);
-                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-
+    public void searchItem(String textToSearch){
+        Iterator<Plant> iter = plants.selectAll().iterator();
+        while (iter.hasNext()) {
+            Plant p = iter.next();
+            if (!p.getName().toLowerCase().contains(textToSearch.toLowerCase())) {
+                System.out.println(p.toString());
+                iter.remove();
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
 }
 
 class PlantAdapter extends BaseAdapter {
-    private LayoutInflater inflater;
-    private ArrayList<Plant> plants;
+    private Context context;
+    private List<Plant> plants;
 
-    PlantAdapter(Context ctx, ArrayList<Plant> array) {
-        inflater = LayoutInflater.from(ctx);
-        setArrayMyData(array);
+    PlantAdapter(Context context, List<Plant> list ) {
+        this.context = context;
+        this.plants = list;
     }
 
-    void setArrayMyData(ArrayList<Plant> arrayMyData) {
+    void setArrayMyData(List<Plant> arrayMyData) {
         this.plants = arrayMyData;
     }
 
@@ -147,9 +172,14 @@ class PlantAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return plants.get(i);
+    public Plant getItem(int position) {
+        return plants.get(position);
     }
+
+    //@Override
+    //public Object getItem(int i) {
+    //    return plants.get(i);
+    //}
 
     @Override
     public long getItemId(int i) {
@@ -164,16 +194,20 @@ class PlantAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         if (view == null) {
-            view = inflater.inflate(R.layout.plant_list, null);
+            view = LayoutInflater.from(context).inflate(R.layout.plant_list, viewGroup, false);
         }
-        TextView name = view.findViewById(R.id.nameTxt);
+        TextView name = view.findViewById(R.id.plantTipName);
         TextView stateWater = view.findViewById(R.id.stateWater);
         TextView stateFeed = view.findViewById(R.id.stateFeed);
         TextView stateSpray = view.findViewById(R.id.stateSpray);
         LinearLayout lay = view.findViewById(R.id.linLay);
+        ImageView photo = view.findViewById(R.id.imageView);
+
 
         Plant plant = plants.get(i);
         name.setText(plant.getName());
+        photo.setImageResource(plant.getPhoto());
+        //photo.setImageDrawable(view.getResources().getDrawable(plant.getPhoto()));
 
         if (plant.getWatering() != 0 && System.currentTimeMillis() > plant.getLastMilWat() + plant.getWatering() * 1000 * 60 * 60 * 24) {
             stateWater.setText(R.string.need_w);

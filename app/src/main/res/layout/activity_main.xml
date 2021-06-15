@@ -8,32 +8,18 @@
     >
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorPrimary"/>
+            android:layout_height="match_parent" />
 
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <LinearLayout
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="55dp"
-        android:layout_marginTop="57dp"
-        android:orientation="horizontal">
-
-        <ListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
 
     <include
         layout="@layout/content_main"
@@ -46,16 +32,21 @@
         android:layout_height="wrap_content"
         android:rotation="45"
         app:backgroundTint="@color/colorMain"
-        app:layout_anchor="@id/bottomAppBar"
+        app:layout_anchor="@id/bottom_app_bar"
         app:srcCompat="@drawable/ic_close_black_24dp" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
+        android:id="@+id/bottom_app_bar"
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:theme="@style/AppTheme.AppBarOverlay"
-        app:navigationIcon="@drawable/ic_reorder_black_24dp"/>
+        app:navigationIcon="@drawable/ic_reorder_black_24dp"
+        app:hideOnScroll="true"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:fabAlignmentMode="center"
+
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

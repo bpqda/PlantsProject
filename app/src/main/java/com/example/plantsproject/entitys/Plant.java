@@ -16,8 +16,30 @@ public class Plant implements Serializable {
     private long lastMilWat;
     private long lastMilFeed;
     private long lastMilSpray;
+    private int photo;
 
-    public Plant(long id, String name, String notes, int watering, int feeding, int spraying, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray) {
+
+
+    //public Plant(String name, String notes, long watering, long feeding, long spraying, long id, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray, byte photo) {
+    //    this.name = name;
+    //    this.notes = notes;
+    //    this.watering = watering;
+    //    this.feeding = feeding;
+    //    this.spraying = spraying;
+    //    this.id = id;
+    //    this.creationDate = creationDate;
+    //    this.lastW = lastW;
+    //    this.lastF = lastF;
+    //    this.lastS = lastS;
+    //    this.lastMilWat = lastMilWat;
+    //    this.lastMilFeed = lastMilFeed;
+    //    this.lastMilSpray = lastMilSpray;
+    //    this.photo = photo;
+    //}
+
+    public Plant(long id, String name, String notes, int watering, int feeding, int spraying,
+                 String creationDate, String lastW, String lastF, String lastS,
+                 long lastMilWat, long lastMilFeed, long lastMilSpray, int photo) {
         this.name = name;
         this.notes = notes;
         this.watering = watering;
@@ -31,6 +53,34 @@ public class Plant implements Serializable {
         this.lastMilWat = lastMilWat;
         this.lastMilFeed = lastMilFeed;
         this.lastMilSpray = lastMilSpray;
+        this.photo = photo;
+    }
+    public int getPhoto() {
+        return photo;
+    }
+
+    @Override
+    public String toString() {
+        return "Plant{" +
+                "name='" + name + '\'' +
+                ", notes='" + notes + '\'' +
+                ", watering=" + watering +
+                ", feeding=" + feeding +
+                ", spraying=" + spraying +
+                ", id=" + id +
+                ", creationDate='" + creationDate + '\'' +
+                ", lastW='" + lastW + '\'' +
+                ", lastF='" + lastF + '\'' +
+                ", lastS='" + lastS + '\'' +
+                ", lastMilWat=" + lastMilWat +
+                ", lastMilFeed=" + lastMilFeed +
+                ", lastMilSpray=" + lastMilSpray +
+                ", photo=" + photo +
+                '}';
+    }
+
+    public void setPhoto(int photo) {
+        this.photo = photo;
     }
 
     public long getLastMilWat() {

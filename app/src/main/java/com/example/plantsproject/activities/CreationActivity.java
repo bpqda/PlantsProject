@@ -23,6 +23,9 @@ import androidx.core.content.ContextCompat;
 
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageSwitcher;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +37,8 @@ import retrofit2.Response;
 public class CreationActivity extends AppCompatActivity {
 
     TextView plantName, notes, wInf, fInf, sInf, tipsTxt;
-    ImageButton checkName, back;
+    ImageButton checkName, back, left, right;
+    ImageSwitcher photoView;
     CheckBox wCB, fCB, sCB;
     SeekBar wSB, fSB, sSB;
     long plantID;
@@ -42,6 +46,8 @@ public class CreationActivity extends AppCompatActivity {
     Plant plant;
     Intent i;
     CollapsingToolbarLayout toolbarLayout;
+    int position = 0;
+    static private int[] photos = {R.drawable.plant_default, R.drawable.plant_green, R.drawable.plant_orange, R.drawable.plant_red};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +65,15 @@ public class CreationActivity extends AppCompatActivity {
         toolbarLayout = findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(getString(R.string.plant_creation_bar));
 
-            plantName = findViewById(R.id.nameTxt);
+            plantName = findViewById(R.id.plantTipName);
             notes = findViewById(R.id.notes);
             checkName = findViewById(R.id.checkName);
             back = findViewById(R.id.back);
             tipsTxt = findViewById(R.id.tips);
+            photoView = findViewById(R.id.photo);
+            left = findViewById(R.id.left);
+            right = findViewById(R.id.right);
+
             wCB = findViewById(R.id.wateringCB);
             wSB = findViewById(R.id.wateringSB);
             wInf = findViewById(R.id.wateringInf);
@@ -92,8 +102,6 @@ public class CreationActivity extends AppCompatActivity {
                 plant = (Plant) getIntent().getSerializableExtra("plant");
                 fromPlantTipsList = getIntent().getBooleanExtra("from_plantTipsList", false);
 
-
-
                 plantName.setText(plant.getName());
                 notes.setText(plant.getNotes());
                 setPlantParameters((int) plant.getWatering(), wCB, wInf, wSB);
@@ -105,6 +113,30 @@ public class CreationActivity extends AppCompatActivity {
                 plantID = -1;
             }
 
+            photoView.setFactory(() -> {
+                ImageView imageView = new ImageView(getBaseContext());
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView.setLayoutParams(new
+                        ImageSwitcher.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                return imageView;
+            });
+        photoView.setImageResource(photos[0]);
+
+        right.setOnClickListener(v -> {
+            position++;
+            if (position > photos.length - 1) {
+                position = 0;
+            }
+            photoView.setImageResource(photos[position]);
+        });
+        left.setOnClickListener(v -> {
+            position--;
+            if (position < 0) {
+                position = photos.length - 1;
+            }
+            photoView.setImageResource(photos[position]);
+        });
 
             create.setOnClickListener(v -> {
 
@@ -112,7 +144,7 @@ public class CreationActivity extends AppCompatActivity {
                     Toast.makeText(this, getString(R.string.input_name), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                DateDefiner def = new DateDefiner("dd/MM/yyyy");
+                DateDefiner def = new DateDefiner(this, true);
 
                 if (update) {
                     plant = new Plant(plantID,
@@ -122,7 +154,8 @@ public class CreationActivity extends AppCompatActivity {
                             fSB.getProgress(),
                             sSB.getProgress(),
                             def.defineDate(),
-                            plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray());
+                            plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(),
+                            plant.getLastMilSpray(), photos[position]);
 
                     plants.update(plant);
 
@@ -142,7 +175,8 @@ public class CreationActivity extends AppCompatActivity {
                             fSB.getProgress(),
                             sSB.getProgress(),
                             def.defineDate(),
-                            plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray());
+                            plant.getLastW(), plant.getLastF(), plant.getLastS(),
+                            plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray(), photos[position]);
 
                     plants.insert(plant);
 
@@ -157,7 +191,7 @@ public class CreationActivity extends AppCompatActivity {
                             sSB.getProgress(),
                             def.defineDate(),
                             getString(R.string.no), getString(R.string.no), getString(R.string.no),
-                            0, 0, 0);
+                            0, 0, 0, photos[position]);
 
                     plants.insert(plant);
                     setPlantReminder(plant);
@@ -177,8 +211,11 @@ public class CreationActivity extends AppCompatActivity {
                 checkName.callOnClick();
                 return true;
             });
+        plantName.setOnClickListener(view -> {
+            plantName.setText("");
+            plantName.setOnClickListener(null);
+        });
         }
-
 
         private void searchPlant(String str) {
 
@@ -203,6 +240,7 @@ public class CreationActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<PlantTip> call, Throwable t) {
                     t.printStackTrace();
+                    tipsTxt.setText(getString(R.string.error));
                     Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -260,14 +298,5 @@ public class CreationActivity extends AppCompatActivity {
         if (plant.getSpraying() != 0) {
             NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying(), plant);
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        plantName.setOnClickListener(view -> {
-            plantName.setText("");
-            plantName.setOnClickListener(null);
-        });
     }
 }

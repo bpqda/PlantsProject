@@ -31,6 +31,7 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
 
+
             <ImageButton
                 android:id="@+id/back"
                 android:layout_width="wrap_content"
@@ -41,6 +42,7 @@
                 app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_creation" />

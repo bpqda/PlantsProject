@@ -9,16 +9,35 @@
     tools:context=".activities.PlantTipsListActivity"
     tools:showIn="@layout/activity_plant_tips_list">
 
-    <EditText
-        android:id="@+id/plantTipName"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/input_name"
-        android:inputType="textPersonName"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/plantTipName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:backgroundTint="@color/darkGreen"
+            android:ems="10"
+            android:hint="@string/input_name"
+            android:imeOptions="actionSearch"
+            android:inputType="textPersonName"
+            android:textColor="@color/darkGreen" />
+
+        <ImageButton
+            android:id="@+id/checkName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            app:srcCompat="@drawable/ic_search_black_24dp" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/list"
@@ -28,5 +47,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plantTipName" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

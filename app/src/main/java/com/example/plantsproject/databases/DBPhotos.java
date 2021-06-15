@@ -2,8 +2,11 @@ package com.example.plantsproject.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 public class DBPhotos {
     private static final String DATABASE_NAME = "photos.db";
@@ -35,7 +38,6 @@ public class DBPhotos {
     //ArrayList<String> select (long id) {
     //    Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
     //    mCursor.moveToFirst();
-    //
     //}
 
 
@@ -51,7 +53,7 @@ public class DBPhotos {
         public void onCreate(SQLiteDatabase db) {
             String queryTipsDB = "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER, " +
-                    COLUMN_PHOTOS + " TEXT); ";
+                    COLUMN_PHOTOS + " BLOB); ";
             db.execSQL(queryTipsDB);
 
         }
