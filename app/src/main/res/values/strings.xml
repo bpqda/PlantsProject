@@ -61,5 +61,8 @@ You can edit it</string>
     <string name="ch_lang">Change a language</string>
     <string name="notifs">Notifications</string>
     <string name="get_notifs">Get notifications</string>
+    <string name="autowatering">Autowatering settings</string>
+    <string name="url">Autowatering url: </string>
+    <string name="autow">Autowatering</string>
 
 </resources>

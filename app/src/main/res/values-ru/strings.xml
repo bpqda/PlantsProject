@@ -62,6 +62,9 @@
     <string name="ch_lang">Выберите язык</string>
     <string name="notifs">Уведомления</string>
     <string name="get_notifs">Получать уведомления</string>
+    <string name="autowatering">Настроить автополив</string>
+    <string name="url">Url автополива: </string>
+    <string name="autow">Автополив</string>
 
 
 </resources>

@@ -20,7 +20,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
+import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
@@ -48,6 +51,43 @@ public class CreationActivity extends AppCompatActivity {
     CollapsingToolbarLayout toolbarLayout;
     int position = 0;
     static private int[] photos = {R.drawable.plant_default, R.drawable.plant_green, R.drawable.plant_orange, R.drawable.plant_red};
+    Button create2, autoWatering;
+    String url;
+    DateDefiner def;
+    FloatingActionButton create;
+    DBPlants plants;
+    public void initPlant() {
+        if (getIntent().hasExtra("plant")) {
+            plant = (Plant) getIntent().getSerializableExtra("plant");
+            fromPlantTipsList = getIntent().getBooleanExtra("from_plantTipsList", false);
+            plant = plants.select(plant.getId());
+            plantName.setText(plant.getName());
+            notes.setText(plant.getNotes());
+            setPlantParameters((int) plant.getWatering(), wCB, wInf, wSB);
+            setPlantParameters((int) plant.getFeeding(), fCB, fInf, fSB);
+            setPlantParameters((int) plant.getSpraying(), sCB, sInf, sSB);
+            plantID = plant.getId();
+
+            if (plantID <= 0) {
+                url = plant.getUrl();
+                update = false;
+            } else {
+                create.setImageResource(R.drawable.ic_check_black_24dp);
+                create.setRotation(0);
+                create2.setText(getString(R.string.edit));
+                toolbarLayout.setTitle(getString(R.string.edit));
+                update = true;
+            }
+        } else {
+            plantID = -1;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initPlant();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,67 +100,53 @@ public class CreationActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton create = findViewById(R.id.fab);
+         create = findViewById(R.id.fab);
 
         toolbarLayout = findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(getString(R.string.plant_creation_bar));
 
-            plantName = findViewById(R.id.plantTipName);
-            notes = findViewById(R.id.notes);
-            checkName = findViewById(R.id.checkName);
-            back = findViewById(R.id.back);
-            tipsTxt = findViewById(R.id.tips);
-            photoView = findViewById(R.id.photo);
-            left = findViewById(R.id.left);
-            right = findViewById(R.id.right);
+        plantName = findViewById(R.id.plantTipName);
+        notes = findViewById(R.id.notes);
+        checkName = findViewById(R.id.checkName);
+        back = findViewById(R.id.back);
+        tipsTxt = findViewById(R.id.tips);
+        photoView = findViewById(R.id.photo);
+        left = findViewById(R.id.left);
+        right = findViewById(R.id.right);
+        create2 = findViewById(R.id.save);
+        autoWatering = findViewById(R.id.autoWatering);
 
-            wCB = findViewById(R.id.wateringCB);
-            wSB = findViewById(R.id.wateringSB);
-            wInf = findViewById(R.id.wateringInf);
-            setAllListeners(wCB, wSB, wInf, ContextCompat.getColor(CreationActivity.this, R.color.blue));
-            wCB.setChecked(false);
-            fCB = findViewById(R.id.feedingCB);
-            fSB = findViewById(R.id.feedingSB);
-            fInf = findViewById(R.id.feedingInf);
-            setAllListeners(fCB, fSB, fInf, ContextCompat.getColor(CreationActivity.this, R.color.yellow));
-            fCB.setChecked(false);
-            sCB = findViewById(R.id.sprayingCB);
-            sSB = findViewById(R.id.sprayingSB);
-            sInf = findViewById(R.id.sprayingInf);
-            setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(CreationActivity.this, R.color.colorMain));
-            sCB.setChecked(false);
+        wCB = findViewById(R.id.wateringCB);
+        wSB = findViewById(R.id.wateringSB);
+        wInf = findViewById(R.id.wateringInf);
+        setAllListeners(wCB, wSB, wInf, ContextCompat.getColor(CreationActivity.this, R.color.blue));
+        wCB.setChecked(false);
+        fCB = findViewById(R.id.feedingCB);
+        fSB = findViewById(R.id.feedingSB);
+        fInf = findViewById(R.id.feedingInf);
+        setAllListeners(fCB, fSB, fInf, ContextCompat.getColor(CreationActivity.this, R.color.yellow));
+        fCB.setChecked(false);
+        sCB = findViewById(R.id.sprayingCB);
+        sSB = findViewById(R.id.sprayingSB);
+        sInf = findViewById(R.id.sprayingInf);
+        setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(CreationActivity.this, R.color.colorMain));
+        sCB.setChecked(false);
+        def = new DateDefiner(this, true);
 
-            DBPlants plants = new DBPlants(this);
+         plants = new DBPlants(this);
 
-            checkName.setOnClickListener(view -> searchPlant(plantName.getText().toString()));
+        checkName.setOnClickListener(view -> searchPlant(plantName.getText().toString()));
 
-            if (getIntent().hasExtra("plant")) {
-                toolbarLayout.setTitle(getString(R.string.edit));
-                create.setImageResource(R.drawable.ic_check_black_24dp);
-                create.setRotation(0);
+        initPlant();
 
-                plant = (Plant) getIntent().getSerializableExtra("plant");
-                fromPlantTipsList = getIntent().getBooleanExtra("from_plantTipsList", false);
-
-                plantName.setText(plant.getName());
-                notes.setText(plant.getNotes());
-                setPlantParameters((int) plant.getWatering(), wCB, wInf, wSB);
-                setPlantParameters((int) plant.getFeeding(), fCB, fInf, fSB);
-                setPlantParameters((int) plant.getSpraying(), sCB, sInf, sSB);
-                plantID = plant.getId();
-                update = true;
-            } else {
-                plantID = -1;
-            }
-
-            photoView.setFactory(() -> {
-                ImageView imageView = new ImageView(getBaseContext());
-                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imageView.setLayoutParams(new
-                        ImageSwitcher.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                return imageView;
-            });
+        photoView.setFactory(() -> {
+            ImageView imageView = new ImageView(getBaseContext());
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setLayoutParams(new
+                    ImageSwitcher.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            return imageView;
+        });
         photoView.setImageResource(photos[0]);
 
         right.setOnClickListener(v -> {
@@ -138,116 +164,115 @@ public class CreationActivity extends AppCompatActivity {
             photoView.setImageResource(photos[position]);
         });
 
-            create.setOnClickListener(v -> {
 
-                if(plantName.getText().toString().equals("")) {
-                    Toast.makeText(this, getString(R.string.input_name), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                DateDefiner def = new DateDefiner(this, true);
+        View.OnClickListener createListener = v -> {
+            if (plantName.getText().toString().equals("")) {
+                Toast.makeText(getBaseContext(), getString(R.string.input_name), Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                if (update) {
-                    plant = new Plant(plantID,
-                            plantName.getText().toString(),
-                            notes.getText().toString(),
-                            wSB.getProgress(),
-                            fSB.getProgress(),
-                            sSB.getProgress(),
-                            def.defineDate(),
-                            plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(),
-                            plant.getLastMilSpray(), photos[position]);
+            if (update) {
+                plant = new Plant(plantID,
+                        plantName.getText().toString(),
+                        notes.getText().toString(),
+                        wSB.getProgress(),
+                        fSB.getProgress(),
+                        sSB.getProgress(),
+                        def.defineDate(),
+                        plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(),
+                        plant.getLastMilSpray(), photos[position], url);
 
-                    plants.update(plant);
+                plants.update(plant);
 
-                    NotificationScheduler.cancelReminder(this, AlarmReceiver.class);
-                    setPlantReminder(plant);
+                NotificationScheduler.cancelReminder(getBaseContext(), AlarmReceiver.class);
+                setPlantReminder(plant);
 
-                    i = new Intent(CreationActivity.this, InfoPlantActivity.class);
-                    i.putExtra("plant", plant);
-                    startActivity(i);
+                i = new Intent(CreationActivity.this, InfoPlantActivity.class);
+                i.putExtra("plant", plant);
+                startActivity(i);
+                return;
+            }
+            if (fromPlantTipsList) {
+                plant = new Plant(0,
+                        plantName.getText().toString(),
+                        notes.getText().toString(),
+                        wSB.getProgress(),
+                        fSB.getProgress(),
+                        sSB.getProgress(),
+                        def.defineDate(),
+                        plant.getLastW(), plant.getLastF(), plant.getLastS(),
+                        plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray(), photos[position], url);
 
-                }
-                if(fromPlantTipsList) {
-                    plant = new Plant(plantID,
-                            plantName.getText().toString(),
-                            notes.getText().toString(),
-                            wSB.getProgress(),
-                            fSB.getProgress(),
-                            sSB.getProgress(),
-                            def.defineDate(),
-                            plant.getLastW(), plant.getLastF(), plant.getLastS(),
-                            plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray(), photos[position]);
-
-                    plants.insert(plant);
-
-                    i = new Intent(CreationActivity.this, MainActivity.class);
-                    startActivity(i);
-                }
-                else {
-                    plant = new Plant(0, plantName.getText().toString(),
-                            notes.getText().toString(),
-                            wSB.getProgress(),
-                            fSB.getProgress(),
-                            sSB.getProgress(),
-                            def.defineDate(),
-                            getString(R.string.no), getString(R.string.no), getString(R.string.no),
-                            0, 0, 0, photos[position]);
-
-                    plants.insert(plant);
-                    setPlantReminder(plant);
-
-                    i = new Intent(CreationActivity.this, MainActivity.class);
-                    startActivity(i);
-                }
-
-            });
-
-        back.setOnClickListener(v -> {
+            } else {
+                plant = new Plant(0, plantName.getText().toString(),
+                        notes.getText().toString(),
+                        wSB.getProgress(),
+                        fSB.getProgress(),
+                        sSB.getProgress(),
+                        def.defineDate(),
+                        getString(R.string.no), getString(R.string.no), getString(R.string.no),
+                        0, 0, 0, photos[position], url);
+            }
+            plants.insert(plant);
+            System.out.println(plant.getId());
+            setPlantReminder(plant);
             i = new Intent(CreationActivity.this, MainActivity.class);
             startActivity(i);
+        };
+
+        create.setOnClickListener(createListener);
+        create2.setOnClickListener(createListener);
+        autoWatering.setOnClickListener(v -> {
+            Intent intent = new Intent(CreationActivity.this, AutoWateringActivity.class);
+            intent.putExtra("plant", plantID);
+            startActivity(intent);
         });
 
-            plantName.setOnEditorActionListener((v, actionId, event) -> {
-                checkName.callOnClick();
-                return true;
-            });
+        back.setOnClickListener(v -> {
+            onBackPressed();
+        });
+
+        plantName.setOnEditorActionListener((v, actionId, event) -> {
+            checkName.callOnClick();
+            return true;
+        });
         plantName.setOnClickListener(view -> {
             plantName.setText("");
             plantName.setOnClickListener(null);
         });
-        }
+    }
 
-        private void searchPlant(String str) {
+    private void searchPlant(String str) {
 
-            tipsTxt.setText(getString(R.string.searching));
-            ServicePlantTips service = MyRetrofit.createService();
+        tipsTxt.setText(getString(R.string.searching));
+        ServicePlantTips service = MyRetrofit.createService();
 
-            Call<PlantTip> call = service.getPlantTipByName(str);
-            call.enqueue(new Callback<PlantTip>() {
-                @Override
-                public void onResponse(Call<PlantTip> call, Response<PlantTip> response) {
-                    PlantTip plantTip = response.body();
-                    if(plantTip!=null) {
-                        wSB.setProgress(plantTip.getWatering());
-                        fSB.setProgress(plantTip.getFeeding());
-                        sSB.setProgress(plantTip.getSpraying());
-                        notes.setText(plantTip.getNotes());
-                        tipsTxt.setText(getString(R.string.recommend_uxod));
-                    } else {
-                        tipsTxt.setText(getString(R.string.plant_not_found));
-                    }
+        Call<PlantTip> call = service.getPlantTipByName(str);
+        call.enqueue(new Callback<PlantTip>() {
+            @Override
+            public void onResponse(Call<PlantTip> call, Response<PlantTip> response) {
+                PlantTip plantTip = response.body();
+                if (plantTip != null) {
+                    wSB.setProgress(plantTip.getWatering());
+                    fSB.setProgress(plantTip.getFeeding());
+                    sSB.setProgress(plantTip.getSpraying());
+                    notes.setText(plantTip.getNotes());
+                    tipsTxt.setText(getString(R.string.recommend_uxod));
+                } else {
+                    tipsTxt.setText(getString(R.string.plant_not_found));
                 }
-                @Override
-                public void onFailure(Call<PlantTip> call, Throwable t) {
-                    t.printStackTrace();
-                    tipsTxt.setText(getString(R.string.error));
-                    Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            }
 
+            @Override
+            public void onFailure(Call<PlantTip> call, Throwable t) {
+                t.printStackTrace();
+                tipsTxt.setText(getString(R.string.error));
+                Toast.makeText(CreationActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-        private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
+    private void setAllListeners(CheckBox cb, final SeekBar sb, final TextView txt, final int color) {
 
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -277,7 +302,7 @@ public class CreationActivity extends AppCompatActivity {
         });
     }
 
-        private void setPlantParameters(long parameter, CheckBox cb, TextView tv, SeekBar sb) {
+    private void setPlantParameters(long parameter, CheckBox cb, TextView tv, SeekBar sb) {
         if (parameter != 0) {
             cb.setChecked(true);
             tv.setText(String.valueOf(parameter));
@@ -288,15 +313,17 @@ public class CreationActivity extends AppCompatActivity {
         }
     }
 
-        private void setPlantReminder(Plant plant) {
-        if (plant.getWatering() != 0) {
-            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);
-        }
-        if ((plant.getFeeding() != 0)) {
-            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding(), plant);
-        }
-        if (plant.getSpraying() != 0) {
-            NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying(), plant);
+    private void setPlantReminder(Plant plant) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("notifications", true)) {
+            if (plant.getWatering() != 0) {
+                NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getWatering(), plant);
+            }
+            if ((plant.getFeeding() != 0)) {
+                NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getFeeding(), plant);
+            }
+            if (plant.getSpraying() != 0) {
+                NotificationScheduler.setReminder(this, AlarmReceiver.class, plant.getSpraying(), plant);
+            }
         }
     }
 }

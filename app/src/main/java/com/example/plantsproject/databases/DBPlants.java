@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
     private static final String TABLE_NAME = "tablePlants";
 
     private static final String COLUMN_ID = "id";
@@ -30,6 +30,7 @@ public class DBPlants {
     private static final String COLUMN_LASTMILFEED= "FeedingLastInMillis";
     private static final String COLUMN_LASTMILSPRAY= "SprayingLastInMillis";
     private static final String COLUMN_PHOTO= "photo";
+    private static final String COLUMN_URL= "url";
 
     private static final int NUM_COLUMN_ID = 0;
     private static final int NUM_COLUMN_NAME= 1;
@@ -45,6 +46,7 @@ public class DBPlants {
     private static final int NUM_COLUMN_LASTMILFEED= 11;
     private static final int NUM_COLUMN_LASTMILSPRAY= 12;
     private static final int NUM_COLUMN_PHOTO= 13;
+    private static final int NUM_COLUMN_URL= 14;
     private SQLiteDatabase mDataBase;
 
     public DBPlants(Context context) {
@@ -67,7 +69,10 @@ public class DBPlants {
         cv.put(COLUMN_LASTMILFEED, plant.getLastMilFeed());
         cv.put(COLUMN_LASTMILSPRAY, plant.getLastMilSpray());
         cv.put(COLUMN_PHOTO, plant.getPhoto());
-        return mDataBase.insert(TABLE_NAME, null, cv);
+        cv.put(COLUMN_URL, plant.getUrl());
+        long id =  mDataBase.insert(TABLE_NAME, null, cv);
+        plant.setId(id);
+        return id;
     }
 
     public int update(Plant plant) {
@@ -85,6 +90,7 @@ public class DBPlants {
         cv.put(COLUMN_LASTMILFEED, plant.getLastMilFeed());
         cv.put(COLUMN_LASTMILSPRAY, plant.getLastMilSpray());
         cv.put(COLUMN_PHOTO, plant.getPhoto());
+        cv.put(COLUMN_URL, plant.getUrl());
         return mDataBase.update(TABLE_NAME, cv, COLUMN_ID + " = ?",new String[] { String.valueOf(plant.getId())});
     }
 
@@ -95,29 +101,35 @@ public class DBPlants {
     public void delete(long id) {
         mDataBase.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[] { String.valueOf(id) });
     }
-    //public Plant select(long id) {
-    //    Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
-    //    mCursor.moveToFirst();
-    //    String plantName = mCursor.getString(NUM_COLUMN_NAME);
-    //    String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
-    //    int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
-    //    int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
-    //    int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
-    //    String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
-    //    String lastW = mCursor.getString(NUM_COLUMN_LASTWAT);
-    //    String lastF = mCursor.getString(NUM_COLUMN_LASTFEED);
-    //    String lastS = mCursor.getString(NUM_COLUMN_LASTSPR);
-    //    long lastMilWat = mCursor.getLong(NUM_COLUMN_LASTMILWAT);
-    //    long lastMilFeed = mCursor.getLong(NUM_COLUMN_LASTMILFEED);
-    //    long lastMilSpray = mCursor.getLong(NUM_COLUMN_LASTMILSPRAY);
-    //    int photo = mCursor.getInt(NUM_COLUMN_PHOTO);
-    //    return new Plant(id, plantName, plantNotes, plantWatering, plantFeeding, plantSpraying, creationDate, lastW, lastF, lastS, lastMilWat, lastMilFeed, lastMilSpray, photo);
-    //}
+    public Plant select(long id) {
+        Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
+        mCursor.moveToFirst();
+        if(mCursor.isAfterLast()) {
+            return null;
+        }
+        String plantName = mCursor.getString(NUM_COLUMN_NAME);
+        String plantNotes = mCursor.getString(NUM_COLUMN_NOTES);
+        int plantWatering = mCursor.getInt(NUM_COLUMN_WATERING);
+        int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
+        int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
+        String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
+        String lastW = mCursor.getString(NUM_COLUMN_LASTWAT);
+        String lastF = mCursor.getString(NUM_COLUMN_LASTFEED);
+        String lastS = mCursor.getString(NUM_COLUMN_LASTSPR);
+        long lastMilWat = mCursor.getLong(NUM_COLUMN_LASTMILWAT);
+        long lastMilFeed = mCursor.getLong(NUM_COLUMN_LASTMILFEED);
+        long lastMilSpray = mCursor.getLong(NUM_COLUMN_LASTMILSPRAY);
+        int photo = mCursor.getInt(NUM_COLUMN_PHOTO);
+        String url = mCursor.getString(NUM_COLUMN_URL);
+        return new Plant(id, plantName, plantNotes, plantWatering,
+                plantFeeding, plantSpraying, creationDate, lastW,
+                lastF, lastS, lastMilWat, lastMilFeed, lastMilSpray, photo, url);
+    }
 
-    public List<Plant> selectAll() {
+    public ArrayList<Plant> selectAll() {
         Cursor mCursor = mDataBase.query(TABLE_NAME, null, null, null, null, null, "id desc");
 
-        List<Plant> arr = new ArrayList<>();
+        ArrayList<Plant> arr = new ArrayList<>();
         mCursor.moveToFirst();
         if (!mCursor.isAfterLast()) {
             do {
@@ -135,9 +147,10 @@ public class DBPlants {
                 long lastMilFeed = mCursor.getLong(NUM_COLUMN_LASTMILFEED);
                 long lastMilSpray = mCursor.getLong(NUM_COLUMN_LASTMILSPRAY);
                 int photo = mCursor.getInt(NUM_COLUMN_PHOTO);
+                String url = mCursor.getString(NUM_COLUMN_URL);
                 arr.add(new Plant(id, plantName, plantNotes, plantWatering,
                         plantFeeding, plantSpraying, creationDate, lastW, lastF, lastS, lastMilWat,
-                        lastMilFeed, lastMilSpray, photo));
+                        lastMilFeed, lastMilSpray, photo, url));
             } while (mCursor.moveToNext());
         }
         return arr;
@@ -165,8 +178,10 @@ public class DBPlants {
                     COLUMN_LASTMILWAT + " INTEGER, " +
                     COLUMN_LASTMILFEED + " INTEGER, " +
                     COLUMN_LASTMILSPRAY + " INTEGER, " +
-                    COLUMN_PHOTO + " INTEGER);";
-            db.execSQL(queryPlantsDB);
+                    COLUMN_PHOTO + " INTEGER, " +
+                    COLUMN_URL + " TEXT);";
+
+                    db.execSQL(queryPlantsDB);
         }
 
         @Override

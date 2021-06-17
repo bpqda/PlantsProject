@@ -14,4 +14,13 @@ public class MyRetrofit {
 
         return retrofit.create(ServicePlantTips.class);
     }
+
+    public static ServicePlantTips createService(String url) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return retrofit.create(ServicePlantTips.class);
+    }
 }

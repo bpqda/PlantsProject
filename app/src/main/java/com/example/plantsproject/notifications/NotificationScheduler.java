@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 
 import com.example.plantsproject.R;
+import com.example.plantsproject.databases.DBPlants;
 import com.example.plantsproject.entitys.Plant;
 
 import static android.content.Context.ALARM_SERVICE;
@@ -21,11 +22,20 @@ public class NotificationScheduler {
 
     private static final int REMINDER_REQUEST_CODE=100;
 
-     static void showNotification(Context context, Class<?> cls, String plantName, String plantActions) {
+     static void showNotification(Context context, Class<?> cls, String plantName, String plantActions, long id) {
+
+         DBPlants db = new DBPlants(context);
+         System.out.println(db.selectAll().size());
+         System.out.println(id);
+         if(db.select(id)==null) {
+
+             return;
+         }
+
         Intent notificationIntent = new Intent(context, cls);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(cls);
         stackBuilder.addNextIntent(notificationIntent);
 
@@ -33,19 +43,20 @@ public class NotificationScheduler {
                 REMINDER_REQUEST_CODE,PendingIntent.FLAG_UPDATE_CURRENT);
         String bigText = "Растение " + plantName + " требует " +plantActions;
 
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context, "CHANNEL_ID")
-                        .setSmallIcon(R.drawable.plant_picture)
-                        .setContentTitle("Менеджер растений")
-                        .setContentText("Растение " + plantName + " требует " + plantActions)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setContentIntent(pendingIntent)
-                        .addAction(R.drawable.plant_picture, "Открыть", pendingIntent)
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(bigText))
-                        .setAutoCancel(true);
 
+        NotificationCompat.Builder builder =
+        new NotificationCompat.Builder(context, "CHANNEL_ID")
+                .setSmallIcon(R.drawable.plant_picture)
+                .setContentTitle("Менеджер растений")
+                .setContentText("Растение " + plantName + " требует " + plantActions)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .addAction(R.drawable.plant_picture, "Открыть", pendingIntent)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(bigText))
+                .setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(REMINDER_REQUEST_CODE, builder.build());
+
     }
 
     public static void cancelReminder(Context context, Class<?> cls) {
@@ -76,6 +87,7 @@ public class NotificationScheduler {
         Intent intent1 = new Intent(context, cls);
         intent1.putExtra("plantName", plant.getName());
         intent1.putExtra("plantActions", plant.getAction());
+        intent1.putExtra("id", plant.getId());
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
@@ -86,8 +98,8 @@ public class NotificationScheduler {
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + period*1000*60*60*24,
-                period*1000*60*60*24,
+                System.currentTimeMillis() + period,
+                period,
                 pendingIntent);
 
         Toast.makeText(context, R.string.notifs_setted, Toast.LENGTH_SHORT).show();

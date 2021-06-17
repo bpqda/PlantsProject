@@ -3,12 +3,12 @@ package com.example.plantsproject.entitys;
 import java.io.Serializable;
 
 public class Plant implements Serializable {
+    private long id;
     private String name;
-    private String notes;
     private long watering;
     private long feeding;
     private long spraying;
-    private long id;
+    private String notes;
     private String creationDate;
     private String lastW;
     private String lastF;
@@ -17,35 +17,19 @@ public class Plant implements Serializable {
     private long lastMilFeed;
     private long lastMilSpray;
     private int photo;
+    private String url;
 
 
-
-    //public Plant(String name, String notes, long watering, long feeding, long spraying, long id, String creationDate, String lastW, String lastF, String lastS, long lastMilWat, long lastMilFeed, long lastMilSpray, byte photo) {
-    //    this.name = name;
-    //    this.notes = notes;
-    //    this.watering = watering;
-    //    this.feeding = feeding;
-    //    this.spraying = spraying;
-    //    this.id = id;
-    //    this.creationDate = creationDate;
-    //    this.lastW = lastW;
-    //    this.lastF = lastF;
-    //    this.lastS = lastS;
-    //    this.lastMilWat = lastMilWat;
-    //    this.lastMilFeed = lastMilFeed;
-    //    this.lastMilSpray = lastMilSpray;
-    //    this.photo = photo;
-    //}
 
     public Plant(long id, String name, String notes, int watering, int feeding, int spraying,
                  String creationDate, String lastW, String lastF, String lastS,
-                 long lastMilWat, long lastMilFeed, long lastMilSpray, int photo) {
+                 long lastMilWat, long lastMilFeed, long lastMilSpray, int photo, String url) {
+        this.id = id;
         this.name = name;
         this.notes = notes;
         this.watering = watering;
         this.feeding = feeding;
         this.spraying = spraying;
-        this.id = id;
         this.creationDate = creationDate;
         this.lastW = lastW;
         this.lastF = lastF;
@@ -54,11 +38,18 @@ public class Plant implements Serializable {
         this.lastMilFeed = lastMilFeed;
         this.lastMilSpray = lastMilSpray;
         this.photo = photo;
+        this.url = url;
     }
     public int getPhoto() {
         return photo;
     }
+    public String getUrl() {
+        return url;
+    }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
     @Override
     public String toString() {
         return "Plant{" +
@@ -176,5 +167,9 @@ public class Plant implements Serializable {
             name.replace(" ", "_");
         }
         return name.toLowerCase();
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

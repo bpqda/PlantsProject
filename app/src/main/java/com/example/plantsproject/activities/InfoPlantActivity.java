@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,8 +24,8 @@ import android.widget.TextView;
 
 public class InfoPlantActivity extends AppCompatActivity {
 
-    Button edit, delete;
-    TextView name, creationDate, watering, feeding, spraying, notes;
+    Button edit, delete, autoWater;
+    TextView name, creationDate, watering, feeding, spraying, notes, url;
     Plant plant;
     ImageButton back;
     ImageView photo;
@@ -44,9 +45,19 @@ public class InfoPlantActivity extends AppCompatActivity {
         spraying = findViewById(R.id.spraying);
         notes = findViewById(R.id.notes);
         photo = findViewById(R.id.imageView2);
+        url = findViewById(R.id.url);
+        autoWater = findViewById(R.id.autoWater);
+
+
 
         plant = (Plant) getIntent().getSerializableExtra("plant");
         photo.setImageResource(plant.getPhoto());
+
+        if (plant.getUrl() != null)
+            url.setText(plant.getUrl());
+        else
+            url.setText(getString(R.string.disabled));
+
 
        FloatingActionButton search = findViewById(R.id.fab);
        search.setOnClickListener(v -> {
@@ -59,7 +70,14 @@ public class InfoPlantActivity extends AppCompatActivity {
                        .setAction("Action", null).show();
            }
        });
-
+        autoWater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(InfoPlantActivity.this, WaterActivity.class);
+                i.putExtra("url", plant.getUrl());
+                startActivity(i);
+            }
+        });
 
         name.setText(plant.getName());
         creationDate.setText(plant.getCreationDate());

@@ -47,7 +47,7 @@ public class DeleteDialog extends DialogFragment {
                         startActivity(i);
                     } else {
                         plantsDB.delete(plant.getId());
-                        NotificationScheduler.cancelReminder(context, AlarmReceiver.class);
+                        //NotificationScheduler.cancelReminder(context, AlarmReceiver.class);
                         Intent i = new Intent(context, MainActivity.class);
                         startActivity(i);
                     }

@@ -29,11 +29,8 @@ public class WebInfoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
         webView = findViewById(R.id.webView);
         toolbarLayout = findViewById(R.id.toolbar_layout);
-
 
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -51,7 +48,6 @@ public class WebInfoActivity extends AppCompatActivity {
 
         toolbarLayout.setTitle(plant.convertNameToURLform());
         webView.loadUrl("https://ru.wikipedia.org/wiki/"+ plant.convertNameToURLform());
-
     }
 
     private class MyWebViewClient extends WebViewClient {

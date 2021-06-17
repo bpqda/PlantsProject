@@ -15,4 +15,7 @@ public interface ServicePlantTips {
     @GET("/getplant/")
     Call<PlantTip> getPlantTipByName(@Query("name") String name);
 
+    @GET("/water/")
+    Call<Boolean> autoWater();
+
 }

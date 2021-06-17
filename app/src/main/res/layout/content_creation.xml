@@ -113,7 +113,7 @@
                         android:text="@string/watering"
                         android:textColor="#0F427A"
                         android:textColorLink="@color/blue"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
 
                     <TextView
@@ -168,7 +168,7 @@
                         android:text="@string/feeding"
                         android:textColor="#633F01"
                         android:textColorLink="@color/yellow"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/feedingInf"
@@ -224,7 +224,7 @@
                         android:text="@string/spraying"
                         android:textColor="#124D09"
                         android:textColorLink="@color/colorMain"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
 
                     <TextView
@@ -265,13 +265,40 @@
                     android:id="@+id/notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/darkGreen"
-                    android:drawableTint="@color/darkGreen"
                     android:hint="@string/notes"
                     android:textColorHighlight="@color/colorMain"
                     android:textColorLink="@color/colorMain" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/autoWatering"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_white"
+                    android:text="@string/autowatering"
+                    android:textColor="@color/darkGreen"
+                    android:textStyle="normal" />
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_button"
+                    android:text="@string/create"
+                    android:textColor="#FFF7F7" />
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

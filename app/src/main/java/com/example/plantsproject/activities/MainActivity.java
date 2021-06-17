@@ -3,6 +3,8 @@ package com.example.plantsproject.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.example.plantsproject.databases.DBPlants;
@@ -18,7 +20,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -31,8 +35,10 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     ListView list;
@@ -76,6 +82,15 @@ public class MainActivity extends AppCompatActivity {
             dialog.show(manager, "dialog");
 
         });
+
+        //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Locale myLocale = new Locale(PreferenceManager.getDefaultSharedPreferences(this).getString("language", "en"));
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -141,15 +156,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void searchItem(String textToSearch){
-        Iterator<Plant> iter = plants.selectAll().iterator();
+        ArrayList<Plant> array = plants.selectAll();
+        Iterator<Plant> iter = array.iterator();
         while (iter.hasNext()) {
             Plant p = iter.next();
             if (!p.getName().toLowerCase().contains(textToSearch.toLowerCase())) {
-                System.out.println(p.toString());
                 iter.remove();
             }
+            adapter.setArrayMyData(array);
+            adapter.notifyDataSetChanged();
         }
-        adapter.notifyDataSetChanged();
     }
 }
 
