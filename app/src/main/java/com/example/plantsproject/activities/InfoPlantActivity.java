@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class InfoPlantActivity extends AppCompatActivity {
 
@@ -29,6 +30,7 @@ public class InfoPlantActivity extends AppCompatActivity {
     Plant plant;
     ImageButton back;
     ImageView photo;
+    String urlStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +53,12 @@ public class InfoPlantActivity extends AppCompatActivity {
 
 
         plant = (Plant) getIntent().getSerializableExtra("plant");
+        urlStr = plant.getUrl();
+
         photo.setImageResource(plant.getPhoto());
 
-        if (plant.getUrl() != null)
-            url.setText(plant.getUrl());
+        if (urlStr != null&&!urlStr.equals(""))
+            url.setText(urlStr);
         else
             url.setText(getString(R.string.disabled));
 
@@ -73,8 +77,12 @@ public class InfoPlantActivity extends AppCompatActivity {
         autoWater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(urlStr.equals("")) {
+                    Toast.makeText(InfoPlantActivity.this, getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent i = new Intent(InfoPlantActivity.this, WaterActivity.class);
-                i.putExtra("url", plant.getUrl());
+                i.putExtra("url", urlStr);
                 startActivity(i);
             }
         });

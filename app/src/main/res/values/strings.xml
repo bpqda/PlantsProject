@@ -64,5 +64,17 @@ You can edit it</string>
     <string name="autowatering">Autowatering settings</string>
     <string name="url">Autowatering url: </string>
     <string name="autow">Autowatering</string>
+    <string name="need">need</string>
+    <string name="channel_name">channel_name</string>
+    <string name="channel_description">need</string>
+    <string name="open">Open</string>
+    <string name="need_watering">watering</string>
+    <string name="need_feeding">, feeding</string>
+    <string name="need_spraying">, spraying</string>
+    <string name="wifi">Wi-fi SSID</string>
+    <string name="pwd">Password</string>
+    <string name="long_of_watering">Duration of watering</string>
+    <string name="sec">seconds</string>
+    <string name="no_url">url does not exist</string>
 
 </resources>

@@ -65,6 +65,19 @@
     <string name="autowatering">Настроить автополив</string>
     <string name="url">Url автополива: </string>
     <string name="autow">Автополив</string>
+    <string name="need">нуждается</string>
+    <string name="open">Открыть</string>
+    <string name="channel_name">channel_name</string>
+    <string name="channel_description">need</string>
 
+    <string name="need_watering">полива</string>
+    <string name="need_feeding">, удобрения</string>
+    <string name="need_spraying">, опрыскивания</string>
 
+    <string name="wifi">Wi-fi SSID</string>
+    <string name="pwd">Пароль</string>
+    <string name="sec">сек</string>
+    <string name="no_url">url не существует</string>
+
+    <string name="long_of_watering">Длительность полива</string>
 </resources>

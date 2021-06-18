@@ -52,7 +52,7 @@ public class CreationActivity extends AppCompatActivity {
     int position = 0;
     static private int[] photos = {R.drawable.plant_default, R.drawable.plant_green, R.drawable.plant_orange, R.drawable.plant_red};
     Button create2, autoWatering;
-    String url;
+    String url = "";
     DateDefiner def;
     FloatingActionButton create;
     DBPlants plants;
@@ -60,7 +60,9 @@ public class CreationActivity extends AppCompatActivity {
         if (getIntent().hasExtra("plant")) {
             plant = (Plant) getIntent().getSerializableExtra("plant");
             fromPlantTipsList = getIntent().getBooleanExtra("from_plantTipsList", false);
-            plant = plants.select(plant.getId());
+            if(plant.getId()>0) {
+                plant = plants.select(plant.getId());
+            }
             plantName.setText(plant.getName());
             notes.setText(plant.getNotes());
             setPlantParameters((int) plant.getWatering(), wCB, wInf, wSB);
@@ -72,9 +74,9 @@ public class CreationActivity extends AppCompatActivity {
                 url = plant.getUrl();
                 update = false;
             } else {
+                url = plant.getUrl();
                 create.setImageResource(R.drawable.ic_check_black_24dp);
                 create.setRotation(0);
-                create2.setText(getString(R.string.edit));
                 toolbarLayout.setTitle(getString(R.string.edit));
                 update = true;
             }
@@ -193,7 +195,7 @@ public class CreationActivity extends AppCompatActivity {
                 return;
             }
             if (fromPlantTipsList) {
-                plant = new Plant(0,
+                plant = new Plant(plantID,
                         plantName.getText().toString(),
                         notes.getText().toString(),
                         wSB.getProgress(),
@@ -204,7 +206,7 @@ public class CreationActivity extends AppCompatActivity {
                         plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray(), photos[position], url);
 
             } else {
-                plant = new Plant(0, plantName.getText().toString(),
+                plant = new Plant(plantID, plantName.getText().toString(),
                         notes.getText().toString(),
                         wSB.getProgress(),
                         fSB.getProgress(),
@@ -214,7 +216,7 @@ public class CreationActivity extends AppCompatActivity {
                         0, 0, 0, photos[position], url);
             }
             plants.insert(plant);
-            System.out.println(plant.getId());
+            //System.out.println(plant.getId());
             setPlantReminder(plant);
             i = new Intent(CreationActivity.this, MainActivity.class);
             startActivity(i);
@@ -224,7 +226,19 @@ public class CreationActivity extends AppCompatActivity {
         create2.setOnClickListener(createListener);
         autoWatering.setOnClickListener(v -> {
             Intent intent = new Intent(CreationActivity.this, AutoWateringActivity.class);
-            intent.putExtra("plant", plantID);
+            if(plantID>0) {
+                intent.putExtra("plantID", plantID);
+
+            } else {
+                intent.putExtra("plant", new Plant (plantID, plantName.getText().toString(),
+                        notes.getText().toString(),
+                        wSB.getProgress(),
+                        fSB.getProgress(),
+                        sSB.getProgress(),
+                        def.defineDate(),
+                        getString(R.string.no), getString(R.string.no), getString(R.string.no),
+                        0, 0, 0, photos[position], url));
+            }
             startActivity(intent);
         });
 

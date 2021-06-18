@@ -39,10 +39,12 @@
 
                 <PreferenceCategory app:title="@string/notifs">
 
-    <SwitchPreferenceCompat
-        app:icon="@drawable/ic_notifications_active_black_24dp"
-        app:key="notifications"
-        app:title="@string/get_notifs" />
+                    <SwitchPreferenceCompat
+                        android:defaultValue="true"
+                        app:defaultValue="true"
+                        app:icon="@drawable/ic_notifications_active_black_24dp"
+                        app:key="notifications"
+                        app:title="@string/get_notifs" />
     <!--
                         <SwitchPreferenceCompat
                             app:dependency="sync"

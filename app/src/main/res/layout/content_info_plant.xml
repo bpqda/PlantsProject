@@ -191,12 +191,6 @@
                 android:gravity="end" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/autoWater"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/water" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -226,6 +220,18 @@
                 android:textColor="#FFF7F7" />
 
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <Button
+            android:id="@+id/autoWater"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_blue"
+            android:text="@string/autow"
+            android:textColor="@color/blue" />
 
 
     </LinearLayout>

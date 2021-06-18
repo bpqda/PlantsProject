@@ -1,5 +1,10 @@
 package com.example.plantsproject.entitys;
 
+import android.content.Context;
+
+import com.example.plantsproject.R;
+
+import java.io.Console;
 import java.io.Serializable;
 
 public class Plant implements Serializable {
@@ -49,25 +54,6 @@ public class Plant implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-    @Override
-    public String toString() {
-        return "Plant{" +
-                "name='" + name + '\'' +
-                ", notes='" + notes + '\'' +
-                ", watering=" + watering +
-                ", feeding=" + feeding +
-                ", spraying=" + spraying +
-                ", id=" + id +
-                ", creationDate='" + creationDate + '\'' +
-                ", lastW='" + lastW + '\'' +
-                ", lastF='" + lastF + '\'' +
-                ", lastS='" + lastS + '\'' +
-                ", lastMilWat=" + lastMilWat +
-                ", lastMilFeed=" + lastMilFeed +
-                ", lastMilSpray=" + lastMilSpray +
-                ", photo=" + photo +
-                '}';
     }
 
     public void setPhoto(int photo) {
@@ -123,17 +109,17 @@ public class Plant implements Serializable {
         return creationDate;
     }
 
-    public String getAction() {
+    public String getAction(Context c) {
         Plant plant = this;
         String action = "";
         if(plant.getWatering()!=0) {
-            action = "полива";
+            action = c.getResources().getString(R.string.need_watering);
         }
         if(plant.getFeeding()!=0) {
-            action += ", удобрения";
+            action += c.getResources().getString(R.string.need_feeding);
         }
         if(plant.getSpraying()!=0) {
-            action +=", опрыскивания";
+            action +=c.getResources().getString(R.string.need_spraying);
         }
         return action;
     }
