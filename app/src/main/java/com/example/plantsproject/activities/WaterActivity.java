@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.plantsproject.R;
+import com.example.plantsproject.databases.DBPlants;
+import com.example.plantsproject.entitys.Plant;
 import com.example.plantsproject.server.MyRetrofit;
 import com.example.plantsproject.server.ServicePlantTips;
 
@@ -42,8 +44,10 @@ public class WaterActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     EditText ssid;
     ProgressBar progressBar;
-    String period;
+    int period;
     boolean answer = true;
+    TextView urlTextView;
+    long plantID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,7 @@ public class WaterActivity extends AppCompatActivity {
         ssid = findViewById(R.id.editText);
         progressBar = findViewById(R.id.progressBar2);
         progressBar.setVisibility(ProgressBar.INVISIBLE);
+        urlTextView = findViewById(R.id.textView16);
         waterOb.setText(seekBar.getProgress() + " " + getString(R.string.sec));
 
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -83,26 +88,24 @@ public class WaterActivity extends AppCompatActivity {
         });
 
         url = getIntent().getExtras().getString("url");
-        period = String.valueOf(seekBar.getProgress() * 10);
+        plantID = getIntent().getExtras().getLong("plantID");
+        urlTextView.setText(getString(R.string.url) + " " + url);
+        period = seekBar.getProgress();
         autoWater.setOnClickListener(v -> {
 
             MyTask task = new MyTask();
             task.execute();
-            //Thread t = new Thread(() -> {
-            //    executeHttpRequest(url, period, this);
-            //});
-            //t.start();
 
         });
         back.setOnClickListener(v -> onBackPressed());
     }
 
-    public void executeHttpRequest(String targetURL, String period) {
+    public void executeHttpRequest(String targetURL, int period) {
         HttpURLConnection connection = null;
 
         try {
 
-            URL yahoo = new URL(targetURL + "/cm?cmnd=Backlog%20Power%20on%3BDelay%20" + period + "%3BPower1%20off");
+            URL yahoo = new URL(targetURL + "/cm?cmnd=Backlog%20Power%20on%3BDelay%20" + String.valueOf(period * 10) + "%3BPower1%20off");
             URLConnection yc = yahoo.openConnection();
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(
@@ -132,7 +135,12 @@ public class WaterActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-                executeHttpRequest(url, period);
+            executeHttpRequest(url, period);
+            try {
+                Thread.sleep(period * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
@@ -140,9 +148,16 @@ public class WaterActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             progressBar.setVisibility(ProgressBar.INVISIBLE);
-            if(!answer) {
+            if (!answer) {
                 Toast.makeText(WaterActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
             }
+            DBPlants db = new DBPlants(getBaseContext());
+            Plant plant = db.select(plantID);
+            plant.setLastMilWat(System.currentTimeMillis());
+            System.out.println(db.select(plantID).getLastMilWat());
+
+            db.update(plant);
+
         }
     }
 }

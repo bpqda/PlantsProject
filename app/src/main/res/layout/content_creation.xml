@@ -45,38 +45,47 @@
                     android:background="#00FFFFFF"
                     android:rotation="180"
                     app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
-            </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewPlantTip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/name" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/plantTipName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="20"
-                    android:backgroundTint="@color/darkGreen"
-                    android:ems="10"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textPersonName"
-                    android:text="@string/my_plant"
-                    android:textColor="@color/darkGreen" />
-
-                <ImageButton
-                    android:id="@+id/checkName"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#00FFFFFF"
-                    app:srcCompat="@drawable/ic_search_black_24dp" />
+                    android:gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewPlantTip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/name" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/plantTipName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="20"
+                            android:backgroundTint="@color/darkGreen"
+                            android:ems="10"
+                            android:imeOptions="actionSearch"
+                            android:inputType="textPersonName"
+                            android:text="@string/my_plant"
+                            android:textColor="@color/darkGreen" />
+
+                        <ImageButton
+                            android:id="@+id/checkName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="#00FFFFFF"
+                            app:srcCompat="@drawable/ic_search_black_24dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
 
             <TextView

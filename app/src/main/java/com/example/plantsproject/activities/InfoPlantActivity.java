@@ -50,8 +50,6 @@ public class InfoPlantActivity extends AppCompatActivity {
         url = findViewById(R.id.url);
         autoWater = findViewById(R.id.autoWater);
 
-
-
         plant = (Plant) getIntent().getSerializableExtra("plant");
         urlStr = plant.getUrl();
 
@@ -83,6 +81,7 @@ public class InfoPlantActivity extends AppCompatActivity {
                 }
                 Intent i = new Intent(InfoPlantActivity.this, WaterActivity.class);
                 i.putExtra("url", urlStr);
+                i.putExtra("plantID", plant.getId());
                 startActivity(i);
             }
         });

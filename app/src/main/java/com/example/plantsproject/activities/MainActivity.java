@@ -222,6 +222,7 @@ class PlantAdapter extends BaseAdapter {
 
         Plant plant = plants.get(i);
         name.setText(plant.getName());
+        //System.out.println(plant.getLastMilWat());
         photo.setImageResource(plant.getPhoto());
         //photo.setImageDrawable(view.getResources().getDrawable(plant.getPhoto()));
 
