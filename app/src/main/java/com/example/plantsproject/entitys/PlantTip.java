@@ -74,7 +74,7 @@ public class PlantTip implements Serializable{
     }
     public Plant toPlant() {
         return new Plant(0, name, notes, watering,
-                feeding, spraying, "", "", "", "", 0, 0, 0, 0, "");
+                feeding, spraying, "", 0, 0, 0, 0,  "");
     }
 
 

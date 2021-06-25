@@ -16,7 +16,6 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,35 +54,32 @@ public class InfoPlantActivity extends AppCompatActivity {
 
         photo.setImageResource(plant.getPhoto());
 
-        if (urlStr != null&&!urlStr.equals(""))
+        if (urlStr != null && !urlStr.equals(""))
             url.setText(urlStr);
         else
             url.setText(getString(R.string.disabled));
 
 
-       FloatingActionButton search = findViewById(R.id.fab);
-       search.setOnClickListener(v -> {
-           if (isOnline()) {
-               Intent i = new Intent(InfoPlantActivity.this, WebInfoActivity.class);
-               i.putExtra("plant", plant);
-               startActivity(i);
-           } else {
-               Snackbar.make(v,getString(R.string.no_internet), Snackbar.LENGTH_LONG)
-                       .setAction("Action", null).show();
-           }
-       });
-        autoWater.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(urlStr.equals("")) {
-                    Toast.makeText(InfoPlantActivity.this, getString(R.string.no_url), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Intent i = new Intent(InfoPlantActivity.this, WaterActivity.class);
-                i.putExtra("url", urlStr);
-                i.putExtra("plantID", plant.getId());
+        FloatingActionButton search = findViewById(R.id.fab);
+        search.setOnClickListener(v -> {
+            if (isOnline()) {
+                Intent i = new Intent(InfoPlantActivity.this, WebInfoActivity.class);
+                i.putExtra("plant", plant);
                 startActivity(i);
+            } else {
+                Snackbar.make(v, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
+        });
+        autoWater.setOnClickListener(v -> {
+            if (urlStr.equals("")) {
+                Toast.makeText(InfoPlantActivity.this, getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent i = new Intent(InfoPlantActivity.this, WaterActivity.class);
+            i.putExtra("url", urlStr);
+            i.putExtra("plantID", plant.getId());
+            startActivity(i);
         });
 
         name.setText(plant.getName());
@@ -113,7 +109,7 @@ public class InfoPlantActivity extends AppCompatActivity {
         });
         delete.setOnClickListener(v -> {
             DeleteDialog dialog = new DeleteDialog(this, plant,
-                    getString(R.string.sure2) + " " + plant.getName() + " ?",
+                    getString(R.string.sure2) + " " + plant.getName() + "?",
                     false);
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.example.plantsproject.R;
 
-import java.io.Console;
 import java.io.Serializable;
 
 public class Plant implements Serializable {
@@ -15,9 +14,6 @@ public class Plant implements Serializable {
     private long spraying;
     private String notes;
     private String creationDate;
-    private String lastW;
-    private String lastF;
-    private String lastS;
     private long lastMilWat;
     private long lastMilFeed;
     private long lastMilSpray;
@@ -27,8 +23,7 @@ public class Plant implements Serializable {
 
 
     public Plant(long id, String name, String notes, int watering, int feeding, int spraying,
-                 String creationDate, String lastW, String lastF, String lastS,
-                 long lastMilWat, long lastMilFeed, long lastMilSpray, int photo, String url) {
+                 String creationDate, long lastMilWat, long lastMilFeed, long lastMilSpray, int photo, String url) {
         this.id = id;
         this.name = name;
         this.notes = notes;
@@ -36,9 +31,6 @@ public class Plant implements Serializable {
         this.feeding = feeding;
         this.spraying = spraying;
         this.creationDate = creationDate;
-        this.lastW = lastW;
-        this.lastF = lastF;
-        this.lastS = lastS;
         this.lastMilWat = lastMilWat;
         this.lastMilFeed = lastMilFeed;
         this.lastMilSpray = lastMilSpray;
@@ -124,29 +116,6 @@ public class Plant implements Serializable {
         return action;
     }
 
-    public String getLastW() {
-        return lastW;
-    }
-
-    public void setLastW(String lastW) {
-        this.lastW = lastW;
-    }
-
-    public String getLastF() {
-        return lastF;
-    }
-
-    public void setLastF(String lastF) {
-        this.lastF = lastF;
-    }
-
-    public String getLastS() {
-        return lastS;
-    }
-
-    public void setLastS(String lastS) {
-        this.lastS = lastS;
-    }
 
     public String convertNameToURLform() {
         if(name.contains(" ")) {

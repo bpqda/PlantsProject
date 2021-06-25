@@ -37,7 +37,7 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/watered"
@@ -48,8 +48,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
-                android:paddingRight="30dp"
                 android:textColor="@color/darkBrown"
                 android:textSize="16sp" />
 
@@ -63,8 +61,9 @@
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:text="@string/feeded" />
 
@@ -72,9 +71,8 @@
                 android:id="@+id/feeding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:gravity="right"
-                android:paddingRight="30dp"
                 android:textColor="@color/darkBrown"
                 android:textSize="16sp" />
 
@@ -89,8 +87,9 @@
 
             <TextView
                 android:id="@+id/textView7"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:text="@string/sprayed" />
 
@@ -98,9 +97,8 @@
                 android:id="@+id/spraying"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:gravity="right"
-                android:paddingRight="30dp"
                 android:textColor="@color/darkBrown"
                 android:textSize="16sp" />
         </LinearLayout>

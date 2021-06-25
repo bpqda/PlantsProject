@@ -11,29 +11,15 @@ import java.util.Date;
 
 public class DateDefiner {
 
-    //private String format;
+    Context ctx;
 
-    //public DateDefiner(String format) {
-    //   this.format = format;
-    //}
-
-    //public String defineDate () {
-    //    Date date = new Date();
-    //    SimpleDateFormat formatter = new SimpleDateFormat(format);
-    //    String strDate= formatter.format(date);
-    //    return strDate;
-    //}
-     Context ctx;
-     boolean onlyDate;
-
-    public DateDefiner(Context ctx, boolean onlyDate) {
+    public DateDefiner(Context ctx) {
         this.ctx = ctx;
-        this.onlyDate = onlyDate;
     }
 
-    public String defineDate() {
+    public String defineDate(long date) {
 
-        Date currentDate = Calendar.getInstance().getTime();
+        Date currentDate = new Date(date);
 
         java.text.DateFormat dateFormat;
         dateFormat = android.text.format.DateFormat.getDateFormat(ctx);
@@ -43,13 +29,25 @@ public class DateDefiner {
 
         String formattedDate = dateFormat.format(currentDate);
         String formattedTime = timeFormat.format(currentDate);
-        if (onlyDate) {
-            return formattedDate;
-        }
-            else{
-                return ctx.getResources().getString(R.string.date) + formattedDate + "\n" +
-                        ctx.getResources().getString(R.string.time) + formattedTime;
-            }
-        }
+
+
+        return ctx.getResources().getString(R.string.date) + formattedDate + "\n" +
+                ctx.getResources().getString(R.string.time) + formattedTime;
+
     }
+
+    public String defineDate() {
+
+        Date currentDate = Calendar.getInstance().getTime();
+
+        java.text.DateFormat dateFormat;
+        dateFormat = android.text.format.DateFormat.getDateFormat(ctx);
+
+        String formattedDate = dateFormat.format(currentDate);
+
+
+        return formattedDate;
+
+    }
+}
 

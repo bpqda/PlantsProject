@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 searchItem(query);
                 return true;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchItem(newText);
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void searchItem(String textToSearch){
+    public void searchItem(String textToSearch) {
         ArrayList<Plant> array = plants.selectAll();
         Iterator<Plant> iter = array.iterator();
         while (iter.hasNext()) {
@@ -173,7 +174,7 @@ class PlantAdapter extends BaseAdapter {
     private Context context;
     private List<Plant> plants;
 
-    PlantAdapter(Context context, List<Plant> list ) {
+    PlantAdapter(Context context, List<Plant> list) {
         this.context = context;
         this.plants = list;
     }

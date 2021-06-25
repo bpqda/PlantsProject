@@ -45,7 +45,7 @@ public class CreationActivity extends AppCompatActivity {
     CheckBox wCB, fCB, sCB;
     SeekBar wSB, fSB, sSB;
     long plantID;
-    private boolean update, fromPlantTipsList;
+    private boolean update;
     Plant plant;
     Intent i;
     CollapsingToolbarLayout toolbarLayout;
@@ -56,11 +56,11 @@ public class CreationActivity extends AppCompatActivity {
     DateDefiner def;
     FloatingActionButton create;
     DBPlants plants;
+
     public void initPlant() {
         if (getIntent().hasExtra("plant")) {
             plant = (Plant) getIntent().getSerializableExtra("plant");
-            fromPlantTipsList = getIntent().getBooleanExtra("from_plantTipsList", false);
-            if(plant.getId()>0) {
+            if (plant.getId() > 0) {
                 plant = plants.select(plant.getId());
             }
             plantName.setText(plant.getName());
@@ -75,6 +75,7 @@ public class CreationActivity extends AppCompatActivity {
                 update = false;
             } else {
                 url = plant.getUrl();
+                photoView.setImageResource(plant.getPhoto());
                 create.setImageResource(R.drawable.ic_check_black_24dp);
                 create.setRotation(0);
                 toolbarLayout.setTitle(getString(R.string.edit));
@@ -102,7 +103,7 @@ public class CreationActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-         create = findViewById(R.id.fab);
+        create = findViewById(R.id.fab);
 
         toolbarLayout = findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(getString(R.string.plant_creation_bar));
@@ -133,14 +134,14 @@ public class CreationActivity extends AppCompatActivity {
         sInf = findViewById(R.id.sprayingInf);
         setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(CreationActivity.this, R.color.colorMain));
         sCB.setChecked(false);
-        def = new DateDefiner(this, true);
-
-         plants = new DBPlants(this);
-
-        checkName.setOnClickListener(view -> searchPlant(plantName.getText().toString()));
+        def = new DateDefiner(this);
+        plants = new DBPlants(this);
 
         initPlant();
 
+        checkName.setOnClickListener(view -> searchPlant(plantName.getText().toString()));
+
+        //Photo Scroller
         photoView.setFactory(() -> {
             ImageView imageView = new ImageView(getBaseContext());
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -149,8 +150,8 @@ public class CreationActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
             return imageView;
         });
-        photoView.setImageResource(photos[0]);
 
+        photoView.setImageResource(photos[0]);
         right.setOnClickListener(v -> {
             position++;
             if (position > photos.length - 1) {
@@ -165,14 +166,14 @@ public class CreationActivity extends AppCompatActivity {
             }
             photoView.setImageResource(photos[position]);
         });
-
-
+        
+        //Plant Creating
         View.OnClickListener createListener = v -> {
             if (plantName.getText().toString().equals("")) {
                 Toast.makeText(getBaseContext(), getString(R.string.input_name), Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            //Plant Updating
             if (update) {
                 plant = new Plant(plantID,
                         plantName.getText().toString(),
@@ -180,8 +181,7 @@ public class CreationActivity extends AppCompatActivity {
                         wSB.getProgress(),
                         fSB.getProgress(),
                         sSB.getProgress(),
-                        def.defineDate(),
-                        plant.getLastW(), plant.getLastF(), plant.getLastS(), plant.getLastMilWat(), plant.getLastMilFeed(),
+                        def.defineDate(), plant.getLastMilWat(), plant.getLastMilFeed(),
                         plant.getLastMilSpray(), photos[position], url);
 
                 plants.update(plant);
@@ -194,56 +194,44 @@ public class CreationActivity extends AppCompatActivity {
                 startActivity(i);
                 return;
             }
-            if (fromPlantTipsList) {
-                plant = new Plant(plantID,
-                        plantName.getText().toString(),
-                        notes.getText().toString(),
-                        wSB.getProgress(),
-                        fSB.getProgress(),
-                        sSB.getProgress(),
-                        def.defineDate(),
-                        plant.getLastW(), plant.getLastF(), plant.getLastS(),
-                        plant.getLastMilWat(), plant.getLastMilFeed(), plant.getLastMilSpray(), photos[position], url);
-
-            } else {
-                plant = new Plant(plantID, plantName.getText().toString(),
-                        notes.getText().toString(),
-                        wSB.getProgress(),
-                        fSB.getProgress(),
-                        sSB.getProgress(),
-                        def.defineDate(),
-                        getString(R.string.no), getString(R.string.no), getString(R.string.no),
-                        0, 0, 0, photos[position], url);
-            }
+            //Inserting plant to database
+            plant = new Plant(plantID, plantName.getText().toString(),
+                    notes.getText().toString(),
+                    wSB.getProgress(),
+                    fSB.getProgress(),
+                    sSB.getProgress(),
+                    def.defineDate(),
+                    0, 0, 0, photos[position], url);
             plants.insert(plant);
-            //System.out.println(plant.getId());
             setPlantReminder(plant);
             i = new Intent(CreationActivity.this, MainActivity.class);
             startActivity(i);
         };
-
         create.setOnClickListener(createListener);
         create2.setOnClickListener(createListener);
+
+        //Inserting autowatering URL
         autoWatering.setOnClickListener(v -> {
             Intent intent = new Intent(CreationActivity.this, AutoWateringActivity.class);
-            if(plantID>0) {
+            if (plantID > 0) {
                 intent.putExtra("plantID", plantID);
 
             } else {
-                intent.putExtra("plant", new Plant (plantID, plantName.getText().toString(),
+                intent.putExtra("plant", new Plant(plantID, plantName.getText().toString(),
                         notes.getText().toString(),
                         wSB.getProgress(),
                         fSB.getProgress(),
                         sSB.getProgress(),
                         def.defineDate(),
-                        getString(R.string.no), getString(R.string.no), getString(R.string.no),
                         0, 0, 0, photos[position], url));
             }
             startActivity(intent);
         });
 
+        //other
         back.setOnClickListener(v -> {
-            onBackPressed();
+            i = new Intent(CreationActivity.this, MainActivity.class);
+            startActivity(i);
         });
 
         plantName.setOnEditorActionListener((v, actionId, event) -> {

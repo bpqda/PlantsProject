@@ -36,6 +36,7 @@ public class PlantDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        DateDefiner def = new DateDefiner(context);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
 
@@ -57,7 +58,6 @@ public class PlantDialog extends DialogFragment {
         Space space2 = view.findViewById(R.id.space2);
         LinearLayout perLay = view.findViewById(R.id.periodLay);
 
-        DateDefiner def = new DateDefiner(context, false);
         DBPlants plants = new DBPlants(context);
 
         LinearLayout waterLay = view.findViewById(R.id.wateringLay);
@@ -65,28 +65,40 @@ public class PlantDialog extends DialogFragment {
         LinearLayout sprayLay = view.findViewById(R.id.sprayingLay);
 
         name.setText(plant.getName());
-        if(plant.getWatering()!=0) {
-            watering.setText(plant.getLastW());
+        if (plant.getWatering() != 0) {
+            if (plant.getLastMilWat() != 0) {
+                watering.setText(def.defineDate(plant.getLastMilWat()));
+            } else {
+                watering.setText(context.getResources().getString(R.string.no));
+            }
         } else {
             perLay.removeView(waterLay);
             btnLay.removeView(water);
             btnLay.removeView(space1);
         }
-        if(plant.getFeeding()!=0) {
-            feeding.setText(plant.getLastF());
+        if (plant.getFeeding() != 0) {
+            if (plant.getLastMilFeed() != 0) {
+                feeding.setText(def.defineDate(plant.getLastMilFeed()));
+            } else {
+                feeding.setText(context.getResources().getString(R.string.no));
+            }
         } else {
             perLay.removeView(feedLay);
             btnLay.removeView(feed);
             btnLay.removeView(space1);
         }
-        if(plant.getSpraying()!=0) {
-            spraying.setText(plant.getLastS());
+        if (plant.getSpraying() != 0) {
+            if (plant.getLastMilSpray() != 0) {
+                spraying.setText(def.defineDate(plant.getLastMilSpray()));
+            } else {
+                spraying.setText(context.getResources().getString(R.string.no));
+            }
         } else {
             perLay.removeView(sprayLay);
             btnLay.removeView(spray);
             btnLay.removeView(space2);
         }
-        if(plant.getWatering()==0&&plant.getFeeding()==0&&plant.getSpraying()==0) {
+        if (plant.getWatering() == 0 && plant.getFeeding() == 0 && plant.getSpraying() == 0) {
             actions.setText(R.string.actions_are_disabled);
             btnLay.removeView(btnLay);
             perLay.removeView(perLay);
@@ -95,27 +107,27 @@ public class PlantDialog extends DialogFragment {
         water.setOnClickListener(v -> {
             water.setOnClickListener(v13 -> Toast.makeText(context, getString(R.string.already_watered), Toast.LENGTH_SHORT).show());
 
-            plant.setLastW(def.defineDate());
             plant.setLastMilWat(System.currentTimeMillis());
             plants.update(plant);
-            watering.setText(plant.getLastW());
+
+            watering.setText(def.defineDate(plant.getLastMilWat()));
 
         });
         feed.setOnClickListener(v -> {
             feed.setOnClickListener(v12 -> Toast.makeText(context, getString(R.string.already_feeded), Toast.LENGTH_SHORT).show());
 
-            plant.setLastF(def.defineDate());
             plant.setLastMilFeed(System.currentTimeMillis());
             plants.update(plant);
-            feeding.setText(plant.getLastF());
+
+            feeding.setText(def.defineDate(plant.getLastMilFeed()));
+
         });
         spray.setOnClickListener(v -> {
             spray.setOnClickListener(v1 -> Toast.makeText(context, getString(R.string.already_sprayed), Toast.LENGTH_SHORT).show());
 
-            plant.setLastS(def.defineDate());
             plant.setLastMilSpray(System.currentTimeMillis());
             plants.update(plant);
-            spraying.setText(plant.getLastS());
+            spraying.setText(def.defineDate(plant.getLastMilSpray()));
         });
 
         builder.setView(view);

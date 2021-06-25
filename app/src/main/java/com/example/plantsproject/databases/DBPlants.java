@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DBPlants {
     private static final String DATABASE_NAME = "plants.db";
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
     private static final String TABLE_NAME = "tablePlants";
 
     private static final String COLUMN_ID = "id";
@@ -23,9 +23,6 @@ public class DBPlants {
     private static final String COLUMN_FEEDING = "Feeding";
     private static final String COLUMN_SPRAYING = "Spraying";
     private static final String COLUMN_CREATION = "Creation";
-    private static final String COLUMN_LASTWAT = "WateringLast";
-    private static final String COLUMN_LASTFEED = "FeedingLast";
-    private static final String COLUMN_LASTSPR = "SprayingLast";
     private static final String COLUMN_LASTMILWAT= "WateringLastInMillis";
     private static final String COLUMN_LASTMILFEED= "FeedingLastInMillis";
     private static final String COLUMN_LASTMILSPRAY= "SprayingLastInMillis";
@@ -39,14 +36,11 @@ public class DBPlants {
     private static final int NUM_COLUMN_FEEDING = 4;
     private static final int NUM_COLUMN_SPRAYING = 5;
     private static final int NUM_COLUMN_CREATION= 6;
-    private static final int NUM_COLUMN_LASTWAT= 7;
-    private static final int NUM_COLUMN_LASTFEED= 8;
-    private static final int NUM_COLUMN_LASTSPR= 9;
-    private static final int NUM_COLUMN_LASTMILWAT= 10;
-    private static final int NUM_COLUMN_LASTMILFEED= 11;
-    private static final int NUM_COLUMN_LASTMILSPRAY= 12;
-    private static final int NUM_COLUMN_PHOTO= 13;
-    private static final int NUM_COLUMN_URL= 14;
+    private static final int NUM_COLUMN_LASTMILWAT= 7;
+    private static final int NUM_COLUMN_LASTMILFEED= 8;
+    private static final int NUM_COLUMN_LASTMILSPRAY= 9;
+    private static final int NUM_COLUMN_PHOTO= 10;
+    private static final int NUM_COLUMN_URL= 11;
     private SQLiteDatabase mDataBase;
 
     public DBPlants(Context context) {
@@ -62,9 +56,6 @@ public class DBPlants {
         cv.put(COLUMN_FEEDING, plant.getFeeding());
         cv.put(COLUMN_SPRAYING,plant.getSpraying());
         cv.put(COLUMN_CREATION, plant.getCreationDate());
-        cv.put(COLUMN_LASTWAT, plant.getLastW());
-        cv.put(COLUMN_LASTFEED, plant.getLastF());
-        cv.put(COLUMN_LASTSPR, plant.getLastS());
         cv.put(COLUMN_LASTMILWAT, plant.getLastMilWat());
         cv.put(COLUMN_LASTMILFEED, plant.getLastMilFeed());
         cv.put(COLUMN_LASTMILSPRAY, plant.getLastMilSpray());
@@ -83,9 +74,6 @@ public class DBPlants {
         cv.put(COLUMN_FEEDING, plant.getFeeding());
         cv.put(COLUMN_SPRAYING,plant.getSpraying());
         cv.put(COLUMN_CREATION, plant.getCreationDate());
-        cv.put(COLUMN_LASTWAT, plant.getLastW());
-        cv.put(COLUMN_LASTFEED, plant.getLastF());
-        cv.put(COLUMN_LASTSPR, plant.getLastS());
         cv.put(COLUMN_LASTMILWAT, plant.getLastMilWat());
         cv.put(COLUMN_LASTMILFEED, plant.getLastMilFeed());
         cv.put(COLUMN_LASTMILSPRAY, plant.getLastMilSpray());
@@ -113,17 +101,14 @@ public class DBPlants {
         int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
         int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
         String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
-        String lastW = mCursor.getString(NUM_COLUMN_LASTWAT);
-        String lastF = mCursor.getString(NUM_COLUMN_LASTFEED);
-        String lastS = mCursor.getString(NUM_COLUMN_LASTSPR);
         long lastMilWat = mCursor.getLong(NUM_COLUMN_LASTMILWAT);
         long lastMilFeed = mCursor.getLong(NUM_COLUMN_LASTMILFEED);
         long lastMilSpray = mCursor.getLong(NUM_COLUMN_LASTMILSPRAY);
         int photo = mCursor.getInt(NUM_COLUMN_PHOTO);
         String url = mCursor.getString(NUM_COLUMN_URL);
         return new Plant(id, plantName, plantNotes, plantWatering,
-                plantFeeding, plantSpraying, creationDate, lastW,
-                lastF, lastS, lastMilWat, lastMilFeed, lastMilSpray, photo, url);
+                plantFeeding, plantSpraying, creationDate,
+                lastMilWat, lastMilFeed, lastMilSpray, photo, url);
     }
 
     public ArrayList<Plant> selectAll() {
@@ -140,16 +125,13 @@ public class DBPlants {
                 int plantFeeding = mCursor.getInt(NUM_COLUMN_FEEDING);
                 int plantSpraying = mCursor.getInt(NUM_COLUMN_SPRAYING);
                 String creationDate = mCursor.getString(NUM_COLUMN_CREATION);
-                String lastW = mCursor.getString(NUM_COLUMN_LASTWAT);
-                String lastF = mCursor.getString(NUM_COLUMN_LASTFEED);
-                String lastS = mCursor.getString(NUM_COLUMN_LASTSPR);
                 long lastMilWat = mCursor.getLong(NUM_COLUMN_LASTMILWAT);
                 long lastMilFeed = mCursor.getLong(NUM_COLUMN_LASTMILFEED);
                 long lastMilSpray = mCursor.getLong(NUM_COLUMN_LASTMILSPRAY);
                 int photo = mCursor.getInt(NUM_COLUMN_PHOTO);
                 String url = mCursor.getString(NUM_COLUMN_URL);
                 arr.add(new Plant(id, plantName, plantNotes, plantWatering,
-                        plantFeeding, plantSpraying, creationDate, lastW, lastF, lastS, lastMilWat,
+                        plantFeeding, plantSpraying, creationDate, lastMilWat,
                         lastMilFeed, lastMilSpray, photo, url));
             } while (mCursor.moveToNext());
         }
@@ -172,9 +154,6 @@ public class DBPlants {
                     COLUMN_FEEDING + " INT,"+
                     COLUMN_SPRAYING+ " INT, "+
                     COLUMN_CREATION+ " TEXT, " +
-                    COLUMN_LASTWAT+ " TEXT, " +
-                    COLUMN_LASTFEED+ " TEXT, " +
-                    COLUMN_LASTSPR+ " TEXT, " +
                     COLUMN_LASTMILWAT + " INTEGER, " +
                     COLUMN_LASTMILFEED + " INTEGER, " +
                     COLUMN_LASTMILSPRAY + " INTEGER, " +

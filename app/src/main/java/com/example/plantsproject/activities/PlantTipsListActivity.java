@@ -63,7 +63,6 @@ public class PlantTipsListActivity extends AppCompatActivity {
 
             Intent i = new Intent(PlantTipsListActivity.this, CreationActivity.class);
             i.putExtra("plant", selectedPlant);
-            i.putExtra("from_plantTipsList", true);
             startActivity(i);
 
         });

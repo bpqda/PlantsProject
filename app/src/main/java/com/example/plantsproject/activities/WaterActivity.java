@@ -90,7 +90,6 @@ public class WaterActivity extends AppCompatActivity {
         url = getIntent().getExtras().getString("url");
         plantID = getIntent().getExtras().getLong("plantID");
         urlTextView.setText(getString(R.string.url) + " " + url);
-        period = seekBar.getProgress();
         autoWater.setOnClickListener(v -> {
 
             MyTask task = new MyTask();
@@ -100,12 +99,13 @@ public class WaterActivity extends AppCompatActivity {
         back.setOnClickListener(v -> onBackPressed());
     }
 
-    public void executeHttpRequest(String targetURL, int period) {
+    public void executeHttpRequest(String targetURL) {
         HttpURLConnection connection = null;
+        period = seekBar.getProgress();
 
         try {
 
-            URL yahoo = new URL(targetURL + "/cm?cmnd=Backlog%20Power%20on%3BDelay%20" + String.valueOf(period * 10) + "%3BPower1%20off");
+            URL yahoo = new URL(targetURL + "/cm?cmnd=Backlog%20Power%20on%3BDelay%20" + period * 10 + "%3BPower1%20off");
             URLConnection yc = yahoo.openConnection();
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(
@@ -131,11 +131,13 @@ public class WaterActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progressBar.setVisibility(ProgressBar.VISIBLE);
+            period = seekBar.getProgress();
+
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            executeHttpRequest(url, period);
+            executeHttpRequest(url);
             try {
                 Thread.sleep(period * 1000);
             } catch (InterruptedException e) {
@@ -154,7 +156,7 @@ public class WaterActivity extends AppCompatActivity {
             DBPlants db = new DBPlants(getBaseContext());
             Plant plant = db.select(plantID);
             plant.setLastMilWat(System.currentTimeMillis());
-            System.out.println(db.select(plantID).getLastMilWat());
+            //System.out.println(db.select(plantID).getLastMilWat());
 
             db.update(plant);
 
