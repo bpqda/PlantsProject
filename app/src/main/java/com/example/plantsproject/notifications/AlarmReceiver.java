@@ -13,7 +13,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             String plantName = intent.getStringExtra("plantName");
             String plantActions =  intent.getStringExtra("plantActions");
             long id =  intent.getLongExtra("id", -1);
-            //if (plantName!=null && plantActions!=null)
+            
             NotificationScheduler.showNotification(context, MainActivity.class, plantName, plantActions, id);
     }
 

@@ -33,8 +33,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PlantTipsListActivity extends AppCompatActivity {
+/*СПРАВОЧНИК РАСТЕНИЙ*/
 
+public class PlantTipsListActivity extends AppCompatActivity {
     ListView list;
     PlantTipAdapter adapter;
     EditText plantTipName;
@@ -52,44 +53,40 @@ public class PlantTipsListActivity extends AppCompatActivity {
         back = findViewById(R.id.back);
         fillPlantTips();
 
-        back.setOnClickListener(v -> {
+        back.setOnClickListener(v ->
+            onBackPressed());
 
-            Intent i = new Intent(PlantTipsListActivity.this, MainActivity.class);
-            startActivity(i);
-        });
-
+        //При нажатии на растение переход на активность с созданием этого растения
         list.setOnItemClickListener((parent, view, position, id) -> {
             Plant selectedPlant = (Plant) adapter.getItem(position);
-
             Intent i = new Intent(PlantTipsListActivity.this, CreationActivity.class);
             i.putExtra("plant", selectedPlant);
             startActivity(i);
 
         });
+
+        //Поиск по названию
         plantTipName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equals("")) {
+                if (s.toString().equals("")) {
                     fillPlantTips();
-                }else {
+                } else {
                     searchItem(s.toString());
                 }
-
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
     }
-    public void searchItem(String textToSearch){
+
+    //Поиск по названию
+    public void searchItem(String textToSearch) {
         Iterator<PlantTip> iter = plantTips.iterator();
         while (iter.hasNext()) {
             PlantTip p = iter.next();
@@ -99,6 +96,7 @@ public class PlantTipsListActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    //Запрос на сервер для получения всех растений оттуда
     public void fillPlantTips() {
         ServicePlantTips service = MyRetrofit.createService();
         Call<List<PlantTip>> call = service.getAllPlants();
@@ -109,8 +107,8 @@ public class PlantTipsListActivity extends AppCompatActivity {
                 Collections.sort(plantTips, (o1, o2) -> o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase()));
                 adapter = new PlantTipAdapter(getBaseContext(), plantTips);
                 list.setAdapter(adapter);
-
             }
+
             @Override
             public void onFailure(Call<List<PlantTip>> call, Throwable t) {
                 t.printStackTrace();
@@ -159,7 +157,7 @@ class PlantTipAdapter extends BaseAdapter {
         if (view == null) {
             view = inflater.inflate(R.layout.plant_tip_list, null);
         }
-        TextView name  = view.findViewById(R.id.textViewPlantTip);
+        TextView name = view.findViewById(R.id.textViewPlantTip);
 
         PlantTip plant = plants.get(i);
         name.setText(plant.getName().toLowerCase());

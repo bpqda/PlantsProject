@@ -37,25 +37,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/*СОЗДАНИЕ ИЛИ РЕДАКТИРОВАНИЕ РАСТЕНИЯ*/
+
 public class CreationActivity extends AppCompatActivity {
 
-    TextView plantName, notes, wInf, fInf, sInf, tipsTxt;
-    ImageButton checkName, back, left, right;
-    ImageSwitcher photoView;
-    CheckBox wCB, fCB, sCB;
-    SeekBar wSB, fSB, sSB;
-    long plantID;
+    private TextView plantName, notes, wInf, fInf, sInf, tipsTxt;
+    private ImageButton checkName, back, left, right;
+    private ImageSwitcher photoView;
+    private CheckBox wCB, fCB, sCB;
+    private SeekBar wSB, fSB, sSB;
+    private long plantID;
     private boolean update;
-    Plant plant;
-    Intent i;
-    CollapsingToolbarLayout toolbarLayout;
-    int position = 0;
-    static private int[] photos = {R.drawable.plant_default, R.drawable.plant_green, R.drawable.plant_orange, R.drawable.plant_red};
-    Button create2, autoWatering;
-    String url = "";
-    DateDefiner def;
-    FloatingActionButton create;
-    DBPlants plants;
+    private Plant plant;
+    private Intent i;
+    private CollapsingToolbarLayout toolbarLayout;
+    private int position = 0;
+    private int[] photos = {R.drawable.plant_default, R.drawable.plant_green, R.drawable.plant_orange, R.drawable.plant_red};
+    private Button create2, autoWatering;
+    private String url = "";
+    private DateDefiner def;
+    private FloatingActionButton create;
+    private DBPlants plants;
 
     public void initPlant() {
         if (getIntent().hasExtra("plant")) {
@@ -75,7 +77,7 @@ public class CreationActivity extends AppCompatActivity {
                 update = false;
             } else {
                 url = plant.getUrl();
-                photoView.setImageResource(plant.getPhoto());
+//              photoView.setImageResource(plant.getPhoto());
                 create.setImageResource(R.drawable.ic_check_black_24dp);
                 create.setRotation(0);
                 toolbarLayout.setTitle(getString(R.string.edit));
@@ -141,7 +143,8 @@ public class CreationActivity extends AppCompatActivity {
 
         checkName.setOnClickListener(view -> searchPlant(plantName.getText().toString()));
 
-        //Photo Scroller
+
+        //Листание иконок с растениями
         photoView.setFactory(() -> {
             ImageView imageView = new ImageView(getBaseContext());
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -166,14 +169,15 @@ public class CreationActivity extends AppCompatActivity {
             }
             photoView.setImageResource(photos[position]);
         });
-        
-        //Plant Creating
+
+
+        //Создание растения
         View.OnClickListener createListener = v -> {
             if (plantName.getText().toString().equals("")) {
                 Toast.makeText(getBaseContext(), getString(R.string.input_name), Toast.LENGTH_SHORT).show();
                 return;
             }
-            //Plant Updating
+            //Обновление в базе данных
             if (update) {
                 plant = new Plant(plantID,
                         plantName.getText().toString(),
@@ -194,7 +198,7 @@ public class CreationActivity extends AppCompatActivity {
                 startActivity(i);
                 return;
             }
-            //Inserting plant to database
+            //Вставка в базу данных
             plant = new Plant(plantID, plantName.getText().toString(),
                     notes.getText().toString(),
                     wSB.getProgress(),
@@ -210,7 +214,7 @@ public class CreationActivity extends AppCompatActivity {
         create.setOnClickListener(createListener);
         create2.setOnClickListener(createListener);
 
-        //Inserting autowatering URL
+        //Переход в активность для ввода ip-адреса реле, отвечающего за полив
         autoWatering.setOnClickListener(v -> {
             Intent intent = new Intent(CreationActivity.this, AutoWateringActivity.class);
             if (plantID > 0) {
@@ -228,7 +232,7 @@ public class CreationActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //other
+        //Остальные кнопки
         back.setOnClickListener(v -> {
             i = new Intent(CreationActivity.this, MainActivity.class);
             startActivity(i);

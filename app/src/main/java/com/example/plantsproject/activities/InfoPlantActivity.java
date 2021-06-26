@@ -20,68 +20,24 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+/*ПОДРОБНАЯ ИНФОРМАЦИЯ О РАСТЕНИИ*/
 
 public class InfoPlantActivity extends AppCompatActivity {
 
-    Button edit, delete, autoWater;
-    TextView name, creationDate, watering, feeding, spraying, notes, url;
-    Plant plant;
-    ImageButton back;
-    ImageView photo;
-    String urlStr;
+    private Button edit, delete, autoWater;
+    private TextView name, creationDate, watering, feeding, spraying, notes, url;
+    private Plant plant;
+    private ImageButton back;
+    private ImageView photo;
+    private String urlStr;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_info_plant);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        edit = findViewById(R.id.edit);
-        delete = findViewById(R.id.delete);
-        name = findViewById(R.id.name);
-        back = findViewById(R.id.back);
-        creationDate = findViewById(R.id.creationDate);
-        watering = findViewById(R.id.watering);
-        feeding = findViewById(R.id.feeding);
-        spraying = findViewById(R.id.spraying);
-        notes = findViewById(R.id.notes);
-        photo = findViewById(R.id.imageView2);
-        url = findViewById(R.id.url);
-        autoWater = findViewById(R.id.autoWater);
-
-        plant = (Plant) getIntent().getSerializableExtra("plant");
-        urlStr = plant.getUrl();
-
+    public void initPlant() {
         photo.setImageResource(plant.getPhoto());
-
         if (urlStr != null && !urlStr.equals(""))
             url.setText(urlStr);
         else
             url.setText(getString(R.string.disabled));
-
-
-        FloatingActionButton search = findViewById(R.id.fab);
-        search.setOnClickListener(v -> {
-            if (isOnline()) {
-                Intent i = new Intent(InfoPlantActivity.this, WebInfoActivity.class);
-                i.putExtra("plant", plant);
-                startActivity(i);
-            } else {
-                Snackbar.make(v, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        autoWater.setOnClickListener(v -> {
-            if (urlStr.equals("")) {
-                Toast.makeText(InfoPlantActivity.this, getString(R.string.no_url), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Intent i = new Intent(InfoPlantActivity.this, WaterActivity.class);
-            i.putExtra("url", urlStr);
-            i.putExtra("plantID", plant.getId());
-            startActivity(i);
-        });
-
         name.setText(plant.getName());
         creationDate.setText(plant.getCreationDate());
 
@@ -101,7 +57,57 @@ public class InfoPlantActivity extends AppCompatActivity {
             spraying.setText(R.string.disabled);
 
         notes.setText(plant.getNotes());
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_info_plant);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        edit = findViewById(R.id.edit);
+        delete = findViewById(R.id.delete);
+        name = findViewById(R.id.name);
+        back = findViewById(R.id.back);
+        creationDate = findViewById(R.id.creationDate);
+        watering = findViewById(R.id.watering);
+        feeding = findViewById(R.id.feeding);
+        spraying = findViewById(R.id.spraying);
+        notes = findViewById(R.id.notes);
+        photo = findViewById(R.id.imageView2);
+        url = findViewById(R.id.url);
+        autoWater = findViewById(R.id.autoWater);
+
+        //получение растения, выбранного в списке
+        plant = (Plant) getIntent().getSerializableExtra("plant");
+        urlStr = plant.getUrl();
+        initPlant();
+
+        //Кнопка для поиска растения в Википедии
+        FloatingActionButton search = findViewById(R.id.fab);
+        search.setOnClickListener(v -> {
+            if (isOnline()) {
+                Intent i = new Intent(InfoPlantActivity.this, WebInfoActivity.class);
+                i.putExtra("plantID", plant.getId());
+                startActivity(i);
+            } else {
+                Snackbar.make(v, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        //Кнопка для перехода в активность с автополивом
+        autoWater.setOnClickListener(v -> {
+            if (urlStr.equals("")) {
+                Snackbar.make(v, getString(R.string.no_url), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();                return;
+            }
+            Intent i = new Intent(InfoPlantActivity.this, WaterActivity.class);
+            i.putExtra("url", urlStr);
+            i.putExtra("plantID", plant.getId());
+            startActivity(i);
+        });
+
+        //Остальные кнопки
         edit.setOnClickListener(v -> {
             Intent j = new Intent(InfoPlantActivity.this, CreationActivity.class);
             j.putExtra("plant", plant);
@@ -121,6 +127,13 @@ public class InfoPlantActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initPlant();
+    }
+
+    //Проверяет, включен ли интернет на телефоне
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

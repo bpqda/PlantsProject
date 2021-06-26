@@ -40,14 +40,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+
+/*СПИСОК ВСЕХ РАСТЕНИЙ*/
 public class MainActivity extends AppCompatActivity {
-    ListView list;
-    Toolbar toolbar;
-    PlantAdapter adapter;
-    DBPlants plants;
-    LinearLayout layout;
-    ImageView img;
-    SearchView searchView;
+    private ListView list;
+    private Toolbar toolbar;
+    private PlantAdapter adapter;
+    private DBPlants plants;
+    private LinearLayout layout;
+    private ImageView img;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
             adapter.changeListToImage(list, img, layout);
         }
 
+        //Устанавливается локализация, указанная в настройках
+        Locale myLocale = new Locale(PreferenceManager.getDefaultSharedPreferences(this).getString("language", "en"));
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+
+        //При нажатии на растение открывается диалог с ним
         list.setOnItemClickListener((parent, view, position, id) -> {
             Plant selectedPlant = adapter.getItem(position);
             PlantDialog dialog = new PlantDialog(selectedPlant, this);
@@ -83,16 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        Locale myLocale = new Locale(PreferenceManager.getDefaultSharedPreferences(this).getString("language", "en"));
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-
-
+        //Создание нового растения
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent i = new Intent(MainActivity.this, CreationActivity.class);
@@ -100,20 +102,19 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // Переход к справочнику растений (левая кнопка в нижней панели)
         bottomAppBar.setNavigationOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, PlantTipsListActivity.class);
             startActivity(i);
         });
 
-
+        //Поиск растения по названию
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 searchItem(query);
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchItem(newText);
@@ -123,18 +124,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Поиск растения по названию
+    public void searchItem(String textToSearch) {
+        ArrayList<Plant> array = plants.selectAll();
+        Iterator<Plant> iter = array.iterator();
+        while (iter.hasNext()) {
+            Plant p = iter.next();
+            if (!p.getName().toLowerCase().contains(textToSearch.toLowerCase())) {
+                iter.remove();
+            }
+            adapter.setArrayMyData(array);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    //Меню (правая кнопка в нижней панели)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         switch (id) {
@@ -153,20 +165,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
-    }
-
-
-    public void searchItem(String textToSearch) {
-        ArrayList<Plant> array = plants.selectAll();
-        Iterator<Plant> iter = array.iterator();
-        while (iter.hasNext()) {
-            Plant p = iter.next();
-            if (!p.getName().toLowerCase().contains(textToSearch.toLowerCase())) {
-                iter.remove();
-            }
-            adapter.setArrayMyData(array);
-            adapter.notifyDataSetChanged();
-        }
     }
 }
 
@@ -193,11 +191,6 @@ class PlantAdapter extends BaseAdapter {
         return plants.get(position);
     }
 
-    //@Override
-    //public Object getItem(int i) {
-    //    return plants.get(i);
-    //}
-
     @Override
     public long getItemId(int i) {
         Plant plant = plants.get(i);
@@ -220,13 +213,11 @@ class PlantAdapter extends BaseAdapter {
         LinearLayout lay = view.findViewById(R.id.linLay);
         ImageView photo = view.findViewById(R.id.imageView);
 
-
         Plant plant = plants.get(i);
         name.setText(plant.getName());
-        //System.out.println(plant.getLastMilWat());
         photo.setImageResource(plant.getPhoto());
-        //photo.setImageDrawable(view.getResources().getDrawable(plant.getPhoto()));
 
+        //Если растению нужен полив, то его фон в списке станет желтым
         if (plant.getWatering() != 0 && System.currentTimeMillis() > plant.getLastMilWat() + plant.getWatering() * 1000 * 60 * 60 * 24) {
             stateWater.setText(R.string.need_w);
             lay.setBackgroundResource(R.drawable.plant_needsmth_background);
@@ -246,6 +237,7 @@ class PlantAdapter extends BaseAdapter {
         return view;
     }
 
+    //Если список пустой, то он меняется на картинку
     void changeListToImage(ListView lis, ImageView im, LinearLayout lay) {
         lay.removeView(lis);
         lay.addView(im);

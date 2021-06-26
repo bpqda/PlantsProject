@@ -13,12 +13,14 @@ import com.example.plantsproject.R;
 import com.example.plantsproject.databases.DBPlants;
 import com.example.plantsproject.entitys.Plant;
 
+/*ВВОД IP АДРЕСА РЕЛЕ ДЛЯ АВТОПОЛИВА*/
+
 public class AutoWateringActivity extends AppCompatActivity {
-    EditText ip, port;
-    Button save;
-    Plant plant;
-    ImageButton back;
-    String url = "";
+    private EditText ip, port;
+    private Button save;
+    private Plant plant;
+    private ImageButton back;
+    private String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class AutoWateringActivity extends AppCompatActivity {
         save = findViewById(R.id.save);
         back = findViewById(R.id.back);
         DBPlants db = new DBPlants(this);
+
+        //получение создающегося растения
         if(getIntent().getLongExtra("plantID", -1)>0) {
             plant = db.select(getIntent().getLongExtra("plantID", -1));
         } else if (getIntent().getSerializableExtra("plant")!=null){
@@ -37,6 +41,7 @@ public class AutoWateringActivity extends AppCompatActivity {
         }
         url = plant.getUrl();
 
+        //если растение обновляется, то в поля ввода вводится старый ip
         if (url != null && url.length() > 0) {
             url = url.replace("http://", "");
             String[] urlParts = url.split
@@ -44,18 +49,24 @@ public class AutoWateringActivity extends AppCompatActivity {
             ip.setText(urlParts[0]);
             port.setText(urlParts[1]);
         }
+
+        //Кнопка сохранения
         save.setOnClickListener(v -> {
             String portStr = port.getText().toString();
 
+            //Значение порта по умолчанию
             if (portStr.equals("")) {
                 portStr = "80";
             }
+            //Обновление поля url у растения
             if (!(ip.getText().toString().equals(""))) {
                 plant.setUrl("http://" + ip.getText().toString().replace(" ", "") + ":" + portStr);
             }
+            //Обновление растения в бд
             if(plant.getId()>0) {
                 db.update(plant);
             }
+            //Обратно к созданию растения
             else {
                 Intent i = new Intent(AutoWateringActivity.this, CreationActivity.class);
                 i.putExtra("plant", plant);

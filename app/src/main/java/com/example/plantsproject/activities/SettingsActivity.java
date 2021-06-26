@@ -1,9 +1,6 @@
 package com.example.plantsproject.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -22,8 +19,11 @@ import com.example.plantsproject.notifications.NotificationScheduler;
 
 import java.util.Locale;
 
+/*НАСТРОЙКИ*/
+
 public class SettingsActivity extends AppCompatActivity {
-ImageButton back;
+    ImageButton back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +36,9 @@ ImageButton back;
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        back = findViewById(R.id.back);
 
-        back.setOnClickListener(v -> {
-            Intent i = new Intent(SettingsActivity.this, MainActivity.class);
-            startActivity(i);
-        });
+        back = findViewById(R.id.back);
+        back.setOnClickListener(v ->onBackPressed());
 
     }
 
@@ -50,6 +47,8 @@ ImageButton back;
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
+
+            //Настройка локализации
             Preference langPreference = getPreferenceScreen().findPreference("language");
             Preference.OnPreferenceChangeListener languageChangeListener = (preference, newValue) -> {
                 switch (newValue.toString()) {
@@ -60,17 +59,14 @@ ImageButton back;
                         setLocale("ru");
                         break;
                 }
-                //SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-                //SharedPreferences.Editor ed = sPref.edit();
-                //ed.putString("lang", newValue.toString());
-                //ed.commit();
                 return true;
             };
             langPreference.setOnPreferenceChangeListener(languageChangeListener);
 
+            //Отключение уведомлений
             Preference notifsPreference = getPreferenceScreen().findPreference("notifications");
             notifsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                if(newValue.equals(false)) {
+                if (newValue.equals(false)) {
                     NotificationScheduler.cancelReminder(getContext(), AlarmReceiver.class);
                     Toast.makeText(getContext(), getString(R.string.disable_notifications), Toast.LENGTH_SHORT).show();
                 }
@@ -79,7 +75,8 @@ ImageButton back;
 
         }
 
-         void setLocale(String lang) {
+        //Установление локализации
+        void setLocale(String lang) {
             Locale myLocale = new Locale(lang);
             Resources res = getResources();
             DisplayMetrics dm = res.getDisplayMetrics();

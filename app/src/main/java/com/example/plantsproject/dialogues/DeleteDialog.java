@@ -17,19 +17,19 @@ import com.example.plantsproject.entitys.Plant;
 import com.example.plantsproject.notifications.AlarmReceiver;
 import com.example.plantsproject.notifications.NotificationScheduler;
 
+/*ДИАЛОГ ДЛЯ УДАЛЕНИЯ РАСТЕНИЙ*/
+
 public class DeleteDialog extends DialogFragment {
     private Context context;
     private Plant plant;
     private String content;
     private boolean deleteAll;
-    //private PlantAdapter adapter;
 
     public DeleteDialog(Context context, Plant plant, String content, boolean deleteAll) {
         this.context = context;
         this.plant = plant;
         this.content = content;
         this.deleteAll = deleteAll;
-        //this.adapter = adapter;
     }
 
     @NonNull
@@ -41,13 +41,16 @@ public class DeleteDialog extends DialogFragment {
                 .setMessage(content)
                 .setPositiveButton("Да", (dialog, id) -> {
                     DBPlants plantsDB = new DBPlants(context);
+
+                    //Удаление всех растений
                     if(deleteAll) {
                         plantsDB.deleteAll();
                         Intent i = new Intent(context, MainActivity.class);
                         startActivity(i);
-                    } else {
+                    }
+                    //Удаление одного растения
+                    else {
                         plantsDB.delete(plant.getId());
-                        //NotificationScheduler.cancelReminder(context, AlarmReceiver.class);
                         Intent i = new Intent(context, MainActivity.class);
                         startActivity(i);
                     }

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.example.plantsproject.R;
+import com.example.plantsproject.databases.DBPlants;
 import com.example.plantsproject.entitys.Plant;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -17,9 +18,13 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+/*ПОИСК РАСТЕНИЯ В ВИКИПЕДИИ*/
+
 public class WebInfoActivity extends AppCompatActivity {
     WebView webView;
     CollapsingToolbarLayout toolbarLayout;
+    Plant plant;
+    long plantID;
 
 
     @Override
@@ -29,25 +34,31 @@ public class WebInfoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        webView = findViewById(R.id.webView);
-        toolbarLayout = findViewById(R.id.toolbar_layout);
 
+        //Настройка WebView
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new MyWebViewClient());
 
-        Plant plant = (Plant) getIntent().getSerializableExtra("plant");
+        plantID = getIntent().getLongExtra("plantID", 0);
+        DBPlants db = new DBPlants(this);
+        plant = db.select(plantID);
 
+        //Кнопка назад
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent i = new Intent(WebInfoActivity.this, MainActivity.class);
-            i.putExtra("plant", plant);
+            //i.putExtra("plant", plant);
             startActivity(i);
 
         });
 
-        toolbarLayout.setTitle(plant.convertNameToURLform());
-        webView.loadUrl("https://ru.wikipedia.org/wiki/"+ plant.convertNameToURLform());
+        //Устанавливается название растения в toolbar
+        toolbarLayout = findViewById(R.id.toolbar_layout);
+        toolbarLayout.setTitle(plant.getName());
+
+        //Открывается ссылка
+        webView.loadUrl("https://ru.wikipedia.org/wiki/"+ plant.getName());
     }
 
     private class MyWebViewClient extends WebViewClient {

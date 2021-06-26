@@ -116,14 +116,6 @@ public class Plant implements Serializable {
         return action;
     }
 
-
-    public String convertNameToURLform() {
-        if(name.contains(" ")) {
-            name.replace(" ", "_");
-        }
-        return name.toLowerCase();
-    }
-
     public void setId(long id) {
         this.id = id;
     }
