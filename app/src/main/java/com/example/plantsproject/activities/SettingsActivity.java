@@ -1,5 +1,6 @@
 package com.example.plantsproject.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -22,7 +23,6 @@ import java.util.Locale;
 /*НАСТРОЙКИ*/
 
 public class SettingsActivity extends AppCompatActivity {
-    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +37,15 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        back = findViewById(R.id.back);
+        ImageButton back = findViewById(R.id.back);
         back.setOnClickListener(v ->onBackPressed());
 
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    private static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
 
             //Настройка локализации
             Preference langPreference = getPreferenceScreen().findPreference("language");
@@ -75,8 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
 
-        //Установление локализации
-        void setLocale(String lang) {
+        private void setLocale(String lang) {
             Locale myLocale = new Locale(lang);
             Resources res = getResources();
             DisplayMetrics dm = res.getDisplayMetrics();
@@ -84,8 +82,9 @@ public class SettingsActivity extends AppCompatActivity {
             conf.locale = myLocale;
             res.updateConfiguration(conf, dm);
 
-            Intent refresh = new Intent(getContext(), SettingsActivity.class);
-            startActivity(refresh);
+            Activity activity = getActivity();
+            activity.finish();
+            activity.startActivity(activity.getIntent());
         }
     }
 }

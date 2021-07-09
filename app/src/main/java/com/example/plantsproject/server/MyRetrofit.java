@@ -5,10 +5,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyRetrofit {
 
+    private static final String SERVER_IPV4= "http://192.168.0.105:8081/";
     public static ServicePlantTips createService() {
 
          Retrofit retrofit = new Retrofit.Builder()
-                 .baseUrl("http://192.168.0.104:8080/")
+                 .baseUrl(SERVER_IPV4)
                  .addConverterFactory(GsonConverterFactory.create())
                  .build();
 

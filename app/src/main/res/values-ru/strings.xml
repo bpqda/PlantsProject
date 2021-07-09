@@ -80,4 +80,12 @@
     <string name="no_url">url не существует</string>
 
     <string name="long_of_watering">Длительность полива</string>
+    <string name="yes">Да</string>
+    <string name="default_watering">Обильность полива по умолчачнию:</string>
+    <string name="plus_to_add">Вы еще не добавили растения.\n
+    Нажмите + чтобы сделать это.</string>
+    <string name="autowatered">Растение успешно полито</string>
+
+
+
 </resources>

@@ -42,49 +42,51 @@ import retrofit2.Response;
 public class CreationActivity extends AppCompatActivity {
 
     private TextView plantName, notes, wInf, fInf, sInf, tipsTxt;
-    private ImageButton checkName, back, left, right;
+    private ImageButton checkName;
     private ImageSwitcher photoView;
     private CheckBox wCB, fCB, sCB;
     private SeekBar wSB, fSB, sSB;
     private long plantID;
-    private boolean update;
     private Plant plant;
-    private Intent i;
     private CollapsingToolbarLayout toolbarLayout;
     private int position = 0;
     private int[] photos = {R.drawable.plant_default, R.drawable.plant_green, R.drawable.plant_orange, R.drawable.plant_red};
-    private Button create2, autoWatering;
     private String url = "";
+    private int defaultAutoWatering = 0;
     private DateDefiner def;
     private FloatingActionButton create;
     private DBPlants plants;
 
     public void initPlant() {
-        if (getIntent().hasExtra("plant")) {
-            plant = (Plant) getIntent().getSerializableExtra("plant");
-            if (plant.getId() > 0) {
-                plant = plants.select(plant.getId());
-            }
+
+        //Если растение из PlantTipsListActivity (справочника)
+        plant = (Plant) getIntent().getSerializableExtra("plant");
+        if(plant!=null) {
+            plantID=-1;
+            plant.setPhoto(photos[0]);
+        }
+
+        //Если растение из InfoPlantActivity (редактируется)
+        plantID = getIntent().getLongExtra("plantID", -1);
+        if (plantID > 0) {
+            plant = plants.select(plantID);
+        }
+
+        if (plant != null) {
+
+            create.setImageResource(R.drawable.ic_check_black_24dp);
+            create.setRotation(0);
+            toolbarLayout.setTitle(getString(R.string.edit));
+
+            photoView.setImageResource(plant.getPhoto());
             plantName.setText(plant.getName());
             notes.setText(plant.getNotes());
             setPlantParameters((int) plant.getWatering(), wCB, wInf, wSB);
             setPlantParameters((int) plant.getFeeding(), fCB, fInf, fSB);
             setPlantParameters((int) plant.getSpraying(), sCB, sInf, sSB);
-            plantID = plant.getId();
 
-            if (plantID <= 0) {
-                url = plant.getUrl();
-                update = false;
-            } else {
-                url = plant.getUrl();
-//              photoView.setImageResource(plant.getPhoto());
-                create.setImageResource(R.drawable.ic_check_black_24dp);
-                create.setRotation(0);
-                toolbarLayout.setTitle(getString(R.string.edit));
-                update = true;
-            }
-        } else {
-            plantID = -1;
+            url = plant.getUrl();
+            defaultAutoWatering = plant.getDefaultAutoWatering();
         }
     }
 
@@ -105,7 +107,6 @@ public class CreationActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        create = findViewById(R.id.fab);
 
         toolbarLayout = findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(getString(R.string.plant_creation_bar));
@@ -113,38 +114,37 @@ public class CreationActivity extends AppCompatActivity {
         plantName = findViewById(R.id.plantTipName);
         notes = findViewById(R.id.notes);
         checkName = findViewById(R.id.checkName);
-        back = findViewById(R.id.back);
         tipsTxt = findViewById(R.id.tips);
         photoView = findViewById(R.id.photo);
-        left = findViewById(R.id.left);
-        right = findViewById(R.id.right);
-        create2 = findViewById(R.id.save);
-        autoWatering = findViewById(R.id.autoWatering);
 
         wCB = findViewById(R.id.wateringCB);
         wSB = findViewById(R.id.wateringSB);
         wInf = findViewById(R.id.wateringInf);
         setAllListeners(wCB, wSB, wInf, ContextCompat.getColor(CreationActivity.this, R.color.blue));
-        wCB.setChecked(false);
         fCB = findViewById(R.id.feedingCB);
         fSB = findViewById(R.id.feedingSB);
         fInf = findViewById(R.id.feedingInf);
         setAllListeners(fCB, fSB, fInf, ContextCompat.getColor(CreationActivity.this, R.color.yellow));
-        fCB.setChecked(false);
         sCB = findViewById(R.id.sprayingCB);
         sSB = findViewById(R.id.sprayingSB);
         sInf = findViewById(R.id.sprayingInf);
         setAllListeners(sCB, sSB, sInf, ContextCompat.getColor(CreationActivity.this, R.color.colorMain));
-        sCB.setChecked(false);
         def = new DateDefiner(this);
         plants = new DBPlants(this);
 
-        initPlant();
-
+        //Поиск растения на сервере по названию
         checkName.setOnClickListener(view -> searchPlant(plantName.getText().toString()));
 
+        //Поиск растения на сервере по названию при нажатии на кнопку на клавиатуре
+        plantName.setOnEditorActionListener((v, actionId, event) -> {
+            checkName.callOnClick();
+            return true;
+        });
 
-        //Листание иконок с растениями
+        //Выбор иконки растения
+        ImageButton left = findViewById(R.id.left);
+        ImageButton right = findViewById(R.id.right);
+
         photoView.setFactory(() -> {
             ImageView imageView = new ImageView(getBaseContext());
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -170,7 +170,6 @@ public class CreationActivity extends AppCompatActivity {
             photoView.setImageResource(photos[position]);
         });
 
-
         //Создание растения
         View.OnClickListener createListener = v -> {
             if (plantName.getText().toString().equals("")) {
@@ -178,7 +177,7 @@ public class CreationActivity extends AppCompatActivity {
                 return;
             }
             //Обновление в базе данных
-            if (update) {
+            if (plantID > 0) {
                 plant = new Plant(plantID,
                         plantName.getText().toString(),
                         notes.getText().toString(),
@@ -186,15 +185,12 @@ public class CreationActivity extends AppCompatActivity {
                         fSB.getProgress(),
                         sSB.getProgress(),
                         def.defineDate(), plant.getLastMilWat(), plant.getLastMilFeed(),
-                        plant.getLastMilSpray(), photos[position], url);
+                        plant.getLastMilSpray(), photos[position], url, defaultAutoWatering);
 
                 plants.update(plant);
-
-                NotificationScheduler.cancelReminder(getBaseContext(), AlarmReceiver.class);
                 setPlantReminder(plant);
 
-                i = new Intent(CreationActivity.this, InfoPlantActivity.class);
-                i.putExtra("plant", plant);
+                Intent i = new Intent(CreationActivity.this, MainActivity.class);
                 startActivity(i);
                 return;
             }
@@ -205,49 +201,52 @@ public class CreationActivity extends AppCompatActivity {
                     fSB.getProgress(),
                     sSB.getProgress(),
                     def.defineDate(),
-                    0, 0, 0, photos[position], url);
+                    0, 0, 0, photos[position], url, defaultAutoWatering);
             plants.insert(plant);
             setPlantReminder(plant);
-            i = new Intent(CreationActivity.this, MainActivity.class);
+            Intent i = new Intent(CreationActivity.this, MainActivity.class);
             startActivity(i);
         };
+
+        create = findViewById(R.id.fab);
         create.setOnClickListener(createListener);
+        Button create2 = findViewById(R.id.save);
         create2.setOnClickListener(createListener);
 
         //Переход в активность для ввода ip-адреса реле, отвечающего за полив
+        Button autoWatering = findViewById(R.id.autoWatering);
         autoWatering.setOnClickListener(v -> {
-            Intent intent = new Intent(CreationActivity.this, AutoWateringActivity.class);
-            if (plantID > 0) {
+
+            Intent intent = new Intent(CreationActivity.this, WateringInfoActivity.class);
+
+            if (plantID > 0) {  //Если растение есть в бд, то передается ID
                 intent.putExtra("plantID", plantID);
 
-            } else {
+            } else {  //Если растения еще нет в бд, то передается все растение, которому потом присваевается URL
                 intent.putExtra("plant", new Plant(plantID, plantName.getText().toString(),
                         notes.getText().toString(),
                         wSB.getProgress(),
                         fSB.getProgress(),
                         sSB.getProgress(),
                         def.defineDate(),
-                        0, 0, 0, photos[position], url));
+                        0, 0, 0, photos[position], url, defaultAutoWatering));
             }
             startActivity(intent);
         });
 
-        //Остальные кнопки
-        back.setOnClickListener(v -> {
-            i = new Intent(CreationActivity.this, MainActivity.class);
-            startActivity(i);
-        });
+        ImageButton back = findViewById(R.id.back);
+        back.setOnClickListener(v -> onBackPressed());
 
-        plantName.setOnEditorActionListener((v, actionId, event) -> {
-            checkName.callOnClick();
-            return true;
-        });
+        //При нажатии на поле ввода названия растения убирается надпись "Мое растение"
         plantName.setOnClickListener(view -> {
             plantName.setText("");
             plantName.setOnClickListener(null);
         });
+
+        initPlant();
     }
 
+    //Запрос на сервер для получения одного растения по названию
     private void searchPlant(String str) {
 
         tipsTxt.setText(getString(R.string.searching));
@@ -306,6 +305,7 @@ public class CreationActivity extends AppCompatActivity {
                 sb.setEnabled(false);
             }
         });
+        cb.setChecked(false);
     }
 
     private void setPlantParameters(long parameter, CheckBox cb, TextView tv, SeekBar sb) {

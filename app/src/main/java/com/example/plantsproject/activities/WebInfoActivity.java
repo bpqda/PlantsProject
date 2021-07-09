@@ -21,11 +21,6 @@ import android.webkit.WebViewClient;
 /*ПОИСК РАСТЕНИЯ В ВИКИПЕДИИ*/
 
 public class WebInfoActivity extends AppCompatActivity {
-    WebView webView;
-    CollapsingToolbarLayout toolbarLayout;
-    Plant plant;
-    long plantID;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,34 +29,29 @@ public class WebInfoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         //Настройка WebView
-        webView = findViewById(R.id.webView);
+        WebView webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new MyWebViewClient());
 
-        plantID = getIntent().getLongExtra("plantID", 0);
-        DBPlants db = new DBPlants(this);
-        plant = db.select(plantID);
+        String plantName = getIntent().getStringExtra("plantName");
 
         //Кнопка назад
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            Intent i = new Intent(WebInfoActivity.this, MainActivity.class);
-            //i.putExtra("plant", plant);
-            startActivity(i);
-
-        });
+        fab.setOnClickListener(view -> onBackPressed());
 
         //Устанавливается название растения в toolbar
-        toolbarLayout = findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle(plant.getName());
+        CollapsingToolbarLayout toolbarLayout = findViewById(R.id.toolbar_layout);
+        toolbarLayout.setTitle(plantName);
 
         //Открывается ссылка
-        webView.loadUrl("https://ru.wikipedia.org/wiki/"+ plant.getName());
+        webView.loadUrl("https://ru.wikipedia.org/wiki/" + plantName);
     }
 
+    //Возможность открывать ссылки через приложение
     private class MyWebViewClient extends WebViewClient {
+
+        //Для новых устройств
         @TargetApi(Build.VERSION_CODES.N)
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -69,6 +59,7 @@ public class WebInfoActivity extends AppCompatActivity {
             return true;
         }
 
+        //Для старых устройств
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);

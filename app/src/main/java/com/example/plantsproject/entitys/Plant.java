@@ -19,11 +19,13 @@ public class Plant implements Serializable {
     private long lastMilSpray;
     private int photo;
     private String url;
+    private int defaultAutoWatering;
 
-
-
-    public Plant(long id, String name, String notes, int watering, int feeding, int spraying,
-                 String creationDate, long lastMilWat, long lastMilFeed, long lastMilSpray, int photo, String url) {
+    public Plant(long id, String name, String notes, long watering,
+                 long feeding, long spraying,
+                 String creationDate, long lastMilWat, long lastMilFeed,
+                 long lastMilSpray, int photo, String url,
+                 int defaultAutoWatering) {
         this.id = id;
         this.name = name;
         this.notes = notes;
@@ -36,7 +38,17 @@ public class Plant implements Serializable {
         this.lastMilSpray = lastMilSpray;
         this.photo = photo;
         this.url = url;
+        this.defaultAutoWatering = defaultAutoWatering;
     }
+
+    public int getDefaultAutoWatering() {
+        return defaultAutoWatering;
+    }
+
+    public void setDefaultAutoWatering(int defaultAutoWatering) {
+        this.defaultAutoWatering = defaultAutoWatering;
+    }
+
     public int getPhoto() {
         return photo;
     }

@@ -1,30 +1,36 @@
 package com.example.plantsproject.dialogues;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 
+import com.example.plantsproject.activities.InfoPlantActivity;
+import com.example.plantsproject.activities.MainActivity;
 import com.example.plantsproject.databases.DBPlants;
 import com.example.plantsproject.notifications.DateDefiner;
 import com.example.plantsproject.R;
-import com.example.plantsproject.activities.InfoPlantActivity;
-import com.example.plantsproject.activities.MainActivity;
 import com.example.plantsproject.entitys.Plant;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class PlantDialog extends DialogFragment {
+import org.w3c.dom.Text;
+
+import java.util.zip.Inflater;
+
+public class PlantDialog extends BottomSheetDialogFragment {
+
     private Plant plant;
     private Context context;
 
@@ -33,59 +39,47 @@ public class PlantDialog extends DialogFragment {
         this.context = context;
     }
 
-    TextView name;
-    TextView watering;
-    TextView feeding;
-    TextView spraying;
-    TextView actions;
-    Button water;
-    Button feed;
-    Button spray;
-    LinearLayout btnLay;
-    Space space1;
-    Space space2;
-    LinearLayout perLay;
-    DBPlants plants;
-    DateDefiner def;
-    LinearLayout waterLay;
-    LinearLayout feedLay;
-    LinearLayout sprayLay;
+    private BottomSheetDialog bottomSheetDialog;
+    private TextView name, watering, feeding, spraying, actions;
+    private Button water, feed, spray;
+    private LinearLayout btnLay;
+    private Space space1, space2;
+    private DateDefiner def;
+    private LinearLayout waterLay, feedLay, sprayLay, perLay;
+    private DBPlants plants;
 
-    public void initPlant() {
+    private void initPlant() {
         name.setText(plant.getName());
         if (plant.getWatering() != 0) {
-            if (plant.getLastMilWat() != 0) {
+
+            if (plant.getLastMilWat() != 0)
                 watering.setText(def.defineDate(plant.getLastMilWat()));
-            } else {
+            else
                 watering.setText(context.getResources().getString(R.string.no));
-            }
-        } else {
-            perLay.removeView(waterLay);
-            btnLay.removeView(water);
-            btnLay.removeView(space1);
-        }
+
+        } else
+            removeButton(waterLay, water, space1);
+
         if (plant.getFeeding() != 0) {
-            if (plant.getLastMilFeed() != 0) {
+
+            if (plant.getLastMilFeed() != 0)
                 feeding.setText(def.defineDate(plant.getLastMilFeed()));
-            } else {
+            else
                 feeding.setText(context.getResources().getString(R.string.no));
-            }
-        } else {
-            perLay.removeView(feedLay);
-            btnLay.removeView(feed);
-            btnLay.removeView(space1);
-        }
+
+        } else
+            removeButton(feedLay, feed, space1);
+
         if (plant.getSpraying() != 0) {
-            if (plant.getLastMilSpray() != 0) {
+
+            if (plant.getLastMilSpray() != 0)
                 spraying.setText(def.defineDate(plant.getLastMilSpray()));
-            } else {
+            else
                 spraying.setText(context.getResources().getString(R.string.no));
-            }
-        } else {
-            perLay.removeView(sprayLay);
-            btnLay.removeView(spray);
-            btnLay.removeView(space2);
-        }
+
+        } else
+            removeButton(sprayLay, spray, space2);
+
         if (plant.getWatering() == 0 && plant.getFeeding() == 0 && plant.getSpraying() == 0) {
             actions.setText(R.string.actions_are_disabled);
             btnLay.removeView(btnLay);
@@ -93,84 +87,86 @@ public class PlantDialog extends DialogFragment {
         }
     }
 
-    @NonNull
+    private void removeButton(LinearLayout lay, Button btn, Space space) {
+        perLay.removeView(lay);
+        btnLay.removeView(btn);
+        btnLay.removeView(space);
+
+    }
+
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        def = new DateDefiner(context);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyAlertDialogStyle);
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_plant, null);
-
-        name = view.findViewById(R.id.name);
-        watering = view.findViewById(R.id.watering);
-        feeding = view.findViewById(R.id.feeding);
-        spraying = view.findViewById(R.id.spraying);
-        actions = view.findViewById(R.id.actions);
-
-        water = view.findViewById(R.id.water);
-        feed  = view.findViewById(R.id.feed);
-        spray = view.findViewById(R.id.spray);
-
-        btnLay = view.findViewById(R.id.btnLayout);
-        space1 = view.findViewById(R.id.space1);
-        space2 = view.findViewById(R.id.space2);
-        perLay = view.findViewById(R.id.periodLay);
+    public void setupDialog(@NonNull Dialog dialog, int style) {
+        super.setupDialog(dialog, style);
 
         plants = new DBPlants(context);
+        def = new DateDefiner(context);
 
-        waterLay = view.findViewById(R.id.wateringLay);
-        feedLay = view.findViewById(R.id.feedingLay);
-        sprayLay = view.findViewById(R.id.sprayingLay);
+        bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog.setContentView(R.layout.dialog_plant);
+
+        name = bottomSheetDialog.findViewById(R.id.name);
+        watering = bottomSheetDialog.findViewById(R.id.watering);
+        feeding = bottomSheetDialog.findViewById(R.id.feeding);
+        spraying = bottomSheetDialog.findViewById(R.id.spraying);
+        actions = bottomSheetDialog.findViewById(R.id.actions);
+
+        water = bottomSheetDialog.findViewById(R.id.water);
+        feed = bottomSheetDialog.findViewById(R.id.feed);
+        spray = bottomSheetDialog.findViewById(R.id.spray);
+
+        btnLay = bottomSheetDialog.findViewById(R.id.btnLayout);
+        space1 = bottomSheetDialog.findViewById(R.id.space1);
+        space2 = bottomSheetDialog.findViewById(R.id.space2);
+        perLay = bottomSheetDialog.findViewById(R.id.periodLay);
+
+        waterLay = bottomSheetDialog.findViewById(R.id.wateringLay);
+        feedLay = bottomSheetDialog.findViewById(R.id.feedingLay);
+        sprayLay = bottomSheetDialog.findViewById(R.id.sprayingLay);
         initPlant();
+
+        ImageButton close = bottomSheetDialog.findViewById(R.id.imageButton);
+        close.setOnClickListener(v -> bottomSheetDialog.dismiss());
+
+        Button moreInfoBtn = bottomSheetDialog.findViewById(R.id.more);
 
 
         //Запись даты последнего полива
         water.setOnClickListener(v -> {
-            water.setOnClickListener(v13 -> Toast.makeText(context, getString(R.string.already_watered), Toast.LENGTH_SHORT).show());
-
             plant.setLastMilWat(System.currentTimeMillis());
-            plants.update(plant);
-
-            watering.setText(def.defineDate(plant.getLastMilWat()));
-
+            setNewDate(water, watering, R.string.already_watered);
         });
 
         //Запись даты последнего удобрения
         feed.setOnClickListener(v -> {
-            feed.setOnClickListener(v12 -> Toast.makeText(context, getString(R.string.already_feeded), Toast.LENGTH_SHORT).show());
             plant.setLastMilFeed(System.currentTimeMillis());
-            plants.update(plant);
-            feeding.setText(def.defineDate(plant.getLastMilFeed()));
-
+            setNewDate(feed, feeding, R.string.already_feeded);
         });
 
         //Запись даты последнего опрыскивания
         spray.setOnClickListener(v -> {
-            spray.setOnClickListener(v1 -> Toast.makeText(context, getString(R.string.already_sprayed), Toast.LENGTH_SHORT).show());
             plant.setLastMilSpray(System.currentTimeMillis());
-            plants.update(plant);
-            spraying.setText(def.defineDate(plant.getLastMilSpray()));
+            setNewDate(spray, spraying, R.string.sprayed);
         });
 
-        //Сохранение и обновление
-        builder.setView(view);
-        builder.setNeutralButton(getString(R.string.save), (dialog, which) -> {
-            Intent i = new Intent(context, MainActivity.class);
-            startActivity(i);
-        });
-
-        //Переход к активности с информацией о растении
-        builder.setNegativeButton(getString(R.string.more), (dialog, which) -> {
+        moreInfoBtn.setOnClickListener(v -> {
             Intent i = new Intent(context, InfoPlantActivity.class);
-            i.putExtra("plant", plant);
-            startActivity(i);
+            i.putExtra("plantID", plant.getId());
+            context.startActivity(i);
         });
+        bottomSheetDialog.setOnDismissListener(dialogInterface ->
+            ((MainActivity) context).initList());
 
-        builder.setCancelable(false);
-        return builder.create();
+    }
+    private void setNewDate(Button btn, TextView textView, int string ) {
+        btn.setOnClickListener(v1 -> Toast.makeText(context, context.getString(string), Toast.LENGTH_SHORT).show());
+        plants.update(plant);
+        textView.setText(def.defineDate(plant.getLastMilSpray()));
+    }
 
+    //Показ диалога
+    public void showDialog() {
+        setupDialog(bottomSheetDialog, R.style.MyBottomDialogStyle);
+        bottomSheetDialog.show();
     }
 
     @Override
@@ -178,4 +174,10 @@ public class PlantDialog extends DialogFragment {
         super.onResume();
         initPlant();
     }
+
+    @Override
+    public int getTheme() {
+        return R.style.MyBottomDialogStyle;
+    }
+
 }

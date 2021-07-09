@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:gravity="bottom"
     android:orientation="vertical"
     android:padding="10dp">
 
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        android:rotation="270"
+        app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
 
     <TextView
         android:id="@+id/name"
@@ -17,13 +29,14 @@
         android:textSize="30sp" />
 
     <Space
+        android:id="@+id/space"
         android:layout_width="match_parent"
         android:layout_height="10dp" />
 
     <LinearLayout
         android:id="@+id/periodLay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/gray_background"
         android:orientation="vertical"
         android:padding="10dp">
@@ -105,10 +118,6 @@
 
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
-
     <TextView
         android:id="@+id/actions"
         android:layout_width="match_parent"
@@ -116,13 +125,14 @@
         android:text="@string/actions" />
 
     <Space
+        android:id="@+id/space4"
         android:layout_width="match_parent"
         android:layout_height="10dp" />
 
     <LinearLayout
         android:id="@+id/btnLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
@@ -163,6 +173,18 @@
             android:textColor="@color/darkBrown" />
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <Button
+        android:id="@+id/more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:text="@string/more"
+        android:textColor="@color/white" />
 
 
 </LinearLayout>

@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.example.plantsproject.R;
 import com.example.plantsproject.databases.DBPlants;
 import com.example.plantsproject.entitys.Plant;
+import com.example.plantsproject.notifications.AlarmReceiver;
+import com.example.plantsproject.notifications.NotificationScheduler;
 import com.example.plantsproject.server.MyRetrofit;
 import com.example.plantsproject.server.ServicePlantTips;
 
@@ -38,18 +40,11 @@ import retrofit2.Response;
 
 public class WaterActivity extends AppCompatActivity {
 
-    ImageButton autoWater;
-    ImageButton back;
     String url;
     SeekBar seekBar;
-    TextView waterOb;
-    LinearLayout linearLayout;
-    EditText ssid;
     ProgressBar progressBar;
     int period;
-    boolean answer = true;
-    TextView urlTextView;
-    long plantID;
+    boolean httpAnswerIsTrue;
     DBPlants db;
     Plant plant;
 
@@ -57,19 +52,24 @@ public class WaterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_water);
-        autoWater = findViewById(R.id.autoWater);
-        back = findViewById(R.id.back);
-        seekBar = findViewById(R.id.seekBar);
-        waterOb = findViewById(R.id.waterOb);
-        linearLayout = findViewById(R.id.linearLayout);
-        ssid = findViewById(R.id.editText);
+        ImageButton autoWater = findViewById(R.id.autoWater);
+        TextView waterOb = findViewById(R.id.waterOb);
         progressBar = findViewById(R.id.progressBar2);
         progressBar.setVisibility(ProgressBar.INVISIBLE);
-        urlTextView = findViewById(R.id.textView16);
-        waterOb.setText(seekBar.getProgress() + " " + getString(R.string.sec));
 
+        //Получение ip адреса и обильности полива по умолчанию
+        db = new DBPlants(getBaseContext());
+        plant = db.select(getIntent().getExtras().getLong("plantID"));
+
+        url = plant.getUrl();
+        TextView urlTextView = findViewById(R.id.textView16);
+        urlTextView.setText(getString(R.string.url) + " " + url);
+
+        seekBar = findViewById(R.id.seekBar);
+        seekBar.setProgress(plant.getDefaultAutoWatering());
 
         //Автоопределение SSID
+        EditText ssid = findViewById(R.id.editText);
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = wifiManager.getConnectionInfo();
         String ssidStr = info.getSSID();
@@ -77,7 +77,7 @@ public class WaterActivity extends AppCompatActivity {
             ssid.setText(info.getSSID().replace("\"", ""));
         }
 
-        //НАстройка длительности полива
+        //Настройка длительности полива
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -92,12 +92,8 @@ public class WaterActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        //Получение ip адреса
-        db = new DBPlants(getBaseContext());
-        plantID = getIntent().getExtras().getLong("plantID");
-        plant = db.select(plantID);
-        url = plant.getUrl();
-        urlTextView.setText(getString(R.string.url) + " " + url);
+
+        waterOb.setText(seekBar.getProgress() + " " + getString(R.string.sec));
 
         //Автополив
         autoWater.setOnClickListener(v -> {
@@ -105,6 +101,8 @@ public class WaterActivity extends AppCompatActivity {
             task.execute();
 
         });
+
+        ImageButton back = findViewById(R.id.back);
         back.setOnClickListener(v -> onBackPressed());
     }
 
@@ -114,22 +112,23 @@ public class WaterActivity extends AppCompatActivity {
         period = seekBar.getProgress();
 
         try {
+            //запрос
             URL urlToWater = new URL(targetURL + "/cm?cmnd=Backlog%20Power%20on%3BDelay%20" + period * 10 + "%3BPower1%20off");
-            URLConnection yc = urlToWater.openConnection();
+            URLConnection urlConnection = urlToWater.openConnection();
 
             //получение http ответа
-            BufferedReader in = new BufferedReader(
+            BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(
-                            yc.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                System.out.println(inputLine);
-            in.close();
+                            urlConnection.getInputStream()));
 
-            //ошибки
+            String inputLine = bufferedReader.readLine();
+            if(inputLine.equals("{}")) {
+                httpAnswerIsTrue = true;
+            }
+            bufferedReader.close();
+
         } catch (Exception e) {
             e.printStackTrace();
-            answer = false;
         } finally {
             if (connection != null) {
                 connection.disconnect();
@@ -137,7 +136,7 @@ public class WaterActivity extends AppCompatActivity {
         }
     }
 
-    class MyTask extends AsyncTask<Void, Void, Void> {
+    private class MyTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -162,12 +161,13 @@ public class WaterActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             progressBar.setVisibility(ProgressBar.INVISIBLE);
-            if (!answer) {
+            if (!httpAnswerIsTrue) {
                 Toast.makeText(WaterActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
                 return;
             }
 
             //Если растение полили, то дата последнего полива обновляется
+            NotificationScheduler.showNotificationWatered(getBaseContext());
             plant.setLastMilWat(System.currentTimeMillis());
             db.update(plant);
 

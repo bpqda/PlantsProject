@@ -6,9 +6,9 @@
 
     <TextView
         android:id="@+id/textViewPlantTip"
-        android:layout_width="368dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.90"
+        android:layout_weight="0.95"
         android:paddingLeft="5dp"
         android:paddingTop="20dp"
         android:paddingRight="5dp"
@@ -18,11 +18,11 @@
         android:textSize="20sp" />
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_width="15dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|center_vertical|end"
-        android:layout_weight="0.10"
+        android:layout_weight="0.05"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         app:srcCompat="@drawable/ic_info_outline_black_24dp" />

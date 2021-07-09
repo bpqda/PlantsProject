@@ -59,10 +59,11 @@
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_wifi_black_24dp"
+            android:drawablePadding="10dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:textColorHint="#85000000"
-            android:drawableLeft="@drawable/ic_wifi_black_24dp" />
+            android:textColorHint="#85000000" />
 
 
         <TextView
@@ -75,9 +76,10 @@
             android:id="@+id/editText2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_https_black_24dp"
+            android:drawablePadding="10dp"
             android:ems="10"
-            android:inputType="textPassword"
-            android:drawableLeft="@drawable/ic_https_black_24dp"/>
+            android:inputType="textPassword" />
 
         <Space
             android:layout_width="match_parent"

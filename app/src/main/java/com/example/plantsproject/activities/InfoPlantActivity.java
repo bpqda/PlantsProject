@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import com.example.plantsproject.databases.DBPlants;
 import com.example.plantsproject.dialogues.DeleteDialog;
 import com.example.plantsproject.R;
 import com.example.plantsproject.entitys.Plant;
@@ -25,10 +26,8 @@ import android.widget.TextView;
 
 public class InfoPlantActivity extends AppCompatActivity {
 
-    private Button edit, delete, autoWater;
     private TextView name, creationDate, watering, feeding, spraying, notes, url;
     private Plant plant;
-    private ImageButton back;
     private ImageView photo;
     private String urlStr;
 
@@ -58,16 +57,18 @@ public class InfoPlantActivity extends AppCompatActivity {
 
         notes.setText(plant.getNotes());
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initPlant();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_plant);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        edit = findViewById(R.id.edit);
-        delete = findViewById(R.id.delete);
         name = findViewById(R.id.name);
-        back = findViewById(R.id.back);
         creationDate = findViewById(R.id.creationDate);
         watering = findViewById(R.id.watering);
         feeding = findViewById(R.id.feeding);
@@ -75,10 +76,12 @@ public class InfoPlantActivity extends AppCompatActivity {
         notes = findViewById(R.id.notes);
         photo = findViewById(R.id.imageView2);
         url = findViewById(R.id.url);
-        autoWater = findViewById(R.id.autoWater);
+        Button autoWater = findViewById(R.id.autoWater);
+        DBPlants db = new DBPlants(this);
 
         //получение растения, выбранного в списке
-        plant = (Plant) getIntent().getSerializableExtra("plant");
+        long id = getIntent().getLongExtra("plantID", -1);
+        plant = db.select(id);
         urlStr = plant.getUrl();
         initPlant();
 
@@ -87,50 +90,44 @@ public class InfoPlantActivity extends AppCompatActivity {
         search.setOnClickListener(v -> {
             if (isOnline()) {
                 Intent i = new Intent(InfoPlantActivity.this, WebInfoActivity.class);
-                i.putExtra("plantID", plant.getId());
+                i.putExtra("plantName", plant.getName());
                 startActivity(i);
             } else {
                 Snackbar.make(v, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .setAction(getString(R.string.no_internet), null).show();
             }
         });
 
-        //Кнопка для перехода в активность с автополивом
+        //В активность с автополивом
         autoWater.setOnClickListener(v -> {
             if (urlStr.equals("")) {
                 Snackbar.make(v, getString(R.string.no_url), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();                return;
+                        .setAction(getString(R.string.no_url), null).show();
+                return;
             }
             Intent i = new Intent(InfoPlantActivity.this, WaterActivity.class);
-            i.putExtra("url", urlStr);
             i.putExtra("plantID", plant.getId());
             startActivity(i);
         });
 
-        //Остальные кнопки
+        Button edit = findViewById(R.id.edit);
         edit.setOnClickListener(v -> {
             Intent j = new Intent(InfoPlantActivity.this, CreationActivity.class);
-            j.putExtra("plant", plant);
+            j.putExtra("plantID", plant.getId());
             startActivity(j);
         });
+
+        Button delete = findViewById(R.id.delete);
         delete.setOnClickListener(v -> {
-            DeleteDialog dialog = new DeleteDialog(this, plant,
-                    getString(R.string.sure2) + " " + plant.getName() + "?",
-                    false);
+            DeleteDialog dialog = new DeleteDialog(this, plant.getId(),
+                    getString(R.string.sure2) + " " + plant.getName() + "?");
             FragmentManager manager = getSupportFragmentManager();
             dialog.show(manager, "dialog");
         });
-        back.setOnClickListener(v -> {
-            Intent i = new Intent(InfoPlantActivity.this, MainActivity.class);
-            startActivity(i);
-        });
 
-    }
+        ImageButton back = findViewById(R.id.back);
+        back.setOnClickListener(v -> onBackPressed());
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initPlant();
     }
 
     //Проверяет, включен ли интернет на телефоне

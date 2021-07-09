@@ -9,14 +9,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/*ОПРЕДЕЛЕНИЕ ДАТЫ*/
 public class DateDefiner {
 
-    Context ctx;
+    private Context ctx;
 
     public DateDefiner(Context ctx) {
         this.ctx = ctx;
     }
 
+    //Определение даты последнего полива/удобрения и тд
     public String defineDate(long date) {
 
         Date currentDate = new Date(date);
@@ -36,6 +38,7 @@ public class DateDefiner {
 
     }
 
+    //Определение даты настоящего момента
     public String defineDate() {
 
         Date currentDate = Calendar.getInstance().getTime();
@@ -44,7 +47,6 @@ public class DateDefiner {
         dateFormat = android.text.format.DateFormat.getDateFormat(ctx);
 
         String formattedDate = dateFormat.format(currentDate);
-
 
         return formattedDate;
 
