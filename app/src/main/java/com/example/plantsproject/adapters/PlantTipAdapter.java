@@ -1,4 +1,4 @@
-package com.example.plantsproject.Adapters;
+package com.example.plantsproject.adapters;
 
 
 import android.content.Context;

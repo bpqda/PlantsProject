@@ -1,4 +1,4 @@
-package com.example.plantsproject.Adapters;
+package com.example.plantsproject.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import com.example.plantsproject.entitys.Plant;
 import java.util.List;
 
 /*Адаптер для ListView в MainActivity*/
+
 public class PlantAdapter extends BaseAdapter {
     private Context context;
     private List<Plant> plants;

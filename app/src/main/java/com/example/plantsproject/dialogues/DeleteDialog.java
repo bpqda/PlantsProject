@@ -43,7 +43,6 @@ public class DeleteDialog extends DialogFragment {
                 .setMessage(content)
                 .setPositiveButton(getString(R.string.yes), (dialog, id) -> {
                     DBPlants plantsDB = new DBPlants(context);
-
                     //Удаление всех растений
                     if(plantID<0) {
                         plantsDB.deleteAll();

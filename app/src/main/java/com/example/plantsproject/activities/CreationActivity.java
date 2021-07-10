@@ -134,8 +134,6 @@ public class CreationActivity extends AppCompatActivity {
 
         //Поиск растения на сервере по названию
         checkName.setOnClickListener(view -> searchPlant(plantName.getText().toString()));
-
-        //Поиск растения на сервере по названию при нажатии на кнопку на клавиатуре
         plantName.setOnEditorActionListener((v, actionId, event) -> {
             checkName.callOnClick();
             return true;
@@ -170,7 +168,6 @@ public class CreationActivity extends AppCompatActivity {
             photoView.setImageResource(photos[position]);
         });
 
-        //Создание растения
         View.OnClickListener createListener = v -> {
             if (plantName.getText().toString().equals("")) {
                 Toast.makeText(getBaseContext(), getString(R.string.input_name), Toast.LENGTH_SHORT).show();

@@ -76,7 +76,6 @@ public class InfoPlantActivity extends AppCompatActivity {
         notes = findViewById(R.id.notes);
         photo = findViewById(R.id.imageView2);
         url = findViewById(R.id.url);
-        Button autoWater = findViewById(R.id.autoWater);
         DBPlants db = new DBPlants(this);
 
         //получение растения, выбранного в списке
@@ -99,6 +98,7 @@ public class InfoPlantActivity extends AppCompatActivity {
         });
 
         //В активность с автополивом
+        Button autoWater = findViewById(R.id.autoWater);
         autoWater.setOnClickListener(v -> {
             if (urlStr.equals("")) {
                 Snackbar.make(v, getString(R.string.no_url), Snackbar.LENGTH_LONG)
@@ -130,7 +130,7 @@ public class InfoPlantActivity extends AppCompatActivity {
 
     }
 
-    //Проверяет, включен ли интернет на телефоне
+    //Проверяет, включен ли интернет
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

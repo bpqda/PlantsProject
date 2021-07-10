@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import com.example.plantsproject.Adapters.PlantAdapter;
+import com.example.plantsproject.adapters.PlantAdapter;
 import com.example.plantsproject.databases.DBPlants;
 import com.example.plantsproject.dialogues.DeleteDialog;
 import com.example.plantsproject.dialogues.PlantDialog;
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private PlantAdapter adapter;
     private DBPlants plants;
     private ListView list;
+    PlantDialog dialog;
 
     public void initList() {
         adapter = new PlantAdapter(this, plants.selectAll());
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         list = findViewById(R.id.list);
         list.setOnItemClickListener((parent, view, position, id) -> {
-            PlantDialog dialog = new PlantDialog(plants.select(id), view.getContext());
+            dialog = new PlantDialog(plants.select(id), view.getContext());
             dialog.showDialog();
 
         });
@@ -101,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         initList();
     }
 
@@ -149,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initList();
+        if(dialog!=null) {
+            dialog.cancel();
+        }
     }
 }
 

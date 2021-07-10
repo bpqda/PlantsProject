@@ -179,5 +179,7 @@ public class PlantDialog extends BottomSheetDialogFragment {
     public int getTheme() {
         return R.style.MyBottomDialogStyle;
     }
-
+    public void cancel() {
+        bottomSheetDialog.cancel();
+    }
 }

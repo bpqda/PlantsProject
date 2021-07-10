@@ -1,10 +1,9 @@
 package com.example.plantsproject.activities;
 
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.example.plantsproject.Adapters.PlantTipAdapter;
+import com.example.plantsproject.adapters.PlantTipAdapter;
 import com.example.plantsproject.server.MyRetrofit;
 import com.example.plantsproject.R;
 import com.example.plantsproject.server.ServicePlantTips;
@@ -101,7 +100,6 @@ public class PlantTipsListActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -129,7 +127,9 @@ public class PlantTipsListActivity extends AppCompatActivity {
             if (isPlantTipsListFull) {
                 adapter = new PlantTipAdapter(getBaseContext(), plantTips);
                 list.setAdapter(adapter);
+                return;
             }
+            Toast.makeText(getBaseContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
         }
     }
 
