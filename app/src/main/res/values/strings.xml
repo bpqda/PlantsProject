@@ -78,8 +78,9 @@ You can edit it</string>
     <string name="no_url">url does not exist</string>
     <string name="yes">Yes</string>
     <string name="default_watering">Default duration of watering</string>
-    <string name="plus_to_add">You have not added any plants yet.\n Click + to do it</string>
+    <string name="plus_to_add">You have not added any plants yet.\n Click to do it</string>
     <string name="autowatered">Watering successful</string>
-
+    <string name="url_for_request">IP for autowatering mechanism</string>
+    <string name="ill">Plant got sick?</string>
 
 </resources>

@@ -63,6 +63,7 @@
             android:drawablePadding="10dp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:text="ssid"
             android:textColorHint="#85000000" />
 
 

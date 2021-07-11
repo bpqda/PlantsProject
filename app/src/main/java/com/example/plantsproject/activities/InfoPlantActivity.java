@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -95,6 +96,12 @@ public class InfoPlantActivity extends AppCompatActivity {
                 Snackbar.make(v, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
                         .setAction(getString(R.string.no_internet), null).show();
             }
+        });
+        Button plantIsIllBtn = findViewById(R.id.ill);
+        plantIsIllBtn.setOnClickListener(v -> {
+            Intent i = new Intent(InfoPlantActivity.this, WebInfoActivity.class);
+            i.putExtra("plantIsIll", true);
+            startActivity(i);
         });
 
         //В активность с автополивом

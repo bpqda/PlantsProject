@@ -91,10 +91,9 @@ public class PlantTipsListActivity extends AppCompatActivity {
     public void fillPlantTipsAsync() {
         ServicePlantTips service = MyRetrofit.createService();
         Call<ArrayList<PlantTip>> call = service.getAllPlants();
-        Response<ArrayList<PlantTip>> response;
         try {
-            response = call.execute();
-            plantTips = response.body();
+
+            plantTips = call.execute().body();
             Collections.sort(plantTips, (o1, o2) -> o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase()));
             isPlantTipsListFull = true;
 

@@ -7,6 +7,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -47,12 +48,13 @@ public class WaterActivity extends AppCompatActivity {
     boolean httpAnswerIsTrue;
     DBPlants db;
     Plant plant;
+    View.OnClickListener autoWaterClickListener;
+    ImageButton autoWater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_water);
-        ImageButton autoWater = findViewById(R.id.autoWater);
         TextView waterOb = findViewById(R.id.waterOb);
         progressBar = findViewById(R.id.progressBar2);
         progressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -96,12 +98,14 @@ public class WaterActivity extends AppCompatActivity {
         waterOb.setText(seekBar.getProgress() + " " + getString(R.string.sec));
 
         //Автополив
-        autoWater.setOnClickListener(v -> {
+        autoWater = findViewById(R.id.autoWater);
+        autoWaterClickListener = v -> {
             MyTask task = new MyTask();
             task.execute();
+            autoWater.setOnClickListener(null);
+        };
 
-        });
-
+        autoWater.setOnClickListener(autoWaterClickListener);
         ImageButton back = findViewById(R.id.back);
         back.setOnClickListener(v -> onBackPressed());
     }
@@ -161,6 +165,8 @@ public class WaterActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             progressBar.setVisibility(ProgressBar.INVISIBLE);
+            autoWater.setOnClickListener(autoWaterClickListener);
+
             if (!httpAnswerIsTrue) {
                 Toast.makeText(WaterActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
                 return;
@@ -170,7 +176,6 @@ public class WaterActivity extends AppCompatActivity {
             NotificationScheduler.showNotificationWatered(getBaseContext());
             plant.setLastMilWat(System.currentTimeMillis());
             db.update(plant);
-
         }
     }
 }

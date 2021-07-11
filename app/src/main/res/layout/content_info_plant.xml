@@ -17,6 +17,15 @@
         tools:context=".activities.InfoPlantActivity">
 
 
+        <Button
+            android:id="@+id/ill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_white"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/ill" />
+
         <TextView
             android:id="@+id/textView12"
             android:layout_width="match_parent"

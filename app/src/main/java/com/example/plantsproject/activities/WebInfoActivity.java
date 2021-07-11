@@ -35,6 +35,7 @@ public class WebInfoActivity extends AppCompatActivity {
         webView.setWebViewClient(new MyWebViewClient());
 
         String plantName = getIntent().getStringExtra("plantName");
+        boolean openIlness = getIntent().getBooleanExtra("plantIsIll", false);
 
         //Кнопка назад
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -45,7 +46,11 @@ public class WebInfoActivity extends AppCompatActivity {
         toolbarLayout.setTitle(plantName);
 
         //Открывается ссылка
-        webView.loadUrl("https://ru.wikipedia.org/wiki/" + plantName);
+        if(!openIlness) {
+            webView.loadUrl("https://ru.wikipedia.org/wiki/" + plantName);
+        } else {
+            webView.loadUrl("https://ogorod.ua/bolezni");
+        }
     }
 
     //Возможность открывать ссылки через приложение

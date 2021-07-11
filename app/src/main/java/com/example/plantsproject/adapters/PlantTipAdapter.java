@@ -48,7 +48,6 @@ public class PlantTipAdapter extends RecyclerView.Adapter<PlantTipAdapter.ViewHo
         PlantTip plantTip = arrayList.get(position);
 
         holder.name.setText(plantTip.getName());
-        holder.image.setImageResource(R.drawable.ic_info_outline_black_24dp);
 
         holder.itemView.setOnClickListener(v -> {
             Plant selectedPlant = plantTip.toPlant();
@@ -65,13 +64,11 @@ public class PlantTipAdapter extends RecyclerView.Adapter<PlantTipAdapter.ViewHo
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView name;
-        final ImageView image;
+        private TextView name;
 
         ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.textViewPlantTip);
-            image = view.findViewById(R.id.imageView);
         }
     }
 

@@ -83,9 +83,11 @@
     <string name="yes">Да</string>
     <string name="default_watering">Обильность полива по умолчачнию:</string>
     <string name="plus_to_add">Вы еще не добавили растения.\n
-    Нажмите + чтобы сделать это.</string>
+    Нажмите чтобы сделать это.</string>
     <string name="autowatered">Растение успешно полито</string>
 
+    <string name="url_for_request">IP механизма автополива</string>
+    <string name="ill">Растение заболело?</string>
 
 
 </resources>
